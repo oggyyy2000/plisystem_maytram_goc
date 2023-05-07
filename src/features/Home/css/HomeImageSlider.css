@@ -1,0 +1,17 @@
+/* React-slick */
+.slick-next:before {
+  color: black;
+}
+
+.slick-next,
+.slick-prev {
+  z-index: 1;
+}
+
+.slick-next {
+  right: 15px;
+}
+
+.slick-prev {
+  left: 15px;
+}

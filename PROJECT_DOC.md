@@ -1,0 +1,1 @@
+cau hinh route viet trong app.js

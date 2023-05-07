@@ -1,0 +1,30 @@
+#btn-container {
+  display: flex;
+  margin: 0.625rem 0 0 1rem;
+  position: absolute;
+  z-index: 1;
+}
+
+.btn-change-maptype {
+  text-align: center;
+  width: 75px;
+  padding: 10px;
+}
+
+.btn-change-maptype-bold-text {
+  font-weight: bold;
+}
+
+.google-map {
+  height: 100%;
+  width: 100%;
+  z-index: 0;
+}
+
+.table-right tr td {
+    border: 1px solid black;
+}
+
+.table-left tr td {
+    border: 1px solid black;
+}
