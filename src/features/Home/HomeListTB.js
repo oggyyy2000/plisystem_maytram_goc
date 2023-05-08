@@ -35,6 +35,62 @@ function HomeListTB() {
           </div>
         </div>
       </Grid>
+      {/* -------------------------------------------------- */}
+      <Grid item xs={12} className="home-list-TB-container normal">
+        <div>
+          <div className="home-list-TB-title">DAY DIEN</div>
+          <div className="home-list-TB-content">
+            <div>
+              <Button variant="outlined">details</Button>
+            </div>
+            <div className="home-list-TB-content-icon">
+              <CheckCircleIcon fontSize="large" color="success" />
+            </div>
+          </div>
+        </div>
+      </Grid>
+      {/* -------------------------------------------------- */}
+      <Grid item xs={12} className="home-list-TB-container normal">
+        <div>
+          <div className="home-list-TB-title">DAY DIEN</div>
+          <div className="home-list-TB-content">
+            <div>
+              <Button variant="outlined">details</Button>
+            </div>
+            <div className="home-list-TB-content-icon">
+              <CheckCircleIcon fontSize="large" color="success" />
+            </div>
+          </div>
+        </div>
+      </Grid>
+      {/* -------------------------------------------------- */}
+      <Grid item xs={12} className="home-list-TB-container normal">
+        <div>
+          <div className="home-list-TB-title">DAY DIEN</div>
+          <div className="home-list-TB-content">
+            <div>
+              <Button variant="outlined">details</Button>
+            </div>
+            <div className="home-list-TB-content-icon">
+              <CheckCircleIcon fontSize="large" color="success" />
+            </div>
+          </div>
+        </div>
+      </Grid>
+      {/* -------------------------------------------------- */}
+      <Grid item xs={12} className="home-list-TB-container normal">
+        <div>
+          <div className="home-list-TB-title">DAY DIEN</div>
+          <div className="home-list-TB-content">
+            <div>
+              <Button variant="outlined">details</Button>
+            </div>
+            <div className="home-list-TB-content-icon">
+              <CheckCircleIcon fontSize="large" color="success" />
+            </div>
+          </div>
+        </div>
+      </Grid>
       
     </>
   );
