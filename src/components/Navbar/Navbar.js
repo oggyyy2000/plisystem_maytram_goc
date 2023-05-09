@@ -58,7 +58,7 @@ function NavBar() {
     <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <img src={logo} style={{width: "50px", height: "50px"}}/>
+          <img src={logo} alt="logo" style={{width: "50px", height: "50px"}}/>
           {/* <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} /> */}
           <Typography
             variant="h6"

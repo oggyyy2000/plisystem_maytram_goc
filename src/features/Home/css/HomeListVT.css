@@ -1,0 +1,13 @@
+.home-listVT-container {
+  margin-top: 1rem;
+  margin-left: 1rem;
+  min-width: 50px;
+  min-height: 70px;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.error {
+  border: 2px solid red;
+}

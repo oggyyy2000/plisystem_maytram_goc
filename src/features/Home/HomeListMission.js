@@ -1,14 +1,21 @@
 import React, { useEffect, useState } from "react";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import FlightRoundedIcon from "@mui/icons-material/FlightRounded";
-
 import axios from "axios";
 
 import "./css/HomeListMission.css";
 
+import { useDispatch } from "react-redux";
+import * as actions from "../../redux/types";
+// import { MissionId } from "../../redux/selectors";
+
+
+
 function HomeListMission() {
   const [clicked, setClicked] = useState("");
   const [listMissionData, setListMissionData] = useState([]);
+  const dispatch = useDispatch();
+
   const urlhomePageView = process.env.REACT_APP_API_URL + "homepageapiview/";
 
   // call API lay du lieu
@@ -18,6 +25,7 @@ function HomeListMission() {
       .then((res) => {
         // console.log(res.data.data);
         setListMissionData(res.data.data);
+        handleListMissionClick(res.data.data[0].schedule_id)
       })
       .catch((err) => {
         console.log(err);
@@ -26,12 +34,9 @@ function HomeListMission() {
 
   function handleListMissionClick(mission_id) {
     setClicked(mission_id);
-    if (clicked === mission_id) {
-      setClicked("");
-    }
+    dispatch({ type: actions.MissionId, data: mission_id });
   }
 
-  // console.log(typeof(clicked));
   return (
     <>
       {/* <Grid
@@ -65,7 +70,7 @@ function HomeListMission() {
             <div
               item
               className={`homelist-container ${
-                clicked == listmission.schedule_id
+                clicked === listmission.schedule_id
                   ? "homelist-container-onclick"
                   : ""
               }`}
