@@ -44,7 +44,7 @@ function FlightRouteMap() {
           })}
         </div>
 
-        <div className="flightroute-listitem-container">
+        <div className="flightroute-left-panel">
           <div className="flightroute-itemcard">
             <div className="flightroute-itemcard-header">
               <h1>Defect</h1>
@@ -68,22 +68,9 @@ function FlightRouteMap() {
           </div>
         </div>
 
-        <div
-          style={{
-            position: "absolute",
-            zIndex: 1,
-            width: "31.3rem",
-            height: "75vh",
-            backgroundColor: "white",
-            top: 150,
-            right: 0,
-          }}
-        >
-          <div style={{ width: "31.3rem", height: "15vh" }}>
-            <table
-              className="table-right"
-              style={{ width: "100%", border: "3px solid black" }}
-            >
+        <div className="flightroute-right-panel">
+          <div className="flightroute-tableinfo">
+            <table>
               <tr>
                 <td>VTHT: VT8_T87</td>
                 <td rowSpan={2}>

@@ -15,13 +15,13 @@
   font-weight: bold;
 }
 
-.flightroute-listitem-container {
+.flightroute-left-panel {
   position: absolute;
   z-index: 1;
   width: 15rem;
   height: 425px;
   background-color: white;
-  /* left: 0; */
+  left: 0;
   bottom: 45px;
   display: flex;
   flex-direction: column;
@@ -52,12 +52,29 @@
   border: 1px solid black;
 }
 
-.table-right{
-  border-collapse: collapse;
-  width: 100%
+.flightroute-right-panel {
+  position: absolute;
+  z-index: 1;
+  width: 31.3rem;
+  height: 75vh;
+  background-color: white;
+  top: 150px;
+  right: 0;
 }
 
-.table-right tr td {
+.flightroute-tableinfo {
+  width: 31.3rem;
+  height: 15vh;
+}
+
+.flightroute-tableinfo table {
+  width: 100%;
+  border: 3px solid black;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.flightroute-tableinfo table tr td {
   border: 2px solid black;
 }
 
@@ -66,4 +83,3 @@
   width: 100%;
   z-index: 0;
 }
-
