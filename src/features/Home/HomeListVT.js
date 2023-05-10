@@ -3,16 +3,21 @@ import { useState, useEffect } from "react";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
 import itemIcon from "../../assets/images/logo.png";
+
 import axios from "axios";
+
 import { useSelector } from "react-redux";
-import { MissionId } from "../../redux/selectors";
+import { useDispatch } from "react-redux";
+import * as actions from "../../redux/types";
+import { MissionId, VTInfo } from "../../redux/selectors";
 
 import "./css/HomeListVT.css";
 
 function HomeListVT() {
+  const [missionData, setMissionData] = useState([]);
+  const dispatch = useDispatch();
   const missionId = useSelector(MissionId);
   const urlhomePageView = process.env.REACT_APP_API_URL + "homepageapiview/";
-  const [missionData, setMissionData] = useState([]);
 
   useEffect(() => {
     axios
@@ -27,22 +32,26 @@ function HomeListVT() {
       });
   }, [missionId]);
 
-  // console.log(listMissionData);
+  // console.log(missionData)
 
   function renderVT() {
     return Object.keys(missionData.supervision_results).map((item) => {
       var error = false;
+      console.log(item);
       // console.log("1:", Object.keys(missionData.supervision_results[item]))
       Object.keys(missionData.supervision_results[item]).forEach((item2) => {
+        dispatch({
+          type: actions.VTInfo,
+          data: missionData.supervision_results[item][item2],
+        });
+        console.log(missionData.supervision_results[item][item2]);
         if (missionData.supervision_results[item][item2].length > 0) {
           error = true;
         }
       });
       return (
         <>
-          <div
-            className={`home-listVT-container ${error == true ? "error" : ""}`}
-          >
+          <div className={`home-listVT-item ${error == true ? "error" : ""}`}>
             {error == true ? (
               <CancelIcon
                 fontSize="small"
@@ -66,12 +75,7 @@ function HomeListVT() {
 
   return (
     <>
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(6, 1fr)",
-        }}
-      >
+      <div className="home-listVT-container">
         {missionData && missionData.supervision_results && renderVT()}
       </div>
     </>

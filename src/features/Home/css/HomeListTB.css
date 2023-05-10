@@ -2,7 +2,7 @@
   border: 2px solid black;
 }
 
-.home-list-TB-container.error {
+.error {
   border: 3.5px solid red;
 }
 
@@ -15,11 +15,8 @@
 .home-list-TB-content {
   display: flex;
   justify-content: space-around;
+  min-height: 2.669rem;
   margin-left: 3.2rem;
 }
 
-/*.home-list-TB-content-icon {
-  margin-left: 1.5rem;
-  float: right;
-  right: 0
-}*/
+

@@ -3,11 +3,10 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import FlightRoundedIcon from "@mui/icons-material/FlightRounded";
 import axios from "axios";
 
-import "./css/HomeListMission.css";
-
 import { useDispatch } from "react-redux";
 import * as actions from "../../redux/types";
-// import { MissionId } from "../../redux/selectors";
+
+import "./css/HomeListMission.css";
 
 
 
@@ -39,31 +38,32 @@ function HomeListMission() {
 
   return (
     <>
-      {/* <Grid
+      {/* <div
         item
         className={`homelist-container ${
           clicked === true ? "homelist-container-onclick" : ""
         }`}
         // onClick={checkClicked}
       >
-        <Grid item className="homelist-items-title">
-          <Grid className="homelist-icon-top-right">
+        <div item className="homelist-items-title">
+          <div className="homelist-icon-top-right">
             <FlightRoundedIcon fontSize="large" />
-          </Grid>
-          <Grid item className="homelist-date-tittle">
+          </div>
+          <div item className="homelist-date-tittle">
             28-4-2023
-          </Grid>
-        </Grid>
-        <Grid item className="homelist-content">
+          </div>
+        </div>
+        <div item className="homelist-content">
           <div>
           <p>Last Update</p>
           18h50
           </div>
-        <Grid item className="homelist-icon-bottom-right">
+        <div item className="homelist-icon-bottom-right">
           <CheckCircleIcon color="success" fontSize="inherit" />
-        </Grid>
-        </Grid>
-      </Grid> */}
+        </div>
+        </div>
+      </div> */}
+
       {listMissionData.map((listmission) => {
         return (
           <>

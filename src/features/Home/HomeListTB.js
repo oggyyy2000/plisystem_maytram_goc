@@ -3,9 +3,25 @@ import { Grid, Button } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
 
+import axios from "axios";
+
 import "./css/HomeListTB.css";
 
 function HomeListTB() {
+
+  /*.useEffect(() => {
+    axios
+      .get(urlhomePageView)
+      .then((res) => {
+        // console.log(res.data.data.find((el) => el.schedule_id == missionId));
+        // console.log(missionId);
+        setMissionData(res.data.data.find((id) => id.schedule_id == missionId));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [missionId]);*/
+
   return (
     <>
       <Grid item xs={12} className="home-list-TB-container error">

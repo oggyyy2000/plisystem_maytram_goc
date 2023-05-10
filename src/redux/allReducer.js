@@ -1,9 +1,10 @@
-import React from "react";
 import { combineReducers } from "redux";
-import MissionId from "./reducers/MissionId"
+import MissionId from "./reducers/MissionId";
+import VTInfo from "./reducers/VTInfo";
 
 const myReducer = combineReducers({
-    MissionId
+  MissionId,
+  VTInfo,
 });
 
 export default myReducer;

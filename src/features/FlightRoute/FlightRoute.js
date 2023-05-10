@@ -28,12 +28,12 @@ function FlightRouteMap() {
   return (
     <>
       <div style={{ height: "90.7vh" }}>
-        <div id="btn-container">
+        <div id="flightroute-btn-container">
           {types.map((type) => {
             return (
               <button
-                className={`btn-change-maptype ${
-                  type === typeMap ? "btn-change-maptype-bold-text" : ""
+                className={`flightroute-btn-change-maptype ${
+                  type === typeMap ? "bold-text" : ""
                 }`}
                 value={type}
                 onClick={handleChangeMapType}
@@ -44,63 +44,28 @@ function FlightRouteMap() {
           })}
         </div>
 
-        <div
-          style={{
-            position: "absolute",
-            zIndex: 1,
-            width: "11rem",
-            height: "425px",
-            backgroundColor: "white",
-            left: 0,
-            bottom: 45,
-          }}
-        >
-          <div
-            style={{
-              marginTop: "5px",
-              border: "3px solid black",
-              width: "11rem",
-              color: "red",
-            }}
-          >
-            <table className="table-left">
-              <tr>
-                <td>DEFECT</td>
-                <td>DEFECTED</td>
-              </tr>
-              <tr>
-                <td>CDTT vo bat</td>
-                <td>on VT8</td>
-              </tr>
-              <tr>
-                <td colSpan={2}>GIS: 18.16, 28.32</td>
-              </tr>
-            </table>
+        <div className="flightroute-listitem-container">
+          <div className="flightroute-itemcard">
+            <div className="flightroute-itemcard-header">
+              <h1>Defect</h1>
+            </div>
+
+            <div class="flightroute-itemcard-content">
+              <p>CDTT vo bat: on VT8</p>
+              <p>GIS: 18.16, 28.32</p>
+            </div>
           </div>
           {/* ------------------------------------ */}
-          <div
-            style={{
-              marginTop: "5px",
-              border: "3px solid black",
-              width: "11rem",
-              color: "red",
-            }}
-          >
-            <table className="table-left">
-              <tr>
-                <td>DEFECT</td>
-                <td>DEFECTED</td>
-              </tr>
-              <tr>
-                <td>CDTT vo bat</td>
-                <td>on VT8</td>
-              </tr>
-              <tr>
-                <td colSpan={2}>GIS: 18.16, 28.32</td>
-              </tr>
-            </table>
+          <div className="flightroute-itemcard">
+            <div className="flightroute-itemcard-header">
+              <h1>Defect</h1>
+            </div>
+
+            <div class="flightroute-itemcard-content">
+              <p>CDTT vo bat: on VT8</p>
+              <p>GIS: 18.16, 28.32</p>
+            </div>
           </div>
-          {/* ------------------------------------ */}
         </div>
 
         <div
@@ -146,7 +111,7 @@ function FlightRouteMap() {
           </div>
         </div>
         <GoogleMap
-          mapContainerClassName="google-map"
+          mapContainerClassName="flightroute-google-map"
           center={center}
           zoom={10}
           mapTypeId={typeMap}
