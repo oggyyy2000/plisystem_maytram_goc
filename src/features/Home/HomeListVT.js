@@ -34,13 +34,13 @@ function HomeListVT() {
   }, [missionId]);
 
   useEffect(() => {
-    missionData &&
-      Object.keys(missionData.supervision_results).map((item) => {
-        dispatch({
-          type: actions.VTInfo,
-          data: missionData.supervision_results[item],
-        });
+    if (missionData) {
+      const supervisionRes = Object.keys(missionData.supervision_results);
+      dispatch({
+        type: actions.VTInfo,
+        data: supervisionRes[0],
       });
+    }
   }, [missionData]);
 
   function renderVT() {
