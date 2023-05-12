@@ -10,41 +10,61 @@ import "./css/HomeListTB.css";
 
 function HomeListTB() {
   const VTdetail = useSelector(VTInfo);
-  console.log(VTdetail);
+  console.log(VTdetail.data);
 
   function renderTB() {
-    return VTdetail.map((item) => {
-      var error = false;
-      var TBtitle = [];
-      console.log(TBtitle);
-      Object.keys(item).map((TB) => {
-        // console.log(item[item2]);
-        // console.log(TB);
-        TBtitle.push(TB);
-        // if(item[item2])
-      });
-      return (
-        <>
-          {TBtitle.map((nameTB) => {
+    // return VTdetail.map((item) => {
+    //   let error = false;
+    //   let TBtitle = [];
+    //   Object.keys(item).map((TB) => {
+    //     TBtitle.push(TB);
+    //   });
+    return (
+      <>
+        {JSON.stringify(VTdetail) !== "{}" &&
+          Object.keys(VTdetail.data).map((nameTB) => {
+            console.log(Object.keys(VTdetail.data));
+            var error = false;
+            if (VTdetail.data[nameTB].length > 0) {
+              error = true;
+            }
             return (
               <>
-                <Grid item xs={12} className="home-list-TB-container error">
+                <Grid
+                  item
+                  xs={12}
+                  className={`home-list-TB-container normal ${
+                    error ? "error" : ""
+                  }`}
+                >
                   <div className="home-list-TB-title">{nameTB}</div>
                   <div className="home-list-TB-content">
                     <div>
                       <Button variant="outlined">details</Button>
                     </div>
                     <div className="home-list-TB-content-icon">
-                      <CheckCircleIcon fontSize="large" color="success" />
+                      {error == true ? (
+                        <CancelIcon
+                          fontSize="large"
+                          color="error"
+                          style={{ float: "right" }}
+                        />
+                      ) : (
+                        <CheckCircleIcon
+                          fontSize="large"
+                          color="success"
+                          style={{ float: "right" }}
+                        />
+                      )}
                     </div>
                   </div>
                 </Grid>
               </>
             );
           })}
-        </>
-      );
-    });
+      </>
+    );
+    // });
   }
 
   return (

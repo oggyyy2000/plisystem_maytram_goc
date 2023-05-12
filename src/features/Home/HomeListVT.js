@@ -14,38 +14,51 @@ import { MissionId, VTInfo } from "../../redux/selectors";
 import "./css/HomeListVT.css";
 
 function HomeListVT() {
-  const [missionData, setMissionData] = useState([]);
+  const [missionData, setMissionData] = useState();
   const dispatch = useDispatch();
   const missionId = useSelector(MissionId);
+  const VTdetail = useSelector(VTInfo);
   const urlhomePageView = process.env.REACT_APP_API_URL + "homepageapiview/";
 
   useEffect(() => {
-    axios
-      .get(urlhomePageView)
-      .then((res) => {
-        // console.log(res.data.data.find((el) => el.schedule_id == missionId));
-        // console.log(missionId);
-        setMissionData(res.data.data.find((id) => id.schedule_id == missionId));
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    missionId &&
+      axios
+        .get(urlhomePageView)
+        .then((res) => {
+          // console.log(res)
+          // console.log(res.data.data.find((el) => el.schedule_id == missionId));
+          // console.log(missionId);
+          setMissionData(
+            res.data.data.find((id) => id.schedule_id === missionId)
+          );
+        })
+        .catch((err) => {
+          console.log(err);
+        });
   }, [missionId]);
 
-  // console.log(missionData)
+  useEffect(() => {
+    if (missionData) {
+      const supervisionRes = Object.keys(missionData.supervision_results);
+      dispatch({
+        type: actions.VTInfo,
+        data: {
+          name: supervisionRes[0],
+          data: missionData.supervision_results[supervisionRes[0]],
+        },
+      });
+    }
+  }, [missionData]);
+
+  console.log(VTdetail);
 
   function renderVT() {
     return Object.keys(missionData.supervision_results).map((item) => {
-      var error = false;
-      var data = [];
-      console.log(typeof data);
+      let error = false;
       function handleListVTClick() {
-        // alert("!")
-        data.push(missionData.supervision_results[`${item}`]);
-        // console.log(missionData.supervision_results[`${item}`])
         dispatch({
           type: actions.VTInfo,
-          data: data,
+          data: { name: item, data: missionData.supervision_results[item] },
         });
       }
       Object.keys(missionData.supervision_results[item]).forEach((item2) => {
@@ -57,7 +70,9 @@ function HomeListVT() {
       return (
         <>
           <div
-            className={`home-listVT-item ${error == true ? "error" : ""}`}
+            className={`home-listVT-item ${
+              VTdetail.name === item ? "error" : ""
+            }`}
             onClick={handleListVTClick}
           >
             {error == true ? (
