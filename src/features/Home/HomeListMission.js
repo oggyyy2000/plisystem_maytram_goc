@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from "react";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import FlightRoundedIcon from "@mui/icons-material/FlightRounded";
+import checkMark from "../../assets/images/checkmark.png";
 import axios from "axios";
 
 import { useDispatch } from "react-redux";
 import * as actions from "../../redux/types";
 
 import "./css/HomeListMission.css";
-
-
 
 function HomeListMission() {
   const [clicked, setClicked] = useState("");
@@ -24,7 +23,7 @@ function HomeListMission() {
       .then((res) => {
         // console.log(res.data.data);
         setListMissionData(res.data.data);
-        handleListMissionClick(res.data.data[0].schedule_id)
+        handleListMissionClick(res.data.data[1].schedule_id);
       })
       .catch((err) => {
         console.log(err);
@@ -55,12 +54,19 @@ function HomeListMission() {
         </div>
         <div item className="homelist-content">
           <div>
-          <p>Last Update</p>
-          18h50
+            <p>Last Update</p>
+            18h50
           </div>
-        <div item className="homelist-icon-bottom-right">
-          <CheckCircleIcon color="success" fontSize="inherit" />
-        </div>
+          <div
+            style={{
+              marginLeft: " 1.14rem",
+              marginTop: "15px"
+              // fontSize: "58px",
+            }}
+          >
+            // <CheckCircleIcon color="success" fontSize="inherit" />
+            <img src={checkMark} alt="checkMark" style={{height: "100%", width: "100%"}} />
+          </div>
         </div>
       </div> */}
 

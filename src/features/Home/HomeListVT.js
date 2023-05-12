@@ -37,21 +37,29 @@ function HomeListVT() {
   function renderVT() {
     return Object.keys(missionData.supervision_results).map((item) => {
       var error = false;
-      console.log(item);
-      // console.log("1:", Object.keys(missionData.supervision_results[item]))
-      Object.keys(missionData.supervision_results[item]).forEach((item2) => {
+      var data = [];
+      console.log(typeof data);
+      function handleListVTClick() {
+        // alert("!")
+        data.push(missionData.supervision_results[`${item}`]);
+        // console.log(missionData.supervision_results[`${item}`])
         dispatch({
           type: actions.VTInfo,
-          data: missionData.supervision_results[item][item2],
+          data: data,
         });
-        console.log(missionData.supervision_results[item][item2]);
+      }
+      Object.keys(missionData.supervision_results[item]).forEach((item2) => {
+        // console.log(missionData.supervision_results[item][item2]);
         if (missionData.supervision_results[item][item2].length > 0) {
           error = true;
         }
       });
       return (
         <>
-          <div className={`home-listVT-item ${error == true ? "error" : ""}`}>
+          <div
+            className={`home-listVT-item ${error == true ? "error" : ""}`}
+            onClick={handleListVTClick}
+          >
             {error == true ? (
               <CancelIcon
                 fontSize="small"

@@ -1,9 +1,12 @@
-.home-list-TB-container.normal {
+.home-list-TB-container {
+  min-height: 9.25vh;
+}
+.normal {
   border: 2px solid black;
 }
 
 .error {
-  border: 3.5px solid red;
+  border: 2px solid red;
 }
 
 .home-list-TB-title {
