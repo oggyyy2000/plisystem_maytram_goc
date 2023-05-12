@@ -17,6 +17,7 @@ function HomeListVT() {
   const [missionData, setMissionData] = useState();
   const dispatch = useDispatch();
   const missionId = useSelector(MissionId);
+  const VTdetail = useSelector(VTInfo);
   const urlhomePageView = process.env.REACT_APP_API_URL + "homepageapiview/";
 
   useEffect(() => {
@@ -38,7 +39,10 @@ function HomeListVT() {
       const supervisionRes = Object.keys(missionData.supervision_results);
       dispatch({
         type: actions.VTInfo,
-        data: supervisionRes[0],
+        data: {
+          name: supervisionRes[0],
+          data: missionData.supervision_results[supervisionRes[0]],
+        },
       });
     }
   }, [missionData]);
@@ -49,7 +53,7 @@ function HomeListVT() {
       function handleListVTClick() {
         dispatch({
           type: actions.VTInfo,
-          data: missionData.supervision_results[item],
+          data: { name: item, data: missionData.supervision_results[item] },
         });
       }
       Object.keys(missionData.supervision_results[item]).forEach((item2) => {
@@ -61,7 +65,9 @@ function HomeListVT() {
       return (
         <>
           <div
-            className={`home-listVT-item ${error == true ? "error" : ""}`}
+            className={`home-listVT-item ${
+              VTdetail.name === item ? "error" : ""
+            }`}
             onClick={handleListVTClick}
           >
             {error == true ? (

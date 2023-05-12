@@ -10,7 +10,6 @@ import "./css/HomeListTB.css";
 
 function HomeListTB() {
   const VTdetail = useSelector(VTInfo);
-  // console.log(VTdetail);
 
   function renderTB() {
     // return VTdetail.map((item) => {
@@ -21,23 +20,24 @@ function HomeListTB() {
     //   });
     return (
       <>
-        {Object.keys(VTdetail).map((nameTB) => {
-          return (
-            <>
-              <Grid item xs={12} className="home-list-TB-container error">
-                <div className="home-list-TB-title">{nameTB}</div>
-                <div className="home-list-TB-content">
-                  <div>
-                    <Button variant="outlined">details</Button>
+        {JSON.stringify(VTdetail) !== "{}" &&
+          Object.keys(VTdetail.data).map((nameTB) => {
+            return (
+              <>
+                <Grid item xs={12} className="home-list-TB-container error">
+                  <div className="home-list-TB-title">{nameTB}</div>
+                  <div className="home-list-TB-content">
+                    <div>
+                      <Button variant="outlined">details</Button>
+                    </div>
+                    <div className="home-list-TB-content-icon">
+                      <CheckCircleIcon fontSize="large" color="success" />
+                    </div>
                   </div>
-                  <div className="home-list-TB-content-icon">
-                    <CheckCircleIcon fontSize="large" color="success" />
-                  </div>
-                </div>
-              </Grid>
-            </>
-          );
-        })}
+                </Grid>
+              </>
+            );
+          })}
       </>
     );
     // });
