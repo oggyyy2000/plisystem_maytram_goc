@@ -25,12 +25,9 @@ function HomeListVT() {
       axios
         .get(urlhomePageView)
         .then((res) => {
-<<<<<<< HEAD
           // console.log(res)
           // console.log(res.data.data.find((el) => el.schedule_id == missionId));
           // console.log(missionId);
-=======
->>>>>>> 826862eb3b71d4226064c7e9e8d99ef00035a87e
           setMissionData(
             res.data.data.find((id) => id.schedule_id === missionId)
           );
@@ -52,11 +49,8 @@ function HomeListVT() {
       });
     }
   }, [missionData]);
-<<<<<<< HEAD
 
   console.log(VTdetail);
-=======
->>>>>>> 826862eb3b71d4226064c7e9e8d99ef00035a87e
 
   function renderVT() {
     return Object.keys(missionData.supervision_results).map((item) => {

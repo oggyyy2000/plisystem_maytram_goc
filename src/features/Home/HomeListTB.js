@@ -10,10 +10,7 @@ import "./css/HomeListTB.css";
 
 function HomeListTB() {
   const VTdetail = useSelector(VTInfo);
-<<<<<<< HEAD
   console.log(VTdetail.data);
-=======
->>>>>>> 826862eb3b71d4226064c7e9e8d99ef00035a87e
 
   function renderTB() {
     // return VTdetail.map((item) => {
@@ -26,14 +23,11 @@ function HomeListTB() {
       <>
         {JSON.stringify(VTdetail) !== "{}" &&
           Object.keys(VTdetail.data).map((nameTB) => {
-<<<<<<< HEAD
             console.log(Object.keys(VTdetail.data));
             var error = false;
             if (VTdetail.data[nameTB].length > 0) {
               error = true;
             }
-=======
->>>>>>> 826862eb3b71d4226064c7e9e8d99ef00035a87e
             return (
               <>
                 <Grid
