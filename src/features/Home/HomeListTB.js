@@ -10,7 +10,7 @@ import "./css/HomeListTB.css";
 
 function HomeListTB() {
   const VTdetail = useSelector(VTInfo);
-  console.log(VTdetail.data);
+  // console.log(VTdetail);
 
   function renderTB() {
     // return VTdetail.map((item) => {
@@ -21,47 +21,46 @@ function HomeListTB() {
     //   });
     return (
       <>
-        {JSON.stringify(VTdetail) !== "{}" &&
-          Object.keys(VTdetail.data).map((nameTB) => {
-            console.log(Object.keys(VTdetail.data));
-            var error = false;
-            if (VTdetail.data[nameTB].length > 0) {
-              error = true;
-            }
-            return (
-              <>
-                <Grid
-                  item
-                  xs={12}
-                  className={`home-list-TB-container normal ${
-                    error ? "error" : ""
-                  }`}
-                >
-                  <div className="home-list-TB-title">{nameTB}</div>
-                  <div className="home-list-TB-content">
-                    <div>
-                      <Button variant="outlined">details</Button>
-                    </div>
-                    <div className="home-list-TB-content-icon">
-                      {error == true ? (
-                        <CancelIcon
-                          fontSize="large"
-                          color="error"
-                          style={{ float: "right" }}
-                        />
-                      ) : (
-                        <CheckCircleIcon
-                          fontSize="large"
-                          color="success"
-                          style={{ float: "right" }}
-                        />
-                      )}
-                    </div>
+        {Object.keys(VTdetail.data).map((nameTB) => {
+          // console.log(typeof Object.keys(VTdetail.data));
+          var error = false;
+          if (VTdetail.data[nameTB].length > 0) {
+            error = true;
+          }
+          return (
+            <>
+              <Grid
+                item
+                xs={12}
+                className={`home-list-TB-container normal ${
+                  error ? "error" : ""
+                }`}
+              >
+                <div className="home-list-TB-title">{nameTB}</div>
+                <div className="home-list-TB-content">
+                  <div>
+                    <Button variant="outlined">details</Button>
                   </div>
-                </Grid>
-              </>
-            );
-          })}
+                  <div className="home-list-TB-content-icon">
+                    {error == true ? (
+                      <CancelIcon
+                        fontSize="large"
+                        color="error"
+                        style={{ float: "right" }}
+                      />
+                    ) : (
+                      <CheckCircleIcon
+                        fontSize="large"
+                        color="success"
+                        style={{ float: "right" }}
+                      />
+                    )}
+                  </div>
+                </div>
+              </Grid>
+            </>
+          );
+        })}
       </>
     );
     // });
@@ -69,7 +68,7 @@ function HomeListTB() {
 
   return (
     <>
-      {renderTB()}
+      {JSON.stringify(VTdetail) !== "{}" && renderTB()}
       {/* -------------------------------------------------- */}
       {/* <Grid item xs={12} className="home-list-TB-container normal">
         <div>
