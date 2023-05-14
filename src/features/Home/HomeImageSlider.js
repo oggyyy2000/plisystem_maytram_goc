@@ -15,51 +15,33 @@ function HomeImageSlider() {
   // console.log(Object.keys(VTdetail.data));
 
   function renderIMG() {
-    // return (
-    //   <>
-    //     {Object.keys(VTdetail.data).map((item) => {
-    //       VTdetail.data[item].map((item2) => {
-    //         item2.defect_image.map((img) => {
-    //           console.log(process.env.REACT_APP_IMG_SLIDE + `${img}`);
-    //         });
-    //       });
-          
-    //     })}
-    //   </>
-    // );
     return (
       <>
-      <div
-            style={{
-              padding: "1px",
-              textAlign: "center",
-              display: "flex",
-              justifyContent: "center",
-            }}
-          >
-
-        <img
-          src={`http://epsmarttech.com.vn:8000/Supervision_Database/T87/2023-05-12/supervision_results/18h41p/defect_datas/defect_0d8340b3-eff1-11ed-a52f-ac1f6bdc63c1.jpg`}
-          alt="img"
-          style={{ maxWidth: "100px", maxHeight: "100px" }}
-        />
-          </div>
-          <div
-            style={{
-              padding: "1px",
-              textAlign: "center",
-              display: "flex",
-              justifyContent: "center",
-            }}
-          >
-
-        <img
-          src={`http://epsmarttech.com.vn:8000/Supervision_Database/T87/2023-05-12/supervision_results/18h41p/defect_datas/defect_0d8340b3-eff1-11ed-a52f-ac1f6bdc63c1.jpg`}
-          alt="img"
-          style={{ maxWidth: "100px", maxHeight: "100px" }}
-        />
-          </div>
-        
+        {Object.keys(VTdetail.data).map((item) => {
+          VTdetail.data[item].map((item2) => {
+            item2.defect_image.map((img) => {
+              console.log(process.env.REACT_APP_IMG_SLIDE + `${img}`);
+            });
+          });
+          return (
+                <>
+                  <div
+                    style={{
+                      padding: "1px",
+                      textAlign: "center",
+                      display: "flex",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <img
+                      src={`http://epsmarttech.com.vn:8000/Supervision_Database/T87/2023-05-12/supervision_results/18h41p/defect_datas/defect_0d8340b3-eff1-11ed-a52f-ac1f6bdc63c1.jpg`}
+                      alt="img"
+                      style={{ maxWidth: "537px", maxHeight: "272px" }}
+                    />
+                  </div>
+                </>
+              );
+        })}
       </>
     );
   }
@@ -77,9 +59,7 @@ function HomeImageSlider() {
       {/* Slider 1 */}
       <div style={{ margin: "1rem 0 0 0.625rem" }}>
         <Slider {...settings}>
-          
-            {JSON.stringify(VTdetail) !== "{}" && renderIMG()}
-        
+          {JSON.stringify(VTdetail) !== "{}" && renderIMG()}
         </Slider>
       </div>
 
