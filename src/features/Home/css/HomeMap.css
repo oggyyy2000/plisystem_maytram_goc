@@ -28,7 +28,9 @@
 
 .home-map-title {
   position: absolute;
-  margin: 17.5rem 0 0 27rem !important; /*de lai MUI goc*/
+  /* margin: 9.5rem 0 0 27rem !important;  */ /*de lai MUI goc*/
+  bottom: 1rem;
+  right: 0;
   z-index: 1;
   color: white;
   font-weight: bold;

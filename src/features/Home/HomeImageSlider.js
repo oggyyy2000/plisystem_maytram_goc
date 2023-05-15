@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Slider from "react-slick";
 import img4 from "../../assets/images/anh4.png";
 
@@ -10,44 +10,57 @@ import { VTInfo } from "../../redux/selectors";
 const imgList = [img4, img4, img4, img4];
 
 function HomeImageSlider() {
+  const [imgList2, setImgList2] = useState([]);
   const VTdetail = useSelector(VTInfo);
-  console.log(VTdetail.data);
-  // console.log(Object.keys(VTdetail.data));
+  // console.log(imgList2);
 
-  function renderIMG() {
-    return (
-      <>
-        {Object.keys(VTdetail.data).map((item) => {
-          var listIMG = []
-          VTdetail.data[item].map((item2) => {
-            item2.defect_image.map((img) => {
-              //lay dc link anh ra
-              console.log(process.env.REACT_APP_IMG_SLIDE + `${img}`);
-            });
-          });
-          return (
-            <>
-              <div
-                style={{
-                  padding: "1px",
-                  textAlign: "center",
-                  display: "flex",
-                  justifyContent: "center",
-                }}
-              >
-                <img
-                //cho tam 1 link anh vi truyen thu van chua dc 
-                  src={`http://epsmarttech.com.vn:8000/Supervision_Database/T87/2023-05-12/supervision_results/18h41p/defect_datas/defect_0d8340b3-eff1-11ed-a52f-ac1f6bdc63c1.jpg`}
-                  alt="img"
-                  style={{ maxWidth: "537px", maxHeight: "272px" }}
-                />
-              </div>
-            </>
-          );
-        })}
-      </>
-    );
+  function getIMG() {
+    const imgList2 = [];
+    setImgList2(imgList2);
+    // console.log(imgList2);
+    for (var keys in VTdetail.data) {
+      // console.log(keys);
+      VTdetail.data[keys].forEach((item) => {
+        item.defect_image.map((list) => {
+          imgList2.push(process.env.REACT_APP_IMG_SLIDE + `${list}`);
+        });
+      });
+    }
   }
+
+  useEffect(() => {
+    getIMG();
+  }, [VTdetail]);
+
+  //co the render bang fuction nhung gap loi k the return ra slide ma tat ca anh
+  //xep thanh 1 cot
+  // function renderIMG() {
+  //   // console.log(imgList2)
+  //   return (
+  //     <>
+  //       {imgList2.map((img) => {
+  //         return (
+  //           <>
+  //             <div
+  //               style={{
+  //                 padding: "1px",
+  //                 textAlign: "center",
+  //                 display: "flex",
+  //                 justifyContent: "center",
+  //               }}
+  //             >
+  //               <img
+  //                 src={`${img}`}
+  //                 alt="img"
+  //                 style={{ maxWidth: "537px", maxHeight: "272px" }}
+  //               />
+  //             </div>
+  //           </>
+  //         );
+  //       })}
+  //     </>
+  //   );
+  // }
 
   const settings = {
     dots: true,
@@ -62,7 +75,27 @@ function HomeImageSlider() {
       {/* Slider 1 */}
       <div style={{ margin: "1rem 0 0 0.625rem" }}>
         <Slider {...settings}>
-          {JSON.stringify(VTdetail) !== "{}" && renderIMG()}
+          {JSON.stringify(VTdetail.data) !== "{}" &&
+            imgList2.map((img) => {
+              return (
+                <>
+                  <div
+                    style={{
+                      padding: "1px",
+                      textAlign: "center",
+                      display: "flex",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <img
+                      src={`${img}`}
+                      alt="img"
+                      style={{ maxWidth: "537px", maxHeight: "272px" }}
+                    />
+                  </div>
+                </>
+              );
+            })}
         </Slider>
       </div>
 
