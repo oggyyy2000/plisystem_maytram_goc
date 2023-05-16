@@ -17,12 +17,13 @@ import "./css/HomeMap.css";
 function HomeMap() {
   const types = ["roadmap", "satellite"];
   const [typeMap, setTypeMap] = useState("roadmap");
+  const [center, setCenter] = useState({ lat: 21.028511, lng: 105.804817 });
   const [GISlist, setGISlist] = useState([]);
-  const [nameError, setNameError] = useState()
+  const [nameError, setNameError] = useState();
   const [activeMarker, setActiveMarker] = useState(null);
   const VTdetail = useSelector(VTInfo);
 
-  // console.log(typeof activeMarker);
+  // console.log(GISlist);
 
   function getGIS() {
     const listGIS = [];
@@ -30,7 +31,7 @@ function HomeMap() {
     // console.log(errorName);
     // console.log(listGIS);
     setGISlist(listGIS);
-    setNameError(errorName)
+    setNameError(errorName);
     for (var key in VTdetail.data) {
       VTdetail.data[key].forEach((item) => {
         listGIS.push(item.defect_gis);
@@ -43,10 +44,6 @@ function HomeMap() {
     getGIS();
   }, [VTdetail]);
 
-  const center = {
-    lat: 21.028511,
-    lng: 105.804817,
-  };
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
     googleMapsApiKey: "AIzaSyAxTvKumZ34dP0Qf_veNQoliDMC5GgrblM",
@@ -57,11 +54,12 @@ function HomeMap() {
     setTypeMap(event.target.value);
   };
 
-  const handleActiveMarker = (marker) => {
+  const handleActiveMarker = (marker, item) => {
     if (marker === activeMarker) {
       return;
     }
     setActiveMarker(marker);
+    setCenter({ lat: item.latitude, lng: item.longtitude });
   };
 
   function renderMapwithAMarker(GISlist, nameError) {
@@ -106,29 +104,28 @@ function HomeMap() {
                     icon={iconMarker}
                     animation={1}
                     onClick={() => {
-                      handleActiveMarker(index);
+                      handleActiveMarker(index, item);
                     }}
                   >
                     {activeMarker === index && (
-                      
-                      <InfoWindowF 
-                      position={{ lat: latitude, lng: longtitude }}>
+                      <InfoWindowF
+                        position={{ lat: latitude, lng: longtitude }}
+                      >
                         <Box
-                        className={"infobox"}
-                      style={{
-                        color: "black",
-                        width: 100,
-                        wordWrap: "break-word",
-                      }}
-                    >
-                      <p>Tên lỗi: {nameError}</p>
-                      <p>
-                        Tọa độ: {latitude} , {longtitude}
-                      </p>
-                      </Box>
+                          className={"infobox"}
+                          style={{
+                            color: "black",
+                            width: 100,
+                            wordWrap: "break-word",
+                          }}
+                        >
+                          <p>Tên lỗi: {nameError}</p>
+                          <p>
+                            Tọa độ: {latitude} , {longtitude}
+                          </p>
+                        </Box>
                       </InfoWindowF>
-                    
-                    ) }
+                    )}
                   </MarkerF>
                 </>
               );
