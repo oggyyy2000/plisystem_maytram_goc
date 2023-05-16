@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Slider from "react-slick";
 import img4 from "../../assets/images/anh4.png";
+import noProblem from "../../assets/images/noproblem.jpg";
 
 import "./css/HomeImageSlider.css";
 
@@ -12,7 +13,7 @@ const imgList = [img4, img4, img4, img4];
 function HomeImageSlider() {
   const [imgList2, setImgList2] = useState([]);
   const VTdetail = useSelector(VTInfo);
-  // console.log(imgList2);
+  console.log(imgList2);
 
   function getIMG() {
     const imgList2 = [];
@@ -75,18 +76,11 @@ function HomeImageSlider() {
       {/* Slider 1 */}
       <div style={{ margin: "1rem 0 0 0.625rem" }}>
         <Slider {...settings}>
-          {JSON.stringify(VTdetail.data) !== "{}" &&
+          {JSON.stringify(VTdetail.data) !== "{}" && imgList2.length > 0 ? (
             imgList2.map((img) => {
               return (
                 <>
-                  <div
-                    style={{
-                      padding: "1px",
-                      textAlign: "center",
-                      display: "flex",
-                      justifyContent: "center",
-                    }}
-                  >
+                  <div className="home-slide">
                     <img
                       src={`${img}`}
                       alt="img"
@@ -95,7 +89,18 @@ function HomeImageSlider() {
                   </div>
                 </>
               );
-            })}
+            })
+          ) : (
+            <>
+              <div className="home-slide">
+                <img
+                  src={noProblem}
+                  alt="img"
+                  style={{ maxWidth: "537px", maxHeight: "272px" }}
+                />
+              </div>
+            </>
+          )}
         </Slider>
       </div>
 

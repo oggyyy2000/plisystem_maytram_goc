@@ -15,3 +15,10 @@
 .slick-prev {
   left: 15px;
 }
+
+.home-slide {
+  padding: 1px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+}

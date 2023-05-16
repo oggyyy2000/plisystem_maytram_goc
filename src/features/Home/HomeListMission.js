@@ -64,8 +64,8 @@ function HomeListMission() {
               // fontSize: "58px",
             }}
           >
-            // <CheckCircleIcon color="success" fontSize="inherit" />
-            <img src={checkMark} alt="checkMark" style={{height: "100%", width: "100%"}} />
+            <CheckCircleIcon color="success" fontSize="inherit" /> 
+            <img src={checkMark} alt="checkMark" style={{height: "80%", width: "80%"}} />
           </div>
         </div>
       </div> */}

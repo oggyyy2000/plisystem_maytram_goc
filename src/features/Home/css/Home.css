@@ -1,6 +1,13 @@
 .home-left-panel {
   height: 90.8vh;
   border: 2px solid black;
+  overflow-y: auto;
+  -ms-overflow-style: none;  /* hide scrollbar IE and Edge */
+  scrollbar-width: none;  /* hide scrollbar Firefox */
+}
+
+.home-left-panel::-webkit-scrollbar {
+  display: none; /* hide scrollbar for Chrome, Safari and Opera*/
 }
 
 .home-middle-panel-map {
