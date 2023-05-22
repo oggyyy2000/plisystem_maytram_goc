@@ -11,7 +11,7 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import { VTInfo } from "../../redux/selectors";
 
-import iconMarker from "../../assets/images/markerIcon.png";
+import iconMarkereror from "../../assets/images/markerIconerror.png";
 import "./css/HomeMap.css";
 
 function HomeMap() {
@@ -101,8 +101,8 @@ function HomeMap() {
                   <MarkerF
                     key={index}
                     position={{ lat: latitude, lng: longtitude }}
-                    icon={iconMarker}
-                    animation={1}
+                    icon={iconMarkereror}
+                    // animation={1}
                     onClick={() => {
                       handleActiveMarker(index, item);
                     }}

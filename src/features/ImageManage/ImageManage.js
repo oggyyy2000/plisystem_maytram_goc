@@ -4,42 +4,20 @@ import ImageSlider1 from "./ImageSlider1";
 import ImageSlider2 from "./ImageSlider2";
 import ImageSlider3 from "./ImageSlider3";
 
+import "./css/ImageManage.css";
+
 function ImageManager() {
   return (
     <>
       <Box sx={{ flexGrow: 1 }}>
         <Grid container spacing={0}>
-          <Grid
-            item
-            xs={12}
-            style={{
-              border: "3px solid black",
-              margin: "0.5rem 0 0 0",
-              minHeight: "350px",
-            }}
-          >
+          <Grid className="img-manage-slide1" xs={12}>
             <ImageSlider1 />
           </Grid>
-          <Grid
-            item
-            xs={12}
-            style={{
-              border: "3px solid black",
-              margin: "1rem 0 0 0",
-              minHeight: "350px",
-            }}
-          >
+          <Grid className="img-manage-slide2" xs={12}>
             <ImageSlider2 />
           </Grid>
-          <Grid
-            item
-            xs={12}
-            style={{
-              border: "3px solid black",
-              margin: "1rem 0 0 0",
-              minHeight: "350px",
-            }}
-          >
+          <Grid className="img-manage-slide3" xs={12}>
             <ImageSlider3 />
           </Grid>
         </Grid>
