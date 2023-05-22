@@ -1,21 +1,77 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
+import { Button } from "@mui/material";
 import { GoogleMap, useJsApiLoader } from "@react-google-maps/api";
-import { Grid } from "@mui/material";
+
 import "./css/FlightRoute.css";
+import FlightTakeoffIcon from "@mui/icons-material/FlightTakeoff";
+import CloseIcon from "@mui/icons-material/Close";
 import img1 from "../../assets/images/anh4.png";
+import FlightRoutreDefectList from "./FlightRouteDefectList";
+import FlightRouteInMission from "./FlightRouteInMission";
 
 function FlightRouteMap() {
-  const types = ["roadmap", "satellite"];
+  // const types = ["Bản đồ", "Vệ tinh"];
   const [typeMap, setTypeMap] = useState("roadmap");
-
-  const handleChangeMapType = (event) => {
-    setTypeMap(event.target.value);
-  };
-
   const center = {
     lat: 21.028511,
     lng: 105.804817,
+  };
+  const wsUrl = process.env.REACT_APP_WS_URL;
+
+  const sentData = {
+    schedule_id: "c3a2505a-a711-4698-870e-7276c71470c5",
+    implementation_date: "2023-05-12",
+    supervision_results:
+      "E:/AAA_Powerline_Project/Powerline_UAV_Server/Supervision_Database/T87/2023-05-12/supervision_results/",
+    lastest_time_update_data: "7h01p",
+    powerline_id: "T87",
+    vid_save_path:
+      "E:/AAA_Powerline_Project/Powerline_UAV_Server/Supervision_Database/T87/2023-05-12/supervision_offline_datas/DJI_0701.MP4",
+    srt_save_path:
+      "E:/AAA_Powerline_Project/Powerline_UAV_Server/Supervision_Database/T87/2023-05-12/supervision_offline_datas/DJI_0701.SRT",
+    results_save_path:
+      "E:/AAA_Powerline_Project/Powerline_UAV_Server/Supervision_Database/T87/2023-05-12/supervision_results/7h01p/",
+  };
+
+  useEffect(() => {
+    const ws = new WebSocket(wsUrl);
+
+    ws.addEventListener("open", (event) => {
+      ws.send(JSON.stringify(sentData));
+      console.log("Connected to server");
+    });
+
+    ws.addEventListener("message", (event) => {
+      const data = JSON.parse(event.data);
+      console.log(data);
+    });
+
+    ws.addEventListener("close", () => {
+      console.log("Disconnected from server");
+    });
+
+    ws.addEventListener("error", (error) => {
+      console.error("WebSocket error:", error);
+    });
+
+    return () => {
+      ws.close();
+    };
+  }, []);
+
+  const handleChangeMapType = (event) => {
+    if (event.target.value == "Vệ tinh") {
+      setTypeMap("satellite");
+      if (typeMap == "satellite") {
+        setTypeMap("roadmap");
+      }
+    }
+  };
+
+  const handleAddMission = () => {
+    return <></>;
   };
 
   const { isLoaded } = useJsApiLoader({
@@ -29,74 +85,28 @@ function FlightRouteMap() {
     <>
       <div style={{ height: "90.7vh" }}>
         <div id="flightroute-btn-container">
-          {types.map((type) => {
-            return (
-              <button
-                className={`flightroute-btn-change-maptype ${
-                  type === typeMap ? "bold-text" : ""
-                }`}
-                value={type}
-                onClick={handleChangeMapType}
-              >
-                {type.charAt(0).toUpperCase() + type.slice(1)}
-              </button>
-            );
-          })}
+          <button
+            className={`flightroute-btn-change-maptype ${
+              typeMap == "satellite" ? "bold-text" : ""
+            }`}
+            value={"Vệ tinh"}
+            onClick={handleChangeMapType}
+          >
+            Vệ tinh
+          </button>
+
+          <Button
+            className="flightroute-btn-addmission"
+            variant="contained"
+            onClick={handleAddMission}
+          >
+            flight
+            <FlightTakeoffIcon />
+          </Button>
         </div>
-
-        <div className="flightroute-left-panel">
-          <div className="flightroute-itemcard">
-            <div className="flightroute-itemcard-header">
-              <h1>Defect</h1>
-            </div>
-
-            <div class="flightroute-itemcard-content">
-              <p>CDTT vo bat: on VT8</p>
-              <p>GIS: 18.16, 28.32</p>
-            </div>
-          </div>
-          {/* ------------------------------------ */}
-          <div className="flightroute-itemcard">
-            <div className="flightroute-itemcard-header">
-              <h1>Defect</h1>
-            </div>
-
-            <div class="flightroute-itemcard-content">
-              <p>CDTT vo bat: on VT8</p>
-              <p>GIS: 18.16, 28.32</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="flightroute-right-panel">
-          <div className="flightroute-tableinfo">
-            <table>
-              <tr>
-                <td>VTHT: VT8_T87</td>
-                <td rowSpan={2}>
-                  Longtitude: <br />
-                  Latitude: <br />
-                  Altitude:
-                </td>
-              </tr>
-              <tr>
-                <td>FPS:</td>
-              </tr>
-              <tr>
-                <td colSpan={2}>Process: 32/100</td>
-              </tr>
-              <tr>
-                <td colSpan={2}>MODE: DUALDEVICE</td>
-              </tr>
-            </table>
-          </div>
-          <div>
-            <img src={img1} style={{ width: "31.3rem", height: "30vh" }} />
-          </div>
-          <div>
-            <img src={img1} style={{ width: "31.3rem", height: "30vh" }} />
-          </div>
-        </div>
+        
+        <FlightRoutreDefectList />
+        <FlightRouteInMission />
         <GoogleMap
           mapContainerClassName="flightroute-google-map"
           center={center}

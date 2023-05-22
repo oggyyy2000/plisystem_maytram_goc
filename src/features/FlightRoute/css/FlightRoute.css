@@ -1,5 +1,11 @@
+/* Common use */
+.bold-text {
+  font-weight: bold;
+}
+
+/* Body */
 #flightroute-btn-container {
-  display: flex;
+  display: flex ;
   margin: 0.625rem 0 0 1rem;
   position: absolute;
   z-index: 1;
@@ -7,76 +13,29 @@
 
 .flightroute-btn-change-maptype {
   text-align: center;
-  width: 75px;
+  text-transform: none;
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 4px -1px;
+  border: 0px;
+  border-radius: 2px;
+  width: 80px;
+  height: 40px;
   padding: 10px;
 }
 
-.bold-text {
-  font-weight: bold;
-}
-
-.flightroute-left-panel {
-  position: absolute;
-  z-index: 1;
-  width: 15rem;
-  height: 425px;
-  background-color: white;
-  left: 0;
-  bottom: 45px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  overflow-y: auto;
-}
-
-.flightroute-itemcard {
-  margin-top: 6px;
-  width: 95%;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  font-weight: bold;
+.flightroute-btn-addmission {
   text-align: center;
-}
-
-.flightroute-itemcard-header {
-  background-color: red;
-  color: white;
-  padding: 1px;
-  font-size: 10px;
   text-transform: uppercase;
-  border: 1px solid black;
-}
-
-.flightroute-itemcard-content {
+  width: 85px;
   padding: 10px;
-  text-transform: uppercase;
-  border: 1px solid black;
-}
-
-.flightroute-right-panel {
-  position: absolute;
+  margin: 3.5rem 0 0 -2px !important;
   z-index: 1;
-  width: 31.3rem;
-  height: 75vh;
-  background-color: white;
-  top: 150px;
-  right: 0;
+  position: absolute !important;
+  color: white;
 }
 
-.flightroute-tableinfo {
-  width: 31.3rem;
-  height: 15vh;
-}
 
-.flightroute-tableinfo table {
-  width: 100%;
-  border: 3px solid black;
-  border-collapse: collapse;
-  width: 100%;
-}
 
-.flightroute-tableinfo table tr td {
-  border: 2px solid black;
-}
+
 
 .flightroute-google-map {
   height: 100%;
