@@ -13,21 +13,23 @@ const imgList = [img4, img4, img4, img4];
 function HomeImageSlider() {
   const [imgList2, setImgList2] = useState([]);
   const VTdetail = useSelector(VTInfo);
-  console.log(imgList2);
+  console.log(VTdetail);
 
   function getIMG() {
     const imgList2 = [];
     setImgList2(imgList2);
     // console.log(imgList2);
+    
     for (var keys in VTdetail.data) {
-      // console.log(keys);
+      if(typeof VTdetail.data[keys] !== "string") {
       VTdetail.data[keys].forEach((item) => {
         item.defect_image.map((list) => {
           imgList2.push(process.env.REACT_APP_IMG_SLIDE + `${list}`);
         });
       });
     }
-  }
+    }}
+  
 
   useEffect(() => {
     getIMG();

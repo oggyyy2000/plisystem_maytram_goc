@@ -19,15 +19,17 @@ function HomeListTB() {
     //   Object.keys(item).map((TB) => {
     //     TBtitle.push(TB);
     //   });
+
     return (
       <>
         {Object.keys(VTdetail.data).map((nameTB) => {
-          // console.log(typeof Object.keys(VTdetail.data));
+          console.log(typeof VTdetail.data[nameTB]);
           var error = false;
           if (VTdetail.data[nameTB].length > 0) {
             error = true;
           }
-          return (
+          if(typeof VTdetail.data[nameTB] !== "string")
+          {return (
             <>
               <Grid
                 item
@@ -59,7 +61,7 @@ function HomeListTB() {
                 </div>
               </Grid>
             </>
-          );
+          );} else {return <>No data !</>}
         })}
       </>
     );

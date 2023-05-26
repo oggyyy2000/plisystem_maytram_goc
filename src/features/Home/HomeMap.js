@@ -23,20 +23,26 @@ function HomeMap() {
   const [activeMarker, setActiveMarker] = useState(null);
   const VTdetail = useSelector(VTInfo);
 
-  // console.log(GISlist);
+  const urlLocations = process.env.REACT_APP_API_URL + "powerlinelocations";
+
+  console.log(GISlist);
 
   function getGIS() {
     const listGIS = [];
     const errorName = [];
+
     // console.log(errorName);
     // console.log(listGIS);
     setGISlist(listGIS);
     setNameError(errorName);
+
     for (var key in VTdetail.data) {
-      VTdetail.data[key].forEach((item) => {
-        listGIS.push(item.defect_gis);
-        errorName.push(item.defect_name);
-      });
+      if (typeof VTdetail.data[key] !== "string") {
+        VTdetail.data[key].forEach((item) => {
+          listGIS.push(item.defect_gis);
+          errorName.push(item.defect_name);
+        });
+      }
     }
   }
 
@@ -87,7 +93,7 @@ function HomeMap() {
           <GoogleMap
             mapContainerClassName="home-google-map"
             center={center}
-            zoom={10}
+            zoom={15}
             mapTypeId={typeMap}
             options={{ zoomControl: false }}
             onClick={() => setActiveMarker(null)}
@@ -139,6 +145,8 @@ function HomeMap() {
   return (
     <>
       {JSON.stringify(VTdetail) !== "{}" &&
+        GISlist !== "[]" &&
+        nameError !== "[]" &&
         renderMapwithAMarker(GISlist, nameError)}
     </>
   );
