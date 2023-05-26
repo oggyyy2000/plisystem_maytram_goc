@@ -1,67 +1,107 @@
 import React from "react";
 import { useState, useEffect } from "react";
+import axios from "axios";
 
-import { Button } from "@mui/material";
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  Box,
+  InputLabel,
+  MenuItem,
+  FormControl,
+  Select,
+  TextField,
+  Tabs,
+  Tab,
+  Typography,
+} from "@mui/material";
+import PropTypes from "prop-types";
 import { GoogleMap, useJsApiLoader } from "@react-google-maps/api";
 
 import "./css/FlightRoute.css";
 import FlightTakeoffIcon from "@mui/icons-material/FlightTakeoff";
-import CloseIcon from "@mui/icons-material/Close";
-import img1 from "../../assets/images/anh4.png";
+import SaveIcon from "@mui/icons-material/Save";
+
 import FlightRoutreDefectList from "./FlightRouteDefectList";
 import FlightRouteInMission from "./FlightRouteInMission";
 
+function TabPanel(props) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box sx={{ p: 3 }}>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
+    </div>
+  );
+}
+
+TabPanel.propTypes = {
+  children: PropTypes.node,
+  index: PropTypes.number.isRequired,
+  value: PropTypes.number.isRequired,
+};
+
+function a11yProps(index) {
+  return {
+    id: `simple-tab-${index}`,
+    "aria-controls": `simple-tabpanel-${index}`,
+  };
+}
+
 function FlightRouteMap() {
-  // const types = ["Bản đồ", "Vệ tinh"];
+  const [open, setOpen] = useState(false);
+  const [SRT, setSRT] = useState(null);
+  const [nameSRT, setNameSRT] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [nameSelectedFile, setNameSelectedFile] = useState(null);
+  var dt = new Date();
+  var date = `${dt
+    .getFullYear()
+    .toString()
+    .padStart(4, "0")}-${(dt.getMonth() + 1).toString().padStart(2, "0")}-${dt
+    .getDate()
+    .toString()
+    .padStart(2, "0")}`;
+  const values = {
+    someDate: date,
+  };
+  const [DateDB, setDateDB] = useState(date);
+
   const [typeMap, setTypeMap] = useState("roadmap");
+  const [buttonText, setButtonText] = useState("Bản đồ");
+
+  const [tab, setTab] = useState(0);
+
   const center = {
     lat: 21.028511,
     lng: 105.804817,
   };
-  const wsUrl = process.env.REACT_APP_WS_URL;
 
-  const sentData = {
-    schedule_id: "c3a2505a-a711-4698-870e-7276c71470c5",
-    implementation_date: "2023-05-12",
-    supervision_results:
-      "E:/AAA_Powerline_Project/Powerline_UAV_Server/Supervision_Database/T87/2023-05-12/supervision_results/",
-    lastest_time_update_data: "7h01p",
-    powerline_id: "T87",
-    vid_save_path:
-      "E:/AAA_Powerline_Project/Powerline_UAV_Server/Supervision_Database/T87/2023-05-12/supervision_offline_datas/DJI_0701.MP4",
-    srt_save_path:
-      "E:/AAA_Powerline_Project/Powerline_UAV_Server/Supervision_Database/T87/2023-05-12/supervision_offline_datas/DJI_0701.SRT",
-    results_save_path:
-      "E:/AAA_Powerline_Project/Powerline_UAV_Server/Supervision_Database/T87/2023-05-12/supervision_results/7h01p/",
+  const urlPostSchedules =
+    process.env.REACT_APP_API_URL + "supervisionschedules/";
+
+  const handleChangeTabs = (event, newValue) => {
+    setTab(newValue);
   };
 
-  useEffect(() => {
-    const ws = new WebSocket(wsUrl);
-
-    ws.addEventListener("open", (event) => {
-      ws.send(JSON.stringify(sentData));
-      console.log("Connected to server");
-    });
-
-    ws.addEventListener("message", (event) => {
-      const data = JSON.parse(event.data);
-      console.log(data);
-    });
-
-    ws.addEventListener("close", () => {
-      console.log("Disconnected from server");
-    });
-
-    ws.addEventListener("error", (error) => {
-      console.error("WebSocket error:", error);
-    });
-
-    return () => {
-      ws.close();
-    };
-  }, []);
-
   const handleChangeMapType = (event) => {
+    setButtonText("Vệ tinh");
+    if (buttonText == "Vệ tinh") {
+      setButtonText("Bản đồ");
+    }
     if (event.target.value == "Vệ tinh") {
       setTypeMap("satellite");
       if (typeMap == "satellite") {
@@ -70,9 +110,179 @@ function FlightRouteMap() {
     }
   };
 
-  const handleAddMission = () => {
-    return <></>;
-  };
+  function handleClickOpen() {
+    setOpen(true);
+  }
+
+  function handleClose() {
+    setOpen(false);
+  }
+
+  async function onChangeHandlerSRT(event) {
+    var file = event.target.files[0];
+    var fileSRTname = event.target.files[0].name;
+    if (file) {
+      setSRT(file);
+      setNameSRT(fileSRTname);
+    }
+  }
+
+  async function onChangeHandlerVID(event) {
+    var file = event.target.files[0];
+    var fileSelectedName = event.target.files[0].name;
+    if (file) {
+      setSelectedFile(file);
+      setNameSelectedFile(fileSelectedName);
+    }
+  }
+
+  function onChangeDateDB(e) {
+    e.preventDefault();
+    setDateDB(e.target.value);
+  }
+
+  async function onChangeHandlerSelectData() {}
+
+  function handleSubmit() {
+    axios
+      .post({
+        url: urlPostSchedules,
+        data: {
+          video: selectedFile,
+          srt: SRT,
+          data: {
+            powerline_id: "T87",
+            implementation_date: DateDB,
+          },
+        },
+      })
+      .then(function(response) {
+        console.log(response);
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
+  }
+
+  function AddMissionDialog() {
+    return (
+      <>
+        <Dialog
+          open={open}
+          sx={{
+            "& .MuiDialog-container": {
+              justifyContent: "flex-start",
+              alignItems: "flex-start",
+            },
+          }}
+          PaperProps={{ sx: { top: 102, left: -18 } }}
+          hideBackdrop={true}
+        >
+          <Box sx={{ width: "100%" }}>
+            <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+              <Tabs
+                value={tab}
+                onChange={handleChangeTabs}
+                aria-label="basic tabs example"
+              >
+                <Tab label="Mission" {...a11yProps(0)} />
+                <Tab label="Stream" {...a11yProps(1)} />
+                <div className="flightroute-dialog-icon">
+                  <FlightTakeoffIcon color="primary" fontSize="large" />
+                </div>
+              </Tabs>
+            </Box>
+            <TabPanel value={tab} index={0}>
+              <DialogContent>
+                <DialogContentText>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    size="small"
+                    component="label"
+                    htmlFor="files"
+                    startIcon={<SaveIcon />}
+                  >
+                    VIDEO
+                    <input
+                      id="files"
+                      name="file"
+                      accept="video/*"
+                      style={{ display: "none" }}
+                      type="file"
+                      onChange={(e) => onChangeHandlerVID(e)}
+                    />
+                  </Button>
+                  {nameSelectedFile}
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    size="small"
+                    component="label"
+                    htmlFor="srt"
+                    startIcon={<SaveIcon />}
+                    style={{ marginLeft: 10 }}
+                  >
+                    SRT
+                    <input
+                      id="srt"
+                      name="srt"
+                      accept=".srt"
+                      style={{ display: "none" }}
+                      type="file"
+                      onChange={(e) => onChangeHandlerSRT(e)}
+                    />
+                  </Button>
+                  {nameSRT}
+                </DialogContentText>
+                <DialogContentText style={{ marginTop: "5px" }}>
+                  Info:
+                  <Box className="flightroute-select-date">
+                    <TextField
+                      id="date"
+                      label="Ngày quay"
+                      type="date"
+                      value={DateDB}
+                      defaultValue={values.someDate}
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                      onChange={onChangeDateDB}
+                    />
+                  </Box>
+                  <Box className="flightroute-select-tuyen">
+                    <FormControl fullWidth>
+                      <InputLabel>Tên Tuyến</InputLabel>
+                      <Select
+                        // labelId="demo-simple-select-label"
+                        // id="demo-simple-select"
+                        // value={ID_Tuyen}
+                        label="IDTuyen"
+                        onChange={onChangeHandlerSelectData()}
+                      >
+                        <MenuItem value={"T87"}>Mai Động-Thanh Nhàn</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Box>
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleClose} color="primary">
+                  Cancel
+                </Button>
+                <Button onClick={handleClose} color="primary">
+                  Submit
+                </Button>
+              </DialogActions>
+            </TabPanel>
+            <TabPanel value={tab} index={1}>
+              <div className="flightroute-dialogtab-stream">coming soon</div>
+            </TabPanel>
+          </Box>
+        </Dialog>
+      </>
+    );
+  }
 
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
@@ -86,33 +296,35 @@ function FlightRouteMap() {
       <div style={{ height: "90.7vh" }}>
         <div id="flightroute-btn-container">
           <button
-            className={`flightroute-btn-change-maptype ${
-              typeMap == "satellite" ? "bold-text" : ""
-            }`}
+            className={`flightroute-btn-change-maptype `}
             value={"Vệ tinh"}
             onClick={handleChangeMapType}
           >
-            Vệ tinh
+            {buttonText}
           </button>
 
           <Button
             className="flightroute-btn-addmission"
             variant="contained"
-            onClick={handleAddMission}
+            onClick={handleClickOpen}
           >
             flight
             <FlightTakeoffIcon />
           </Button>
+
+          {/* Modal */}
+          {AddMissionDialog()}
         </div>
-        
+
         <FlightRoutreDefectList />
         <FlightRouteInMission />
+
         <GoogleMap
           mapContainerClassName="flightroute-google-map"
           center={center}
           zoom={10}
           mapTypeId={typeMap}
-          options={{ zoomControl: false }}
+          options={{ zoomControl: false, fullscreenControl: false }}
         ></GoogleMap>
       </div>
     </>

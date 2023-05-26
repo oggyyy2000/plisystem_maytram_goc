@@ -5,7 +5,7 @@
 
 /* Body */
 #flightroute-btn-container {
-  display: flex ;
+  display: flex;
   margin: 0.625rem 0 0 1rem;
   position: absolute;
   z-index: 1;
@@ -33,9 +33,29 @@
   color: white;
 }
 
+/* Dialog */
+.flightroute-dialog-icon {
+  display: flex;
+    margin-left: auto;
+    margin-right: 10px;
+    align-items: center;
+}
 
+.flightroute-select-date {
+  min-width: 120;
+  margin-top: 8px;
+}
 
+.flightroute-select-tuyen {
+  margin-top: 8px;
+  min-width: 120;
+}
 
+.flightroute-dialogtab-stream {
+  width: 266px;
+  height: 377px;
+  text-transform: uppercase;
+}
 
 .flightroute-google-map {
   height: 100%;
