@@ -17,7 +17,10 @@ import "./css/HomeMap.css";
 function HomeMap() {
   const types = ["roadmap", "satellite"];
   const [typeMap, setTypeMap] = useState("roadmap");
-  const [center, setCenter] = useState({ lat: 21.028511, lng: 105.804817 });
+  const [center, setCenter] = useState({
+    lat: 21.007556875711494,
+    lng: 105.84322259736739,
+  });
   const [GISlist, setGISlist] = useState([]);
   const [nameError, setNameError] = useState();
   const [activeMarker, setActiveMarker] = useState(null);
@@ -93,7 +96,7 @@ function HomeMap() {
           <GoogleMap
             mapContainerClassName="home-google-map"
             center={center}
-            zoom={15}
+            zoom={12}
             mapTypeId={typeMap}
             options={{ zoomControl: false }}
             onClick={() => setActiveMarker(null)}
