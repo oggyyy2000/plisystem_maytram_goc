@@ -1,10 +1,36 @@
 import React from "react";
-import "./css/FlightRoutreDefectList.css";
+import { useState } from "react";
+
+import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
+import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
+
+import "./css/FlightRouteDefectList.css";
 
 function FlightRoutreDefectList() {
+  const [close, setClose] = useState(false);
+
+  function handleHidePanel() {
+    setClose(true);
+    if (close === true) {
+      setClose(false);
+    }
+  }
   return (
     <>
-      <div className="flightroute-left-panel">
+      <div
+        className={`flightroute-close-leftpanel ${
+          close === true ? "onclose-btn" : ""
+        }`}
+      >
+        <button onClick={handleHidePanel}>
+          {close === true ? (
+            <KeyboardDoubleArrowRightIcon />
+          ) : (
+            <KeyboardDoubleArrowLeftIcon />
+          )}
+        </button>
+      </div>
+      <div className={`flightroute-left-panel ${close ? "onclose-panel" : ""}`}>
         <div className="flightroute-itemcard">
           <div className="flightroute-itemcard-header">
             <h1>Defect</h1>

@@ -3,11 +3,14 @@ import Webcam from "react-webcam";
 
 import { Dialog } from "@mui/material";
 import Icon from "../../assets/images/expand-icon.png";
+import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
+import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
 
 import "./css/FlightRouteInMission.css";
 
 function FlightRouteInMission() {
   const [open, setOpen] = useState(false);
+  const [close, setClose] = useState(false);
 
   function handleClickOpen() {
     setOpen(true);
@@ -15,6 +18,13 @@ function FlightRouteInMission() {
 
   function handleClose() {
     setOpen(false);
+  }
+
+  function handleHidePanel() {
+    setClose(true);
+    if (close === true) {
+      setClose(false);
+    }
   }
 
   function zoomView() {
@@ -34,42 +44,15 @@ function FlightRouteInMission() {
           }}
           // hideBackdrop={true}
         >
-          <div
-            style={{
-              display: "flex",
-              width: "100%",
-              height: "681px",
-              overflowY: "hidden",
-              
-            }}
-          >
-            <div style={{ width: "50%", position: "relative", border: "1px solid black" }}>
-              <div
-                style={{
-                  position: "absolute",
-                  right: 0,
-                  textTransform: "uppercase",
-                  fontWeight: "bold",
-                  fontSize: "25px",
-                  color: "red",
-                }}
-              >
-                RGB
-              </div>
+          <div className="flightroute-expandcam-container">
+            <div className="flightroute-rgbcam-expand-container">
+              <div className="flightroute-rgbcam-expand-title">RGB</div>
               {WebcamComponent()}
             </div>
-            <div style={{ width: "50%", position: "relative", border: "2px solid black" }}><div
-                style={{
-                  position: "absolute",
-                  right: 0,
-                  textTransform: "uppercase",
-                  fontWeight: "bold",
-                  fontSize: "25px",
-                  color: "red",
-                }}
-              >
-                thermal
-              </div>{WebcamComponent()}</div>
+            <div className="flightroute-thermalcam-expand-container">
+              <div className="flightroute-thermalcam-expand-title">thermal</div>
+              {WebcamComponent()}
+            </div>
           </div>
         </Dialog>
       </>
@@ -85,7 +68,16 @@ function FlightRouteInMission() {
   }
   return (
     <>
-      <div className="flightroute-right-panel">
+      <div className={`flightroute-close-rightpanel ${close === true ? "onclose-btn-rightpanel" : ""}`}>
+        <button onClick={handleHidePanel}>
+          {close === true ? (
+            <KeyboardDoubleArrowLeftIcon />
+          ) : (
+            <KeyboardDoubleArrowRightIcon />
+          )}
+        </button>
+      </div>
+      <div className={`flightroute-right-panel ${close ? "onclose-rightpanel" : ""}`}>
         <div className="flightroute-tableinfo">
           <table>
             <tr>
