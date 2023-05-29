@@ -79,6 +79,7 @@ function FlightRouteMap() {
     someDate: date,
   };
   const [DateDB, setDateDB] = useState(date);
+  const [tuyen, setTuyen] = useState();
 
   const [typeMap, setTypeMap] = useState("roadmap");
   const [buttonText, setButtonText] = useState("Bản đồ");
@@ -93,6 +94,8 @@ function FlightRouteMap() {
   const urlPostSchedules =
     process.env.REACT_APP_API_URL + "supervisionschedules/";
 
+
+  console.log("selectedFile:", selectedFile, "SRT:", SRT, "tuyen:", tuyen, "DateDB:", DateDB)  
   const handleChangeTabs = (event, newValue) => {
     setTab(newValue);
   };
@@ -116,6 +119,11 @@ function FlightRouteMap() {
 
   function handleClose() {
     setOpen(false);
+    setTuyen(null)
+    setSelectedFile(null)
+    setNameSelectedFile(null)
+    setSRT(null)
+    setNameSRT(null)
   }
 
   async function onChangeHandlerSRT(event) {
@@ -141,7 +149,10 @@ function FlightRouteMap() {
     setDateDB(e.target.value);
   }
 
-  async function onChangeHandlerSelectData() {}
+  function onChangeSelectTuyen(e) {
+    setTuyen(e.target.value);
+    
+  }
 
   function handleSubmit() {
     axios
@@ -151,7 +162,7 @@ function FlightRouteMap() {
           video: selectedFile,
           srt: SRT,
           data: {
-            powerline_id: "T87",
+            powerline_id: tuyen,
             implementation_date: DateDB,
           },
         },
@@ -162,6 +173,7 @@ function FlightRouteMap() {
       .catch(function(error) {
         console.log(error);
       });
+    setOpen(false);
   }
 
   function AddMissionDialog() {
@@ -254,11 +266,11 @@ function FlightRouteMap() {
                     <FormControl fullWidth>
                       <InputLabel>Tên Tuyến</InputLabel>
                       <Select
-                        // labelId="demo-simple-select-label"
-                        // id="demo-simple-select"
-                        // value={ID_Tuyen}
+                        id="route"
+                        value={tuyen}
                         label="IDTuyen"
-                        onChange={onChangeHandlerSelectData()}
+                        onChange={onChangeSelectTuyen}
+                        defaultValue={""}
                       >
                         <MenuItem value={"T87"}>Mai Động-Thanh Nhàn</MenuItem>
                       </Select>
@@ -270,9 +282,16 @@ function FlightRouteMap() {
                 <Button onClick={handleClose} color="primary">
                   Cancel
                 </Button>
-                <Button onClick={handleClose} color="primary">
-                  Submit
-                </Button>
+                {selectedFile != null &&
+                SRT != null &&
+                tuyen != null 
+                 ? (
+                   <Button onClick={handleSubmit} color="primary">
+                    Submit
+                  </Button>
+                ) : (
+                  <Button disabled>Submit</Button>
+                )}
               </DialogActions>
             </TabPanel>
             <TabPanel value={tab} index={1}>

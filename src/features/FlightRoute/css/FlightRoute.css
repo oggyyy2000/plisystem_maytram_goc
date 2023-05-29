@@ -36,9 +36,9 @@
 /* Dialog */
 .flightroute-dialog-icon {
   display: flex;
-    margin-left: auto;
-    margin-right: 10px;
-    align-items: center;
+  margin-left: auto;
+  margin-right: 10px;
+  align-items: center;
 }
 
 .flightroute-select-date {
