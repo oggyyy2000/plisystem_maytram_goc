@@ -3,8 +3,8 @@ import Webcam from "react-webcam";
 
 import { Dialog } from "@mui/material";
 import Icon from "../../assets/images/expand-icon.png";
-import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
-import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
+import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
+import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
 import "./css/FlightRouteInMission.css";
 
@@ -68,16 +68,24 @@ function FlightRouteInMission() {
   }
   return (
     <>
-      <div className={`flightroute-close-rightpanel ${close === true ? "onclose-btn-rightpanel" : ""}`}>
+      <div
+        className={`flightroute-close-rightpanel ${
+          close === true ? "onclose-btn-rightpanel" : ""
+        }`}
+      >
         <button onClick={handleHidePanel}>
           {close === true ? (
-            <KeyboardDoubleArrowLeftIcon />
+            <KeyboardArrowLeftIcon />
           ) : (
-            <KeyboardDoubleArrowRightIcon />
+            <KeyboardArrowRightIcon />
           )}
         </button>
       </div>
-      <div className={`flightroute-right-panel ${close ? "onclose-rightpanel" : ""}`}>
+      <div
+        className={`flightroute-right-panel ${
+          close ? "onclose-rightpanel" : ""
+        }`}
+      >
         <div className="flightroute-tableinfo">
           <table>
             <tr>

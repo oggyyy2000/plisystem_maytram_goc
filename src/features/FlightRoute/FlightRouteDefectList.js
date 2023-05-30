@@ -1,8 +1,8 @@
 import React from "react";
 import { useState } from "react";
 
-import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
-import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
+import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
+import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
 import "./css/FlightRouteDefectList.css";
 
@@ -24,9 +24,9 @@ function FlightRoutreDefectList() {
       >
         <button onClick={handleHidePanel}>
           {close === true ? (
-            <KeyboardDoubleArrowRightIcon />
+            <KeyboardArrowRightIcon />
           ) : (
-            <KeyboardDoubleArrowLeftIcon />
+            <KeyboardArrowLeftIcon />
           )}
         </button>
       </div>

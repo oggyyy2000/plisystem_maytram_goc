@@ -14,7 +14,7 @@
   position: absolute;
   z-index: 2;
   right: 26.6%;
-  top: 50%;
+  top: 67%;
   transition: 0.5s ease-out;
 }
 
@@ -22,6 +22,7 @@
   display: flex;
   justify-items: center;
   justify-content: center;
+  width: 12px;
 }
 
 .flightroute-right-panel {
