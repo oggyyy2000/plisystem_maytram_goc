@@ -93,9 +93,8 @@ function FlightRouteMap() {
 
   const urlPostSchedules =
     process.env.REACT_APP_API_URL + "supervisionschedules/";
+  const wsUrl = process.env.REACT_APP_WS_URL;
 
-
-  console.log("selectedFile:", selectedFile, "SRT:", SRT, "tuyen:", tuyen, "DateDB:", DateDB)  
   const handleChangeTabs = (event, newValue) => {
     setTab(newValue);
   };
@@ -119,29 +118,34 @@ function FlightRouteMap() {
 
   function handleClose() {
     setOpen(false);
-    setTuyen(null)
-    setSelectedFile(null)
-    setNameSelectedFile(null)
-    setSRT(null)
-    setNameSRT(null)
+    setTuyen(null);
+    setSelectedFile(null);
+    setNameSelectedFile(null);
+    setSRT(null);
+    setNameSRT(null);
   }
 
   async function onChangeHandlerSRT(event) {
-    var file = event.target.files[0];
-    var fileSRTname = event.target.files[0].name;
-    if (file) {
-      setSRT(file);
-      setNameSRT(fileSRTname);
-    }
+    // var file = event.target.files[0];
+    // var fileSRTname = event.target.files[0].name;
+    // if (file) {
+    //   setSRT(file);
+    //   setNameSRT(fileSRTname);
+    // }
+    setSRT(event.target.files[0]);
+    setNameSRT(event.target.files[0].name);
   }
 
   async function onChangeHandlerVID(event) {
-    var file = event.target.files[0];
-    var fileSelectedName = event.target.files[0].name;
-    if (file) {
-      setSelectedFile(file);
-      setNameSelectedFile(fileSelectedName);
-    }
+    // var file = event.target.files[0];
+    // var fileSelectedName = event.target.files[0].name;
+    // // console.log(file);
+    // if (file) {
+    //   setSelectedFile(file);
+    //   setNameSelectedFile(fileSelectedName);
+    // }
+    setSelectedFile(event.target.files[0]);
+    setNameSelectedFile(event.target.files[0].name);
   }
 
   function onChangeDateDB(e) {
@@ -151,29 +155,34 @@ function FlightRouteMap() {
 
   function onChangeSelectTuyen(e) {
     setTuyen(e.target.value);
-    
   }
 
-  function handleSubmit() {
-    axios
-      .post({
-        url: urlPostSchedules,
-        data: {
-          video: selectedFile,
-          srt: SRT,
-          data: {
-            powerline_id: tuyen,
-            implementation_date: DateDB,
-          },
+  const sendPostRequest = async (formData) => {
+    try {
+      const response = await axios.post(urlPostSchedules, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
         },
-      })
-      .then(function(response) {
-        console.log(response);
-      })
-      .catch(function(error) {
-        console.log(error);
       });
-    setOpen(false);
+      console.log(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    // console.log("selectedFile:", selectedFile, "SRT:", SRT, "tuyen:", tuyen, "DateDB:", DateDB)
+    const formData = new FormData();
+    formData.append("video", selectedFile);
+    formData.append("srt", SRT);
+    formData.append(
+      "data",
+      JSON.stringify({ powerline_id: tuyen, implementation_date: DateDB })
+    );
+
+    sendPostRequest(formData);
+    // setOpen(false);
   }
 
   function AddMissionDialog() {
@@ -282,11 +291,8 @@ function FlightRouteMap() {
                 <Button onClick={handleClose} color="primary">
                   Cancel
                 </Button>
-                {selectedFile != null &&
-                SRT != null &&
-                tuyen != null 
-                 ? (
-                   <Button onClick={handleSubmit} color="primary">
+                {selectedFile != null && SRT != null && tuyen != null ? (
+                  <Button onClick={handleSubmit} color="primary">
                     Submit
                   </Button>
                 ) : (
