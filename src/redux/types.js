@@ -1,2 +1,4 @@
 export const MissionId = "MissionId";
 export const VTInfo = "VTInfo";
+export const CurrentLocation = "CurrentLocation";
+export const DefectInfo = "DefectInfo";
