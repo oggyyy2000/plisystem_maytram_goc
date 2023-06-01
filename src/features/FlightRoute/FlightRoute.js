@@ -1,6 +1,13 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { useContext } from "react";
+import { WSContext } from "../../components/context/WSContext";
+
+import { useDispatch } from "react-redux";
+import * as actions from "../../redux/types";
+import { useSelector } from "react-redux";
+import { CurrentLocation, DefectInfo } from "../../redux/selectors";
 
 import {
   Button,
@@ -19,11 +26,19 @@ import {
   Typography,
 } from "@mui/material";
 import PropTypes from "prop-types";
-import { GoogleMap, useJsApiLoader } from "@react-google-maps/api";
+import {
+  GoogleMap,
+  useJsApiLoader,
+  MarkerF,
+  Marker,
+  PolylineF,
+} from "@react-google-maps/api";
 
 import "./css/FlightRoute.css";
 import FlightTakeoffIcon from "@mui/icons-material/FlightTakeoff";
 import SaveIcon from "@mui/icons-material/Save";
+import DroneIcon from "../../assets/images/droneiconresize.png";
+import iconMarkereror from "../../assets/images/markerIconerror.png";
 
 import FlightRoutreDefectList from "./FlightRouteDefectList";
 import FlightRouteInMission from "./FlightRouteInMission";
@@ -83,17 +98,67 @@ function FlightRouteMap() {
 
   const [typeMap, setTypeMap] = useState("roadmap");
   const [buttonText, setButtonText] = useState("Bản đồ");
+  const [zoom, setZoom] = useState(15);
+  const [streetLine, setStreetLine] = useState([]);
+  const dispatch = useDispatch();
+  const currentLocation = useSelector(CurrentLocation);
+  const defectInfo = useSelector(DefectInfo);
 
   const [tab, setTab] = useState(0);
 
-  const center = {
+  const [center, setCenter] = useState({
     lat: 21.028511,
     lng: 105.804817,
-  };
+  });
 
   const urlPostSchedules =
     process.env.REACT_APP_API_URL + "supervisionschedules/";
   const wsUrl = process.env.REACT_APP_WS_URL;
+  const { ws, connect, disconnect } = useContext(WSContext);
+
+  useEffect(() => {
+    // disconnect();
+    if (open === true) {
+      connect();
+    } else {
+      // disconnect();
+    }
+  }, [open]);
+
+  useEffect(() => {
+    try {
+      if (!ws.current) return;
+      ws.current.onmessage = (e) => {
+        const data = JSON.parse(e.data);
+        const gis = data.data.gis;
+        const defectWS = data.data.defects;
+
+        if (gis != undefined) {
+          console.log("WS", gis);
+          dispatch({ type: actions.CurrentLocation, data: gis });
+          // setCurrentLocation(gis);
+          setCenter({
+            lat: parseFloat(gis.latitude),
+            lng: parseFloat(gis.longtitude),
+          });
+          const temppoly = [...streetLine];
+          temppoly.push({
+            lat: parseFloat(gis.latitude),
+            lng: parseFloat(gis.longtitude),
+          });
+          setStreetLine(temppoly);
+          setZoom(23);
+          if (defectWS.length > 0) {
+            // setDefectGIS(defectWS);
+            dispatch({ type: actions.DefectInfo, data: defectWS });
+          }
+          console.log("defectInfo", defectInfo);
+        }
+      };
+    } catch (e) {
+      console.log(e);
+    }
+  });
 
   const handleChangeTabs = (event, newValue) => {
     setTab(newValue);
@@ -126,24 +191,11 @@ function FlightRouteMap() {
   }
 
   async function onChangeHandlerSRT(event) {
-    // var file = event.target.files[0];
-    // var fileSRTname = event.target.files[0].name;
-    // if (file) {
-    //   setSRT(file);
-    //   setNameSRT(fileSRTname);
-    // }
     setSRT(event.target.files[0]);
     setNameSRT(event.target.files[0].name);
   }
 
   async function onChangeHandlerVID(event) {
-    // var file = event.target.files[0];
-    // var fileSelectedName = event.target.files[0].name;
-    // // console.log(file);
-    // if (file) {
-    //   setSelectedFile(file);
-    //   setNameSelectedFile(fileSelectedName);
-    // }
     setSelectedFile(event.target.files[0]);
     setNameSelectedFile(event.target.files[0].name);
   }
@@ -165,14 +217,21 @@ function FlightRouteMap() {
         },
       });
       console.log(response.data);
+      sendvideo(response.data);
     } catch (error) {
       console.error(error);
     }
   };
 
+  const sendvideo = (data) => {
+    if (!ws.current) return;
+    ws.current.send(JSON.stringify(data));
+    handleClose();
+    // setOpen(false);
+  };
+
   function handleSubmit(e) {
     e.preventDefault();
-    // console.log("selectedFile:", selectedFile, "SRT:", SRT, "tuyen:", tuyen, "DateDB:", DateDB)
     const formData = new FormData();
     formData.append("video", selectedFile);
     formData.append("srt", SRT);
@@ -183,6 +242,31 @@ function FlightRouteMap() {
 
     sendPostRequest(formData);
     // setOpen(false);
+  }
+
+  function renderMarkerError(defectInfo) {
+    if (defectInfo.length > 0) {
+      return (
+        <>
+          {defectInfo.map((gis1) => {
+            console.log(gis1);
+            return (
+              <>
+                <MarkerF
+                  key={1}
+                  position={{
+                    lat: parseFloat(gis1.defect_gis.latitude),
+                    lng: parseFloat(gis1.defect_gis.longtitude),
+                  }}
+                  icon={iconMarkereror}
+                  animation={1}
+                ></MarkerF>
+              </>
+            );
+          })}
+        </>
+      );
+    }
   }
 
   function AddMissionDialog() {
@@ -347,10 +431,33 @@ function FlightRouteMap() {
         <GoogleMap
           mapContainerClassName="flightroute-google-map"
           center={center}
-          zoom={10}
+          zoom={zoom}
           mapTypeId={typeMap}
           options={{ zoomControl: false, fullscreenControl: false }}
-        ></GoogleMap>
+        >
+          {currentLocation && (
+            <MarkerF
+              key={1}
+              position={{
+                lat: parseFloat(currentLocation.latitude),
+                lng: parseFloat(currentLocation.longtitude),
+              }}
+              icon={DroneIcon}
+              // animation={1}
+            ></MarkerF>
+          )}
+          {renderMarkerError(defectInfo)}
+          {streetLine && (
+            <PolylineF
+              path={streetLine}
+              options={{
+                strokeColor: "red",
+                strokeOpacity: 0.75,
+                strokeWeight: 2,
+              }}
+            />
+          )}
+        </GoogleMap>
       </div>
     </>
   );
