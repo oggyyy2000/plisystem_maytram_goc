@@ -28,40 +28,43 @@ function HomeListTB() {
           if (VTdetail.data[nameTB].length > 0) {
             error = true;
           }
-          if(typeof VTdetail.data[nameTB] !== "string")
-          {return (
-            <>
-              <Grid
-                item
-                xs={12}
-                className={`home-list-TB-container normal ${
-                  error ? "error" : ""
-                }`}
-              >
-                <div className="home-list-TB-title">{nameTB}</div>
-                <div className="home-list-TB-content">
-                  <div>
-                    <Button variant="outlined">details</Button>
+          if (typeof VTdetail.data[nameTB] !== "string") {
+            return (
+              <>
+                <Grid
+                  item
+                  xs={12}
+                  className={`home-list-TB-container normal ${
+                    error ? "error" : ""
+                  }`}
+                >
+                  <div className="home-list-TB-title">{nameTB}</div>
+                  <div className="home-list-TB-content">
+                    <div>
+                      <Button variant="outlined">details</Button>
+                    </div>
+                    <div className="home-list-TB-content-icon">
+                      {error == true ? (
+                        <CancelIcon
+                          fontSize="large"
+                          color="error"
+                          style={{ float: "right" }}
+                        />
+                      ) : (
+                        <CheckCircleIcon
+                          fontSize="large"
+                          color="success"
+                          style={{ float: "right" }}
+                        />
+                      )}
+                    </div>
                   </div>
-                  <div className="home-list-TB-content-icon">
-                    {error == true ? (
-                      <CancelIcon
-                        fontSize="large"
-                        color="error"
-                        style={{ float: "right" }}
-                      />
-                    ) : (
-                      <CheckCircleIcon
-                        fontSize="large"
-                        color="success"
-                        style={{ float: "right" }}
-                      />
-                    )}
-                  </div>
-                </div>
-              </Grid>
-            </>
-          );} else {return <>No data !</>}
+                </Grid>
+              </>
+            );
+          } else {
+            return <>DATA UPDATING !</>;
+          }
         })}
       </>
     );

@@ -55,51 +55,61 @@ function HomeListVT() {
   function renderVT() {
     return (
       <>
-        {(typeof missionData.supervision_results !== "string") ? Object.keys(missionData.supervision_results).map((item) => {
-          console.log(Object.values(missionData.supervision_results));
-          let error = false;
-          function handleListVTClick() {
-            dispatch({
-              type: actions.VTInfo,
-              data: { name: item, data: missionData.supervision_results[item] },
-            });
-          }
-          Object.keys(missionData.supervision_results[item]).forEach(
-            (item2) => {
-              // console.log(missionData.supervision_results[item][item2]);
-
-              if (missionData.supervision_results[item][item2].length > 0) {
-                error = true;
-              }
+        {typeof missionData.supervision_results !== "string" ? (
+          Object.keys(missionData.supervision_results).map((item) => {
+            console.log(Object.values(missionData.supervision_results));
+            let error = false;
+            function handleListVTClick() {
+              dispatch({
+                type: actions.VTInfo,
+                data: {
+                  name: item,
+                  data: missionData.supervision_results[item],
+                },
+              });
             }
-          );
-          return (
-            <>
-              <div
-                className={`home-listVT-item ${
-                  VTdetail.name === item ? "error" : ""
-                }`}
-                onClick={handleListVTClick}
-              >
-                {error == true ? (
-                  <CancelIcon
-                    fontSize="small"
-                    color="error"
-                    style={{ float: "right" }}
+            Object.keys(missionData.supervision_results[item]).forEach(
+              (item2) => {
+                // console.log(missionData.supervision_results[item][item2]);
+
+                if (missionData.supervision_results[item][item2].length > 0) {
+                  error = true;
+                }
+              }
+            );
+            return (
+              <>
+                <div
+                  className={`home-listVT-item ${
+                    VTdetail.name === item ? "error" : ""
+                  }`}
+                  onClick={handleListVTClick}
+                >
+                  {error == true ? (
+                    <CancelIcon
+                      fontSize="small"
+                      color="error"
+                      style={{ float: "right" }}
+                    />
+                  ) : (
+                    <CheckCircleIcon
+                      fontSize="small"
+                      color="success"
+                      style={{ float: "right" }}
+                    />
+                  )}
+                  <img
+                    src={itemIcon}
+                    style={{ width: "40px", height: "40px" }}
                   />
-                ) : (
-                  <CheckCircleIcon
-                    fontSize="small"
-                    color="success"
-                    style={{ float: "right" }}
-                  />
-                )}
-                <img src={itemIcon} style={{ width: "40px", height: "40px" }} />
-                {item}
-              </div>
-            </>
-          );
-        }) :  <>No data !</>}
+                  {item}
+                </div>
+              </>
+            );
+          })
+        ) : (
+          <>DATA UPDATING !</>
+        )}
       </>
     );
   }
