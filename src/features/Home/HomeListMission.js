@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import FlightRoundedIcon from "@mui/icons-material/FlightRounded";
-import checkMark from "../../assets/images/checkmark.png";
 import axios from "axios";
-
 import { useDispatch } from "react-redux";
 import * as actions from "../../redux/types";
 
 import "./css/HomeListMission.css";
+import { Button } from "@mui/material";
+
+import FlightRoundedIcon from "@mui/icons-material/FlightRounded";
 
 function HomeListMission() {
   const [clicked, setClicked] = useState("");
@@ -96,7 +95,7 @@ function HomeListMission() {
                   {listmission.lastest_time_update_data}
                 </div>
                 <div item className="homelist-icon-bottom-right">
-                  <CheckCircleIcon color="success" fontSize="inherit" />
+                  <Button>VIEW DATAS</Button>
                 </div>
               </div>
             </div>

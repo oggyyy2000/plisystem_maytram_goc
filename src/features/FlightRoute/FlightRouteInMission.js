@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Webcam from "react-webcam";
 
 import { useSelector } from "react-redux";
-import { CurrentLocation } from "../../redux/selectors";
+import { CurrentLocation, CurrentVT } from "../../redux/selectors";
 
 import { Dialog } from "@mui/material";
 import Icon from "../../assets/images/expand-icon.png";
@@ -15,6 +15,7 @@ function FlightRouteInMission() {
   const [open, setOpen] = useState(false);
   const [close, setClose] = useState(false);
   const currentLocation = useSelector(CurrentLocation);
+  const VT = useSelector(CurrentVT);
 
   function handleClickOpen() {
     setOpen(true);
@@ -79,9 +80,9 @@ function FlightRouteInMission() {
       >
         <button onClick={handleHidePanel}>
           {close === true ? (
-            <KeyboardArrowLeftIcon />
-          ) : (
             <KeyboardArrowRightIcon />
+          ) : (
+            <KeyboardArrowLeftIcon />
           )}
         </button>
       </div>
@@ -93,7 +94,7 @@ function FlightRouteInMission() {
         <div className="flightroute-tableinfo">
           <table>
             <tr>
-              <td>VTHT: VT8_T87</td>
+              <td>VTHT: {VT}</td>
               <td rowSpan={2}>
                 Longtitude: {parseFloat(currentLocation.longtitude)} <br />
                 Latitude: {parseFloat(currentLocation.latitude)} <br />

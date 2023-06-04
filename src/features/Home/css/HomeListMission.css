@@ -40,5 +40,15 @@
 
 .homelist-icon-bottom-right {
   margin: 0rem 0 0 1rem !important; /*!important de de len CSS MUI goc*/
-  font-size: 58px;
+  width: 30%;
+  /* font-size: 58px; */
+}
+
+.homelist-icon-bottom-right > button {
+  background-color: chartreuse;
+  border-radius: 50%;
+  color: white;
+}
+.homelist-icon-bottom-right > button:hover {
+  background-color: rgba(127, 255, 0, 0.6) !important;
 }
