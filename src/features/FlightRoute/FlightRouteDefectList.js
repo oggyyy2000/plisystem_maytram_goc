@@ -59,9 +59,9 @@ function FlightRoutreDefectList() {
       >
         <button onClick={handleHidePanel}>
           {close === true ? (
-            <KeyboardArrowRightIcon />
-          ) : (
             <KeyboardArrowLeftIcon />
+          ) : (
+            <KeyboardArrowRightIcon />
           )}
         </button>
       </div>

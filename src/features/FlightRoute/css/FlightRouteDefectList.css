@@ -1,21 +1,21 @@
 /* common use */
 .onclose-panel {
-  opacity: 0;
+  opacity: 1 !important;
   transition: opacity 0.5s ease-in;
 }
 
 .onclose-btn {
-  left: 0 !important;
-  transition: 0.5s ease-in;
+  left: 18.8% !important;
+  transition: 0.5s ease-out;
 }
 
 /* body */
 .flightroute-close-leftpanel {
   position: absolute;
   z-index: 2;
-  left: 18.8%;
+  left: 0;
   top: 67%;
-  transition: 0.5s ease-out;
+  transition: 0.5s ease-in;
 }
 
 .flightroute-close-leftpanel button {
@@ -37,6 +37,7 @@
   flex-direction: column;
   align-items: center;
   overflow-y: auto;
+  opacity: 0;
   transition: opacity 0.5s ease-in;
 }
 
