@@ -37,8 +37,8 @@ import {
 import "./css/FlightRoute.css";
 import FlightTakeoffIcon from "@mui/icons-material/FlightTakeoff";
 import SaveIcon from "@mui/icons-material/Save";
-import DroneIcon from "../../assets/images/droneiconresize.png";
-import iconMarkereror from "../../assets/images/markerIconerror.png";
+import DroneIcon from "../../assets/images/drone2.png";
+// import Error from "../../assets/images/ezgif.com-resize.gif";
 
 import FlightRoutreDefectList from "./FlightRouteDefectList";
 import FlightRouteInMission from "./FlightRouteInMission";
@@ -132,6 +132,7 @@ function FlightRouteMap() {
         const data = JSON.parse(e.data);
         const gis = data.data.gis;
         const defectWS = data.data.defects;
+        const VT = data.data.location;
 
         if (gis != undefined) {
           console.log("WS", gis);
@@ -153,6 +154,7 @@ function FlightRouteMap() {
             dispatch({ type: actions.DefectInfo, data: defectWS });
           }
           console.log("defectInfo", defectInfo);
+          dispatch({ type: actions.CurrentVT, data: VT });
         }
       };
     } catch (e) {
@@ -231,7 +233,12 @@ function FlightRouteMap() {
   };
 
   function handleSubmit(e) {
-    e.preventDefault();
+    // e.preventDefault();
+    setZoom(15);
+    setStreetLine([]);
+    dispatch({ type: actions.CurrentLocation, data: {} });
+    dispatch({ type: actions.DefectInfo, data: [] });
+
     const formData = new FormData();
     formData.append("video", selectedFile);
     formData.append("srt", SRT);
@@ -244,12 +251,64 @@ function FlightRouteMap() {
     // setOpen(false);
   }
 
+  function renderGGMapWithMarker() {
+    let iconMarker = new window.google.maps.MarkerImage(
+      DroneIcon,
+      null /* size is determined at runtime */,
+      null /* origin is 0,0 */,
+      null /* anchor is bottom center of the scaled image */,
+      new window.google.maps.Size(30, 30)
+    );
+    return (
+      <>
+        <GoogleMap
+          mapContainerClassName="flightroute-google-map"
+          center={center}
+          zoom={zoom}
+          mapTypeId={typeMap}
+          options={{ zoomControl: false, fullscreenControl: false }}
+        >
+          {currentLocation && (
+            <MarkerF
+              key={1}
+              position={{
+                lat: parseFloat(currentLocation.latitude),
+                lng: parseFloat(currentLocation.longtitude),
+              }}
+              icon={iconMarker}
+              // animation={1}
+            ></MarkerF>
+          )}
+          {renderMarkerError(defectInfo)}
+          {streetLine && (
+            <PolylineF
+              path={streetLine}
+              options={{
+                strokeColor: "red",
+                strokeOpacity: 0.75,
+                strokeWeight: 2,
+              }}
+            />
+          )}
+        </GoogleMap>
+      </>
+    );
+  }
+
   function renderMarkerError(defectInfo) {
     if (defectInfo.length > 0) {
       return (
         <>
           {defectInfo.map((gis1) => {
             console.log(gis1);
+            let iconMarker = new window.google.maps.MarkerImage(
+              // "http://epsmarttech.com.vn:3000/icon/vector.png",
+              "https://lh3.googleusercontent.com/pw/AM-JKLUs1eX_HbHDXCbEZIr6Zb1lRJPWjhiJk8pFAn82uOebQq77t0n41BzrLrJ8y79pxoYApFx6FznLaHG_fim_tqElBo4gmxIXatokQGC1Y7z3sC00uSoaU6qekd0bkhKGsa30h8Ze9pKx016_4v07kEtg=w1179-h943-no",
+              null /* size is determined at runtime */,
+              null /* origin is 0,0 */,
+              null /* anchor is bottom center of the scaled image */,
+              new window.google.maps.Size(27, 27)
+            );
             return (
               <>
                 <MarkerF
@@ -258,7 +317,7 @@ function FlightRouteMap() {
                     lat: parseFloat(gis1.defect_gis.latitude),
                     lng: parseFloat(gis1.defect_gis.longtitude),
                   }}
-                  icon={iconMarkereror}
+                  icon={iconMarker}
                   animation={1}
                 ></MarkerF>
               </>
@@ -428,7 +487,7 @@ function FlightRouteMap() {
         <FlightRoutreDefectList />
         <FlightRouteInMission />
 
-        <GoogleMap
+        {/* <GoogleMap
           mapContainerClassName="flightroute-google-map"
           center={center}
           zoom={zoom}
@@ -457,7 +516,11 @@ function FlightRouteMap() {
               }}
             />
           )}
-        </GoogleMap>
+        </GoogleMap> */}
+        {currentLocation &&
+          defectInfo &&
+          streetLine &&
+          renderGGMapWithMarker(currentLocation, defectInfo, streetLine)}
       </div>
     </>
   );
