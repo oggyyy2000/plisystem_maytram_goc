@@ -13,7 +13,7 @@
 .flightroute-close-leftpanel {
   position: absolute;
   z-index: 2;
-  left: 15.6%;
+  left: 18.8%;
   top: 67%;
   transition: 0.5s ease-out;
 }
@@ -28,7 +28,7 @@
 .flightroute-left-panel {
   position: absolute;
   z-index: 1;
-  width: 15rem;
+  width: 18rem;
   height: 425px;
   background-color: white;
   left: 0;
@@ -45,16 +45,16 @@
   width: 95%;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   font-weight: bold;
-  text-align: center;
 }
 
 .flightroute-itemcard-header {
   background-color: red;
   color: white;
   padding: 1px;
-  font-size: 10px;
+  font-size: 8px;
   text-transform: uppercase;
   border: 1px solid black;
+  text-align: center;
 }
 
 .flightroute-itemcard-content {
