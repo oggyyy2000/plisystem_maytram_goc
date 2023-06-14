@@ -7,11 +7,12 @@ import {
 } from "@react-google-maps/api";
 import { Box } from "@mui/material";
 
+import axios from "axios";
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import { VTInfo } from "../../redux/selectors";
+import { VTInfo, MissionId } from "../../redux/selectors";
 
-import iconMarkereror from "../../assets/images/markerIconerror.png";
+// import iconMarkereror from "../../assets/images/markerIconerror.png";
 import "./css/HomeMap.css";
 
 function HomeMap() {
@@ -21,14 +22,17 @@ function HomeMap() {
     lat: 21.007556875711494,
     lng: 105.84322259736739,
   });
+  const [missionData, setMissionData] = useState({});
   const [GISlist, setGISlist] = useState([]);
   const [nameError, setNameError] = useState();
   const [activeMarker, setActiveMarker] = useState(null);
   const VTdetail = useSelector(VTInfo);
+  const missionId = useSelector(MissionId);
 
-  const urlLocations = process.env.REACT_APP_API_URL + "powerlinelocations";
+  const urlhomePageView = process.env.REACT_APP_API_URL + "homepageapiview/";
+  // const urlLocations = process.env.REACT_APP_API_URL + "powerlinelocations";
 
-  console.log(GISlist);
+  console.log(missionData);
 
   function getGIS() {
     const listGIS = [];
@@ -52,6 +56,21 @@ function HomeMap() {
   useEffect(() => {
     getGIS();
   }, [VTdetail]);
+
+  useEffect(() => {
+    missionId &&
+      axios
+        .get(urlhomePageView)
+        .then((res) => {
+          setMissionData(
+            res.data.data.find((id) => id.schedule_id === missionId)
+          );
+          console.log(typeof res.data.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+  }, [missionId]);
 
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
@@ -91,7 +110,7 @@ function HomeMap() {
             })}
           </div>
           <div className="home-map-title">
-            Hành lang tuyến T87 Mai Động-Thanh Nhàn
+            Tuyến {missionData.powerline_id} {missionData.powerline_name}
           </div>
           <GoogleMap
             mapContainerClassName="home-google-map"
@@ -102,6 +121,14 @@ function HomeMap() {
             onClick={() => setActiveMarker(null)}
           >
             {GISlist.map((item, index) => {
+              let iconMarker = new window.google.maps.MarkerImage(
+                // "http://epsmarttech.com.vn:3000/icon/vector.png",
+                "https://lh3.googleusercontent.com/pw/AM-JKLUs1eX_HbHDXCbEZIr6Zb1lRJPWjhiJk8pFAn82uOebQq77t0n41BzrLrJ8y79pxoYApFx6FznLaHG_fim_tqElBo4gmxIXatokQGC1Y7z3sC00uSoaU6qekd0bkhKGsa30h8Ze9pKx016_4v07kEtg=w1179-h943-no",
+                null /* size is determined at runtime */,
+                null /* origin is 0,0 */,
+                null /* anchor is bottom center of the scaled image */,
+                new window.google.maps.Size(25, 25)
+              );
               // console.log(typeof index);
               var latitude = parseFloat(item.latitude);
               var longtitude = parseFloat(item.longtitude);
@@ -110,7 +137,7 @@ function HomeMap() {
                   <MarkerF
                     key={index}
                     position={{ lat: latitude, lng: longtitude }}
-                    icon={iconMarkereror}
+                    icon={iconMarker}
                     // animation={1}
                     onClick={() => {
                       handleActiveMarker(index, item);
