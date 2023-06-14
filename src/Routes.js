@@ -8,7 +8,7 @@ import Redirect404 from "./components/NavigateErrorTabs/Redirect404";
 const routes = [
   { path: "/", element: <Home /> },
   { path: "/Home", element: <Home /> },
-  { path: "/ImageManager", element: <ImageManager /> },
+  // { path: "/ImageManager", element: <ImageManager /> },
   { path: "/FlightRouteManage", element: <FlightRouteManage /> },
 
   // failed => navigate to error tabs

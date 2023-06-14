@@ -17,9 +17,9 @@ import AdbIcon from "@mui/icons-material/Adb";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-import logo from "../../assets/images/logo.png"
+import logo from "../../assets/images/logo.png";
 
-const pages = ["Home", "ImageManager", "FlightRouteManage"];
+const pages = ["Home", "FlightRouteManage"];
 const settings = ["Account", "Logout"];
 
 function NavBar() {
@@ -58,7 +58,11 @@ function NavBar() {
     <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <img src={logo} alt="logo" style={{width: "50px", height: "50px"}}/>
+          <img
+            src={logo}
+            alt="logo"
+            style={{ width: "50px", height: "50px" }}
+          />
           {/* <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} /> */}
           <Typography
             variant="h6"
@@ -108,7 +112,7 @@ function NavBar() {
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
+                <MenuItem key={page}>
                   <Typography textAlign="center">
                     <Link
                       style={{ textDecoration: "none", color: "black" }}
@@ -144,7 +148,6 @@ function NavBar() {
             {pages.map((page) => (
               <Button
                 key={page}
-                // onClick={handleCloseNavMenu}
                 sx={{ my: 2, color: "white", display: "block" }}
               >
                 <Link
