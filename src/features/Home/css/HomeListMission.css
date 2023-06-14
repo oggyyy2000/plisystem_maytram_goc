@@ -4,6 +4,7 @@
   cursor: pointer;
 }
 .homelist-container {
+  min-height: 18%;
   border: 3px solid black;
 }
 
@@ -39,14 +40,15 @@
 }
 
 .homelist-icon-bottom-right {
-  margin: 0rem 0 0 1rem !important; /*!important de de len CSS MUI goc*/
+  margin: 0 0 0 1rem !important; /*!important de de len CSS MUI goc*/
   width: 30%;
+  /* height: 10%; */
   /* font-size: 58px; */
 }
 
 .homelist-icon-bottom-right > button {
   background-color: chartreuse;
-  border-radius: 50%;
+  border-radius: 10%;
   color: white;
 }
 .homelist-icon-bottom-right > button:hover {

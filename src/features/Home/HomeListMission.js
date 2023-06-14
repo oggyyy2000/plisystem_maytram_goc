@@ -7,6 +7,7 @@ import "./css/HomeListMission.css";
 import { Button } from "@mui/material";
 
 import FlightRoundedIcon from "@mui/icons-material/FlightRounded";
+import TransitionsModal from "./HomeModal";
 
 function HomeListMission() {
   const [clicked, setClicked] = useState("");
@@ -95,7 +96,7 @@ function HomeListMission() {
                   {listmission.lastest_time_update_data}
                 </div>
                 <div item className="homelist-icon-bottom-right">
-                  <Button>VIEW DATAS</Button>
+                  <TransitionsModal schedule_id={listmission.schedule_id} />
                 </div>
               </div>
             </div>
