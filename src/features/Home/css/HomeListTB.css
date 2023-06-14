@@ -1,5 +1,7 @@
 .home-list-TB-container {
-  min-height: 9.25vh;
+  display: flex;
+  align-items: center;
+  min-height: 16.7%;
 }
 .normal {
   border: 2px solid black;
@@ -10,16 +12,8 @@
 }
 
 .home-list-TB-title {
+  min-width: 80%;
   font-size: 20px;
   text-transform: uppercase;
   font-weight: bold;
 }
-
-.home-list-TB-content {
-  display: flex;
-  justify-content: space-around;
-  min-height: 2.669rem;
-  margin-left: 3.2rem;
-}
-
-

@@ -39,25 +39,20 @@ function HomeListTB() {
                   }`}
                 >
                   <div className="home-list-TB-title">{nameTB}</div>
-                  <div className="home-list-TB-content">
-                    <div>
-                      <Button variant="outlined">details</Button>
-                    </div>
-                    <div className="home-list-TB-content-icon">
-                      {error == true ? (
-                        <CancelIcon
-                          fontSize="large"
-                          color="error"
-                          style={{ float: "right" }}
-                        />
-                      ) : (
-                        <CheckCircleIcon
-                          fontSize="large"
-                          color="success"
-                          style={{ float: "right" }}
-                        />
-                      )}
-                    </div>
+                  <div className="home-list-TB-icon">
+                    {error == true ? (
+                      <CancelIcon
+                        fontSize="large"
+                        color="error"
+                        // style={{ float: "right" }}
+                      />
+                    ) : (
+                      <CheckCircleIcon
+                        fontSize="large"
+                        color="success"
+                        // style={{ float: "right" }}
+                      />
+                    )}
                   </div>
                 </Grid>
               </>
