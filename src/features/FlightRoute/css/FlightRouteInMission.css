@@ -1,12 +1,12 @@
 /* common use */
 .onclose-rightpanel {
   opacity: 1 !important;
-  transition: opacity 0.5s ease-in;
+  /* transition: opacity 0.5s ease-out; */
 }
 
 .onclose-btn-rightpanel {
   right: 26.6% !important;
-  transition: 0.5s ease-out;
+  /* transition: 0.5s ease-out; */
 }
 
 /* body */
@@ -15,7 +15,7 @@
   z-index: 2;
   right: 0;
   top: 67%;
-  transition: 0.5s ease-in;
+  /* transition: 0.5s ease-in; */
 }
 
 .flightroute-close-rightpanel button {
@@ -34,7 +34,7 @@
   bottom: 0;
   right: 0;
   opacity: 0;
-  transition: opacity 0.5s ease-in;
+  /* transition: opacity 0.5s ease-in; */
 }
 
 .flightroute-tableinfo {

@@ -4,7 +4,7 @@ import Webcam from "react-webcam";
 import { useSelector } from "react-redux";
 import { CurrentLocation, CurrentVT } from "../../redux/selectors";
 
-import { Dialog } from "@mui/material";
+import { Dialog, Fade } from "@mui/material";
 import Icon from "../../assets/images/expand-icon.png";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
@@ -26,10 +26,11 @@ function FlightRouteInMission() {
   }
 
   function handleHidePanel() {
-    setClose(true);
-    if (close === true) {
-      setClose(false);
-    }
+    //setClose(true);
+    // if (close === true) {
+    //   setClose(false);
+    // }
+    setClose(!close);
   }
 
   function zoomView() {
@@ -86,6 +87,7 @@ function FlightRouteInMission() {
           )}
         </button>
       </div>
+      <Fade in={close} timeout={1200}>
       <div
         className={`flightroute-right-panel ${
           close ? "onclose-rightpanel" : ""
@@ -124,6 +126,7 @@ function FlightRouteInMission() {
         </div>
         {zoomView()}
       </div>
+      </Fade>
     </>
   );
 }
