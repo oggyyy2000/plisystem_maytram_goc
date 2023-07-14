@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { DefectInfo, CurrentVT } from "../../redux/selectors";
@@ -8,16 +8,19 @@ import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
 import "./css/FlightRouteDefectList.css";
 
-function FlightRoutreDefectList() {
+function FlightRoutreDefectList({startfly}) {
   const [close, setClose] = useState(false);
   const defectInfo = useSelector(DefectInfo);
   const VT = useSelector(CurrentVT);
 
-  function handleHidePanel() {
-    setClose(true);
-    if (close === true) {
-      setClose(false);
+  useEffect(() => {
+    if(startfly) {
+      setClose(true)
     }
+  }, [startfly])
+
+  function handleHidePanel() {
+    setClose(!close);
   }
 
   function handleDefectItem(defectInfo, VT) {

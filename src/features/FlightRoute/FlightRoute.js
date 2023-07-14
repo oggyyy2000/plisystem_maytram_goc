@@ -78,6 +78,8 @@ function a11yProps(index) {
 
 function FlightRouteMap() {
   const [open, setOpen] = useState(false);
+  const [hadSubmited, setHadSubmited] = useState(false);
+  const [startFly, setStartFly] = useState(false);
   const [SRT, setSRT] = useState(null);
   const [nameSRT, setNameSRT] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
@@ -162,7 +164,7 @@ function FlightRouteMap() {
     }
   });
 
-  const handleChangeTabs = (event, newValue) => {
+  const handleChangeTabs = (newValue) => {
     setTab(newValue);
   };
 
@@ -219,6 +221,9 @@ function FlightRouteMap() {
         },
       });
       console.log(response.data);
+      if (response.data) {
+        setStartFly(true);
+      }
       sendvideo(response.data);
     } catch (error) {
       console.error(error);
@@ -229,11 +234,11 @@ function FlightRouteMap() {
     if (!ws.current) return;
     ws.current.send(JSON.stringify(data));
     handleClose();
-    // setOpen(false);
   };
 
   function handleSubmit(e) {
-    // e.preventDefault();
+    e.preventDefault();
+    setHadSubmited(true);
     setZoom(15);
     setStreetLine([]);
     dispatch({ type: actions.CurrentLocation, data: {} });
@@ -248,7 +253,6 @@ function FlightRouteMap() {
     );
 
     sendPostRequest(formData);
-    // setOpen(false);
   }
 
   function renderGGMapWithMarker() {
@@ -434,7 +438,10 @@ function FlightRouteMap() {
                 <Button onClick={handleClose} color="primary">
                   Cancel
                 </Button>
-                {selectedFile != null && SRT != null && tuyen != null ? (
+                {selectedFile != null &&
+                SRT != null &&
+                tuyen != null &&
+                hadSubmited == false ? (
                   <Button onClick={handleSubmit} color="primary">
                     Submit
                   </Button>
@@ -484,8 +491,8 @@ function FlightRouteMap() {
           {AddMissionDialog()}
         </div>
 
-        <FlightRoutreDefectList />
-        <FlightRouteInMission />
+        <FlightRoutreDefectList startfly={startFly} />
+        <FlightRouteInMission startfly={startFly} />
 
         {/* <GoogleMap
           mapContainerClassName="flightroute-google-map"
