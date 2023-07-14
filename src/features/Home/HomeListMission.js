@@ -8,6 +8,7 @@ import { Button } from "@mui/material";
 
 import FlightRoundedIcon from "@mui/icons-material/FlightRounded";
 import TransitionsModal from "./HomeModal";
+import HomeModalTest from "./HomeModalTest";
 
 function HomeListMission() {
   const [clicked, setClicked] = useState("");
@@ -23,7 +24,7 @@ function HomeListMission() {
       .then((res) => {
         // console.log(res.data.data);
         setListMissionData(res.data.data);
-        handleListMissionClick(res.data.data[1].schedule_id);
+        handleListMissionClick(res.data.data[3].schedule_id);
       })
       .catch((err) => {
         console.log(err);
@@ -96,7 +97,8 @@ function HomeListMission() {
                   {listmission.lastest_time_update_data}
                 </div>
                 <div item className="homelist-icon-bottom-right">
-                  <TransitionsModal schedule_id={listmission.schedule_id} />
+                  {/* <TransitionsModal schedule_id={listmission.schedule_id} /> */}
+                  <HomeModalTest />
                 </div>
               </div>
             </div>

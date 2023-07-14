@@ -1,0 +1,18 @@
+.homemodaltest-label:hover {
+  border: 2px solid red;
+}
+
+.choosed {
+  /* border: 2px solid red; */
+  opacity: 0.5;
+}
+
+.checkmark {
+  display: inline-block;
+  transform: rotate(45deg);
+  height: 25px;
+  width: 12px;
+  margin-left: 60%;
+  border-bottom: 7px solid #78b13f;
+  border-right: 7px solid #78b13f;
+}
