@@ -8,6 +8,7 @@ import Fade from "@mui/material/Fade";
 import Button from "@mui/material/Button";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import "./css/HomeModalTest.css";
 
 import { useSelector } from "react-redux";
@@ -117,7 +118,10 @@ export default function HomeModalTest({ schedule_id }) {
         <Fade in={open}>
           <Box sx={style}>
             <div>
-              <ImageList sx={{ width: "100%", height: "100%" }} cols={3}>
+              <ImageList
+                sx={{ width: "100%", height: "100%", position: "relative", overflowY: "hidden" }}
+                cols={3}
+              >
                 {imgList2.map((img) => {
                   return (
                     <>
@@ -134,9 +138,13 @@ export default function HomeModalTest({ schedule_id }) {
                             srcSet={img}
                             alt="picture"
                             loading="lazy"
-                            style={{ width: "100%", maxHeight: "100%" }}
+                            style={{ width: "100%", height: "100%" }}
                           />
                         </label>
+
+                        {selectedLabels.includes(img) && (
+                          <div className="checkmark"></div>
+                        )}
                       </ImageListItem>
 
                       <input

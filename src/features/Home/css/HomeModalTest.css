@@ -3,16 +3,16 @@
 }
 
 .choosed {
-  /* border: 2px solid red; */
-  opacity: 0.5;
+  opacity: 0.4;
 }
 
 .checkmark {
-  display: inline-block;
+  position: absolute;
   transform: rotate(45deg);
-  height: 25px;
-  width: 12px;
-  margin-left: 60%;
-  border-bottom: 7px solid #78b13f;
-  border-right: 7px solid #78b13f;
+  height: 50px;
+  width: 28px;
+  margin-top: 24%;
+  margin-left: 51%;
+  border-bottom: 7px solid #7fff00;
+  border-right: 7px solid #7fff00;
 }
