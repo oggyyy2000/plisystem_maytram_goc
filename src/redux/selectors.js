@@ -3,3 +3,4 @@ export const VTInfo = (state) => state.VTInfo;
 export const CurrentLocation = (state) => state.CurrentLocation;
 export const DefectInfo = (state) => state.DefectInfo;
 export const CurrentVT = (state) => state.CurrentVT;
+export const CurrentFrame = (state) => state.CurrentFrame;

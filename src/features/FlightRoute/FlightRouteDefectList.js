@@ -8,16 +8,16 @@ import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
 import "./css/FlightRouteDefectList.css";
 
-function FlightRoutreDefectList({startfly}) {
+function FlightRoutreDefectList({ startfly }) {
   const [close, setClose] = useState(false);
   const defectInfo = useSelector(DefectInfo);
   const VT = useSelector(CurrentVT);
 
   useEffect(() => {
-    if(startfly) {
-      setClose(true)
+    if (startfly) {
+      setClose(true);
     }
-  }, [startfly])
+  }, [startfly]);
 
   function handleHidePanel() {
     setClose(!close);

@@ -4,6 +4,7 @@ import VTInfo from "./reducers/VTInfo";
 import CurrentLocation from "./reducers/CurrentLocation";
 import DefectInfo from "./reducers/DefectInfo";
 import CurrentVT from "./reducers/CurrentVT";
+import CurrentFrame from "./reducers/CurrentFrame"
 
 const myReducer = combineReducers({
   MissionId,
@@ -11,6 +12,7 @@ const myReducer = combineReducers({
   CurrentLocation,
   DefectInfo,
   CurrentVT,
+  CurrentFrame,
 });
 
 export default myReducer;

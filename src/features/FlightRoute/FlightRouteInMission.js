@@ -2,7 +2,11 @@ import React, { useState, useEffect } from "react";
 import Webcam from "react-webcam";
 
 import { useSelector } from "react-redux";
-import { CurrentLocation, CurrentVT } from "../../redux/selectors";
+import {
+  CurrentLocation,
+  CurrentVT,
+  CurrentFrame,
+} from "../../redux/selectors";
 
 import { Dialog, Fade } from "@mui/material";
 import Icon from "../../assets/images/expand-icon.png";
@@ -16,6 +20,8 @@ function FlightRouteInMission({ startfly }) {
   const [close, setClose] = useState(false);
   const currentLocation = useSelector(CurrentLocation);
   const VT = useSelector(CurrentVT);
+  const currentFrame = useSelector(CurrentFrame);
+  console.log(currentFrame);
 
   useEffect(() => {
     if (startfly) {
@@ -59,7 +65,11 @@ function FlightRouteInMission({ startfly }) {
           <div className="flightroute-expandcam-container">
             <div className="flightroute-rgbcam-expand-container">
               <div className="flightroute-rgbcam-expand-title">RGB</div>
-              {WebcamComponent()}
+              {/* {WebcamComponent()} */}
+              <img
+                src={currentFrame}
+                style={{ height: "681px", width: "auto" }}
+              />
             </div>
             <div className="flightroute-thermalcam-expand-container">
               <div className="flightroute-thermalcam-expand-title">thermal</div>
@@ -124,7 +134,8 @@ function FlightRouteInMission({ startfly }) {
                 <img src={Icon} height={"100%"} width={"100%"} />
               </button>
             </div>
-            {WebcamComponent()}
+            {/* {WebcamComponent()} */}
+            <img src={currentFrame} height={"225px"} width={"auto"} />
           </div>
           <div className="flightroute-thermalview-container">
             <div className="flightroute-thermal-title">Thermal</div>

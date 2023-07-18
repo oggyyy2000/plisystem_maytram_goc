@@ -132,9 +132,17 @@ function FlightRouteMap() {
       if (!ws.current) return;
       ws.current.onmessage = (e) => {
         const data = JSON.parse(e.data);
+        if (data.data == "supervise_complete") {
+          alert("Complete!");
+          setStartFly(false);
+        }
+        console.log("data:", data);
         const gis = data.data.gis;
         const defectWS = data.data.defects;
         const VT = data.data.location;
+        const currentFrame = process.env.REACT_APP_IMG_SLIDE + data.data.frame;
+        // console.log("src: ", process.env.REACT_APP_IMG_SLIDE + currentFrame)
+        // const process = data.data.process;
 
         if (gis != undefined) {
           console.log("WS", gis);
@@ -157,6 +165,7 @@ function FlightRouteMap() {
           }
           console.log("defectInfo", defectInfo);
           dispatch({ type: actions.CurrentVT, data: VT });
+          dispatch({ type: actions.CurrentFrame, data: currentFrame });
         }
       };
     } catch (e) {
@@ -183,6 +192,12 @@ function FlightRouteMap() {
 
   function handleClickOpen() {
     setOpen(true);
+    setHadSubmited(false);
+    setTuyen(null);
+    setSelectedFile(null);
+    setNameSelectedFile(null);
+    setSRT(null);
+    setNameSRT(null);
   }
 
   function handleClose() {
@@ -192,6 +207,7 @@ function FlightRouteMap() {
     setNameSelectedFile(null);
     setSRT(null);
     setNameSRT(null);
+    disconnect();
   }
 
   async function onChangeHandlerSRT(event) {
@@ -233,7 +249,7 @@ function FlightRouteMap() {
   const sendvideo = (data) => {
     if (!ws.current) return;
     ws.current.send(JSON.stringify(data));
-    handleClose();
+    setOpen(false);
   };
 
   function handleSubmit(e) {
@@ -446,7 +462,9 @@ function FlightRouteMap() {
                     Submit
                   </Button>
                 ) : (
-                  <Button disabled>Submit</Button>
+                  <Button disabled>
+                    {hadSubmited == false ? "Submit" : "Processing..."}
+                  </Button>
                 )}
               </DialogActions>
             </TabPanel>
@@ -482,6 +500,7 @@ function FlightRouteMap() {
             className="flightroute-btn-addmission"
             variant="contained"
             onClick={handleClickOpen}
+            disabled={startFly == false ? false : true}
           >
             flight
             <FlightTakeoffIcon />
