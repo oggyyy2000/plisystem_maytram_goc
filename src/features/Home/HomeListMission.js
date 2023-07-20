@@ -24,7 +24,7 @@ function HomeListMission() {
       .then((res) => {
         // console.log(res.data.data);
         setListMissionData(res.data.data);
-        handleListMissionClick(res.data.data[3].schedule_id);
+        handleListMissionClick(res.data.data[0].schedule_id);
       })
       .catch((err) => {
         console.log(err);
