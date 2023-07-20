@@ -1,5 +1,6 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
+// import axios from "axios";
 
 import Backdrop from "@mui/material/Backdrop";
 import Box from "@mui/material/Box";
@@ -8,7 +9,6 @@ import Fade from "@mui/material/Fade";
 import Button from "@mui/material/Button";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import "./css/HomeModalTest.css";
 
 import { useSelector } from "react-redux";
@@ -32,11 +32,15 @@ const style = {
 export default function HomeModalTest({ schedule_id }) {
   const [open, setOpen] = useState(false);
   const [selectedLabels, setSelectedLabels] = useState([]);
-  // const [selectAll, setSelectAll] = useState(false);
   const [checked, setChecked] = useState([]);
   const [imgList2, setImgList2] = useState([]);
   console.log(imgList2);
   const VTdetail = useSelector(VTInfo);
+  console.log(schedule_id)
+  // const url =
+  //   process.env.REACT_APP_API_URL +
+  //   "supervisionschedules/?schedule_id=" +
+  //   schedule_id;
 
   const handleLabelClick = (label) => {
     if (selectedLabels.includes(label)) {
@@ -49,7 +53,6 @@ export default function HomeModalTest({ schedule_id }) {
   const handleOpen = () => {
     setChecked([]);
     setOpen(true);
-    // dispatch({ type: actions.MissionId, data: schedule_id });
   };
   const handleClose = () => setOpen(false);
 
@@ -71,7 +74,15 @@ export default function HomeModalTest({ schedule_id }) {
   function getIMG() {
     const imgList2 = [];
     setImgList2(imgList2);
-    // console.log(imgList2);
+
+    // axios
+    //   .get(url)
+    //   .then((res) => {
+    //     console.log(res.data.data);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
 
     for (var keys in VTdetail.data) {
       if (typeof VTdetail.data[keys] !== "string") {
@@ -119,7 +130,12 @@ export default function HomeModalTest({ schedule_id }) {
           <Box sx={style}>
             <div>
               <ImageList
-                sx={{ width: "100%", height: "100%", position: "relative", overflowY: "hidden" }}
+                sx={{
+                  width: "100%",
+                  height: "100%",
+                  position: "relative",
+                  overflowY: "hidden",
+                }}
                 cols={3}
               >
                 {imgList2.map((img) => {
@@ -161,7 +177,7 @@ export default function HomeModalTest({ schedule_id }) {
                 })}
               </ImageList>
             </div>
-            <div style={{ width: "100%", textAlign: "center" }}>
+            <div style={{ width: "100%", textAlign: "center", marginTop: "10px" }}>
               <Button variant="outlined" onClick={handleSubmit}>
                 SUBMIT
               </Button>

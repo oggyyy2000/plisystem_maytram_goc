@@ -7,7 +7,11 @@ import { WSContext } from "../../components/context/WSContext";
 import { useDispatch } from "react-redux";
 import * as actions from "../../redux/types";
 import { useSelector } from "react-redux";
-import { CurrentLocation, DefectInfo } from "../../redux/selectors";
+import {
+  CurrentFrame,
+  CurrentLocation,
+  DefectInfo,
+} from "../../redux/selectors";
 
 import {
   Button,
@@ -80,6 +84,7 @@ function FlightRouteMap() {
   const [open, setOpen] = useState(false);
   const [hadSubmited, setHadSubmited] = useState(false);
   const [startFly, setStartFly] = useState(false);
+  const [progress, setProgress] = useState("");
   const [SRT, setSRT] = useState(null);
   const [nameSRT, setNameSRT] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
@@ -105,6 +110,7 @@ function FlightRouteMap() {
   const dispatch = useDispatch();
   const currentLocation = useSelector(CurrentLocation);
   const defectInfo = useSelector(DefectInfo);
+  const currentFrame = useSelector(CurrentFrame);
 
   const [tab, setTab] = useState(0);
 
@@ -141,8 +147,8 @@ function FlightRouteMap() {
         const defectWS = data.data.defects;
         const VT = data.data.location;
         const currentFrame = process.env.REACT_APP_IMG_SLIDE + data.data.frame;
-        // console.log("src: ", process.env.REACT_APP_IMG_SLIDE + currentFrame)
-        // const process = data.data.process;
+        const processPercent = data.data.progress;
+        setProgress(processPercent);
 
         if (gis != undefined) {
           console.log("WS", gis);
@@ -160,7 +166,6 @@ function FlightRouteMap() {
           setStreetLine(temppoly);
           setZoom(23);
           if (defectWS.length > 0) {
-            // setDefectGIS(defectWS);
             dispatch({ type: actions.DefectInfo, data: defectWS });
           }
           console.log("defectInfo", defectInfo);
@@ -171,7 +176,7 @@ function FlightRouteMap() {
     } catch (e) {
       console.log(e);
     }
-  });
+  }, [currentLocation, defectInfo, currentFrame]);
 
   const handleChangeTabs = (newValue) => {
     setTab(newValue);
@@ -322,7 +327,6 @@ function FlightRouteMap() {
           {defectInfo.map((gis1) => {
             console.log(gis1);
             let iconMarker = new window.google.maps.MarkerImage(
-              // "http://epsmarttech.com.vn:3000/icon/vector.png",
               "https://lh3.googleusercontent.com/pw/AM-JKLUs1eX_HbHDXCbEZIr6Zb1lRJPWjhiJk8pFAn82uOebQq77t0n41BzrLrJ8y79pxoYApFx6FznLaHG_fim_tqElBo4gmxIXatokQGC1Y7z3sC00uSoaU6qekd0bkhKGsa30h8Ze9pKx016_4v07kEtg=w1179-h943-no",
               null /* size is determined at runtime */,
               null /* origin is 0,0 */,
@@ -511,7 +515,7 @@ function FlightRouteMap() {
         </div>
 
         <FlightRoutreDefectList startfly={startFly} />
-        <FlightRouteInMission startfly={startFly} />
+        <FlightRouteInMission startfly={startFly} progress={progress} />
 
         {/* <GoogleMap
           mapContainerClassName="flightroute-google-map"

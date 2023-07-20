@@ -1,5 +1,6 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
+import axios from "axios";
 
 import Backdrop from "@mui/material/Backdrop";
 import Box from "@mui/material/Box";
@@ -32,11 +33,14 @@ export default function TransitionsModal({ schedule_id }) {
   const [imgList2, setImgList2] = useState([]);
   console.log(imgList2);
   const VTdetail = useSelector(VTInfo);
+
   const handleOpen = () => {
     setChecked([]);
     setOpen(true);
     // dispatch({ type: actions.MissionId, data: schedule_id });
   };
+
+
   const handleClose = () => setOpen(false);
 
   const handleCheck = (event) => {
@@ -61,7 +65,6 @@ export default function TransitionsModal({ schedule_id }) {
   function getIMG() {
     const imgList2 = [];
     setImgList2(imgList2);
-    // console.log(imgList2);
 
     for (var keys in VTdetail.data) {
       if (typeof VTdetail.data[keys] !== "string") {

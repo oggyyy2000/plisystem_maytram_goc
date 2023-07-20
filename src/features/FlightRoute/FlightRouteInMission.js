@@ -15,19 +15,28 @@ import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
 import "./css/FlightRouteInMission.css";
 
-function FlightRouteInMission({ startfly }) {
+function FlightRouteInMission({ startfly, progress }) {
   const [open, setOpen] = useState(false);
   const [close, setClose] = useState(false);
+  const [imageLink, setImageLink] = useState("");
+  console.log(imageLink);
   const currentLocation = useSelector(CurrentLocation);
   const VT = useSelector(CurrentVT);
   const currentFrame = useSelector(CurrentFrame);
-  console.log(currentFrame);
 
   useEffect(() => {
     if (startfly) {
       setClose(true);
     }
-  }, [startfly]);
+    setImageLink(currentFrame);
+  }, [startfly, currentFrame]);
+
+  // useEffect(() => {
+  //   // Delay the rendering of the img tag by 1 second
+  //   setTimeout(() => {
+  //     setImageLink(currentFrame);
+  //   }, 10000);
+  // }, [currentFrame]);
 
   function handleClickOpen() {
     setOpen(true);
@@ -38,10 +47,6 @@ function FlightRouteInMission({ startfly }) {
   }
 
   function handleHidePanel() {
-    //setClose(true);
-    // if (close === true) {
-    //   setClose(false);
-    // }
     setClose(!close);
   }
 
@@ -88,6 +93,7 @@ function FlightRouteInMission({ startfly }) {
       </>
     );
   }
+
   return (
     <>
       <div
@@ -123,7 +129,7 @@ function FlightRouteInMission({ startfly }) {
                 <td>FPS:</td>
               </tr>
               <tr>
-                <td colSpan={2}>Process: 32/100</td>
+                <td colSpan={2}>Process: {progress}</td>
               </tr>
             </table>
           </div>
@@ -135,7 +141,13 @@ function FlightRouteInMission({ startfly }) {
               </button>
             </div>
             {/* {WebcamComponent()} */}
-            <img src={currentFrame} height={"225px"} width={"auto"} />
+
+            <img
+              key={currentFrame}
+              src={imageLink}
+              height={"225px"}
+              width={"auto"}
+            />
           </div>
           <div className="flightroute-thermalview-container">
             <div className="flightroute-thermal-title">Thermal</div>
