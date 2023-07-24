@@ -10,6 +10,7 @@ import Button from "@mui/material/Button";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
 import playVideo from "../../assets/images/play_video_icon.png";
+import CloseIcon from "@mui/icons-material/Close";
 import "./css/HomeModalTest.css";
 
 import { useSelector } from "react-redux";
@@ -26,9 +27,7 @@ const style = {
   bgcolor: "background.paper",
   border: "2px solid #000",
   boxShadow: 24,
-  // p: 2,
   pr: 0,
-  // overflowY: "auto",
 };
 
 export default function HomeModalTest({ schedule_id }) {
@@ -36,30 +35,30 @@ export default function HomeModalTest({ schedule_id }) {
   const [selectedLabels, setSelectedLabels] = useState([]);
   const [checked, setChecked] = useState([]);
   const [imgList2, setImgList2] = useState([]);
-  // const [errorName, setErrorName] = useState([]);
   const [timeFlyStart, setTimeFlyStart] = useState([]);
   const [chooseTime, setChooseTime] = useState("");
   const [videoLink, setVideoLink] = useState("");
-  console.log(imgList2);
+  // console.log(imgList2);
   const VTdetail = useSelector(VTInfo);
-  console.log(chooseTime);
-  const url =
+  console.log(schedule_id);
+  const urlViewData =
     process.env.REACT_APP_API_URL +
     "supervisionschedules/?schedule_id=" +
     schedule_id;
+  const urlPostFlightData = process.env.REACT_APP_API_URL + "flightdatas/";
 
   useEffect(() => {
     if (open === true) {
       axios
-        .get(url)
+        .get(urlViewData)
         .then((res) => {
-          console.log(res.data.data[chooseTime]);
+          // console.log(Object.keys(res.data.data)[0]);
           setTimeFlyStart(Object.keys(res.data.data));
+          // setChooseTime(Object.keys(res.data.data)[0])
           if (chooseTime != "") {
             getVideo(res.data.data[chooseTime]);
             getIMG(res.data.data[chooseTime]);
           }
-          // getErrorName(res.data.data);
         })
         .catch((err) => {
           console.log(err);
@@ -76,9 +75,10 @@ export default function HomeModalTest({ schedule_id }) {
   };
 
   const handleOpen = () => {
-    setChecked([]);
     setOpen(true);
+    setChecked([]);
   };
+
   const handleClose = () => setOpen(false);
 
   const handleCheck = (event) => {
@@ -95,7 +95,7 @@ export default function HomeModalTest({ schedule_id }) {
   const handleSubmit = () => {
     console.log(checked);
     axios
-      .post(" http://10.0.17.36:8000/flightdatas/", checked)
+      .post(urlPostFlightData, checked)
       .then((response) => {
         console.log(response);
       })
@@ -118,13 +118,43 @@ export default function HomeModalTest({ schedule_id }) {
     setVideoLink(process.env.REACT_APP_IMG_SLIDE + data.supervision_datas);
   };
 
-  // const getErrorName = (data) => {
-  //   Object.keys(data).map((info) => {
-  //     data[info].defect_datas.map((defect) => {
-  //       setErrorName(defect.defect_name);
-  //     });
-  //   });
-  // };
+  const renderListData = (timeFlyStart) => {
+    return (
+      <>
+        {timeFlyStart.map((timeflystart) => {
+          return (
+            <>
+              <div
+                className={`${timeflystart} homemodaltest-viewflytime-container ${
+                  timeflystart === chooseTime ? "onclick" : ""
+                }`}
+                style={{
+                  display: "flex",
+                  cursor: "pointer",
+                  fontSize: "25px",
+                  fontWeight: "bold",
+                }}
+                onClick={(e) => {
+                  setChooseTime(e.target.innerText);
+                }}
+              >
+                <div style={{ position: "relative" }}>{timeflystart}</div>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <img src={playVideo} height={"100px"} width={"100px"} />
+                </div>
+              </div>
+            </>
+          );
+        })}
+      </>
+    );
+  };
 
   return (
     <div>
@@ -169,33 +199,41 @@ export default function HomeModalTest({ schedule_id }) {
                 }}
                 className="box1.1"
               >
-                {timeFlyStart.map((timeflystart) => {
+                {renderListData(timeFlyStart)}
+                {/* {timeFlyStart.map((timeflystart) => {
+                  console.log(chooseTime === chooseTimeDiv);
                   return (
                     <>
                       <div
+                        className={`homemodaltest-viewflytime-container ${
+                          clicked === true
+                            ? "onclick"
+                            : ""
+                        }`}
                         style={{
-                          border: "1px solid black",
-                          minHeight: "18%",
+                          // border: "1px solid black",
+                          // minHeight: "18%",
                           display: "flex",
-
                           cursor: "pointer",
                           fontSize: "25px",
                           fontWeight: "bold",
                         }}
                         onClick={(e) => {
+                          console.log(typeof e.target.innerText);
                           setChooseTime(e.target.innerText);
+                          setChooseTimeDiv(e.target.innerText);
+                          setClicked(true)
                         }}
                       >
-                        <div style={{ width: "100%", position: "relative" }}>
+                        <div style={{ position: "relative" }}>
                           {timeflystart}
                         </div>
                         <div
                           style={{
-                            position: "absolute",
-                            top: "3%",
-                            left: "5%",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
                           }}
-                          onClick={false}
                         >
                           <img
                             src={playVideo}
@@ -206,13 +244,14 @@ export default function HomeModalTest({ schedule_id }) {
                       </div>
                     </>
                   );
-                })}
+                })} */}
               </Grid>
               <Grid container xs={10} className="box1.2">
                 <Grid
                   item
                   xs={12}
                   style={{
+                    position: "relative",
                     height: "50%",
                     border: "1px solid black",
                     display: "flex",
@@ -235,6 +274,15 @@ export default function HomeModalTest({ schedule_id }) {
                   >
                     Your browser does not support the video tag.
                   </video>
+
+                  <Button
+                    color="error"
+                    variant="contained"
+                    style={{ position: "absolute", top: 0, right: 0 }}
+                    onClick={handleClose}
+                  >
+                    <CloseIcon fontSize="small" />
+                  </Button>
                 </Grid>
                 <Grid
                   item
@@ -245,12 +293,10 @@ export default function HomeModalTest({ schedule_id }) {
                   }}
                   className="box1.2.2"
                 >
-                  <div style={{ height: "76%", overflowY: "auto" }}>
-                    <div>
+                  <div style={{ height: "100%", overflowY: "auto" }}>
+                    <div style={{ width: "100%", height: "100%" }}>
                       <ImageList
                         sx={{
-                          width: "100%",
-                          height: "100%",
                           position: "relative",
                           overflowY: "hidden",
                         }}

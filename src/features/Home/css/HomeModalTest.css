@@ -2,6 +2,15 @@
   border: 2px solid red;
 }
 
+.homemodaltest-viewflytime-container {
+  min-height: 18%;
+  border: 1px solid black;
+}
+
+.onclick {
+  border: 2px solid red !important;
+}
+
 .choosed {
   opacity: 0.4;
 }
