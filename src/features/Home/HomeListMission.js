@@ -22,7 +22,7 @@ function HomeListMission() {
     axios
       .get(urlhomePageView)
       .then((res) => {
-        // console.log(res.data.data);
+        console.log(res.data.data[0].schedule_id);
         setListMissionData(res.data.data);
         handleListMissionClick(res.data.data[0].schedule_id);
       })

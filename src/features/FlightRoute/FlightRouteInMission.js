@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Webcam from "react-webcam";
 
 import { useSelector } from "react-redux";
 import {
@@ -30,13 +29,6 @@ function FlightRouteInMission({ startfly, progress }) {
     }
     setImageLink(currentFrame);
   }, [startfly, currentFrame]);
-
-  // useEffect(() => {
-  //   // Delay the rendering of the img tag by 1 second
-  //   setTimeout(() => {
-  //     setImageLink(currentFrame);
-  //   }, 10000);
-  // }, [currentFrame]);
 
   function handleClickOpen() {
     setOpen(true);
@@ -70,26 +62,23 @@ function FlightRouteInMission({ startfly, progress }) {
           <div className="flightroute-expandcam-container">
             <div className="flightroute-rgbcam-expand-container">
               <div className="flightroute-rgbcam-expand-title">RGB</div>
-              {/* {WebcamComponent()} */}
-              <img
-                src={currentFrame}
-                style={{ height: "681px", width: "auto" }}
-              />
+              {imageLink !== "" ? (
+                <img
+                  key={currentFrame}
+                  src={imageLink}
+                  height={"679px"}
+                  width={"734px"}
+                />
+              ) : (
+                <>NO RGB</>
+              )}
             </div>
             <div className="flightroute-thermalcam-expand-container">
               <div className="flightroute-thermalcam-expand-title">thermal</div>
-              {WebcamComponent()}
+              NO THERMAL
             </div>
           </div>
         </Dialog>
-      </>
-    );
-  }
-
-  function WebcamComponent() {
-    return (
-      <>
-        <Webcam className="flightroute-webcam" audio={false} />
       </>
     );
   }
@@ -140,18 +129,21 @@ function FlightRouteInMission({ startfly, progress }) {
                 <img src={Icon} height={"100%"} width={"100%"} />
               </button>
             </div>
-            {/* {WebcamComponent()} */}
 
-            <img
-              key={currentFrame}
-              src={imageLink}
-              height={"225px"}
-              width={"auto"}
-            />
+            {imageLink !== "" ? (
+              <img
+                key={currentFrame}
+                src={imageLink}
+                height={"225px"}
+                width={"409px"}
+              />
+            ) : (
+              <>NO RGB</>
+            )}
           </div>
           <div className="flightroute-thermalview-container">
             <div className="flightroute-thermal-title">Thermal</div>
-            {WebcamComponent()}
+            NO THERMAL
           </div>
           {zoomView()}
         </div>
