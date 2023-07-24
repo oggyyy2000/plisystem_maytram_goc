@@ -7,51 +7,25 @@ import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
-import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
-import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import AdbIcon from "@mui/icons-material/Adb";
-// import { Tabs, Tab } from "@mui/material";
 
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
 import logo from "../../assets/images/logo.png";
 
-const pages = ["Home", "FlightRouteManage"];
-const settings = ["Account", "Logout"];
+const pages = ["Home", "FlightRouteManage", "PowerlineCorridor"];
 
 function NavBar() {
   const [anchorElNav, setAnchorElNav] = useState();
-  const [anchorElUser, setAnchorElUser] = useState();
-  // const [value, setValue] = useState();
-
-  // function LinkTab(props) {
-  //   return (
-  //     <Tab
-  //       component="a"
-  //       onClick={(event) => {
-  //         event.preventDefault();
-  //       }}
-  //       {...props}
-  //     />
-  //   );
-  // }
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
-  const handleOpenUserMenu = (event) => {
-    setAnchorElUser(event.currentTarget);
-  };
 
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
-  };
-
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
   };
 
   return (
@@ -63,7 +37,6 @@ function NavBar() {
             alt="logo"
             style={{ width: "50px", height: "50px" }}
           />
-          {/* <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} /> */}
           <Typography
             variant="h6"
             noWrap
@@ -106,7 +79,7 @@ function NavBar() {
                 horizontal: "left",
               }}
               open={Boolean(anchorElNav)}
-              // onClose={handleCloseNavMenu}
+              onClose={handleCloseNavMenu}
               sx={{
                 display: { xs: "block", md: "none" },
               }}
@@ -125,7 +98,7 @@ function NavBar() {
               ))}
             </Menu>
           </Box>
-          <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
+          
           <Typography
             variant="h5"
             noWrap
@@ -142,7 +115,7 @@ function NavBar() {
               textDecoration: "none",
             }}
           >
-            LOGO
+            EPSMARTTECH
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
@@ -158,56 +131,6 @@ function NavBar() {
                 </Link>
               </Button>
             ))}
-            {/* -------------------------- */}
-            {/* <Tabs
-              sx={{
-                marginLeft: "2.5rem",
-                marginRight: "2.5rem",
-                fontWeight: "bold",
-              }}
-              textColor="inherit"
-              variant="scrollable"
-              scrollButtons="auto"
-              indicatorColor="secondary"
-              value={value}
-              onChange={(e, value) => {
-                setValue(value);
-              }}
-            >
-              {pages.map((page) => {
-                return <LinkTab label={`${page}`} href={`/ImageManager`} />;
-              })}
-            </Tabs> */}
-          </Box>
-
-          <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-              </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: "45px" }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
           </Box>
         </Toolbar>
       </Container>

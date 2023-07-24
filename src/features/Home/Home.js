@@ -4,8 +4,6 @@ import HomeMap from "./HomeMap";
 import HomeListMission from "./HomeListMission";
 import HomeImageSlider from "./HomeImageSlider";
 import HomeListVT from "./HomeListVT";
-// import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-// import CancelIcon from "@mui/icons-material/Cancel";
 
 import "./css/Home.css";
 import HomeListTB from "./HomeListTB";
