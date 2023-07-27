@@ -4,11 +4,9 @@ import { useDispatch } from "react-redux";
 import * as actions from "../../redux/types";
 
 import "./css/HomeListMission.css";
-import { Button } from "@mui/material";
 
 import FlightRoundedIcon from "@mui/icons-material/FlightRounded";
-// import TransitionsModal from "./HomeModal";
-import HomeModalTest from "./HomeModalTest";
+import HomeModal from "./HomeModal";
 
 function HomeListMission() {
   const [clicked, setClicked] = useState("");
@@ -98,7 +96,7 @@ function HomeListMission() {
                 </div>
                 <div item className="homelist-icon-bottom-right">
                   {/* <TransitionsModal schedule_id={listmission.schedule_id} /> */}
-                  <HomeModalTest schedule_id={listmission.schedule_id}/>
+                  <HomeModal schedule_id={listmission.schedule_id}/>
                 </div>
               </div>
             </div>

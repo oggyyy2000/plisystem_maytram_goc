@@ -66,16 +66,17 @@ function FlightRouteInMission({ startfly, progress }) {
                 <img
                   key={currentFrame}
                   src={imageLink}
+                  alt={currentFrame}
                   height={"679px"}
                   width={"734px"}
                 />
               ) : (
-                <>NO RGB</>
+                <div className="flightroute-before-datareturned">no rgb</div>
               )}
             </div>
             <div className="flightroute-thermalcam-expand-container">
               <div className="flightroute-thermalcam-expand-title">thermal</div>
-              NO THERMAL
+              <div className="flightroute-before-datareturned">no thermal</div>
             </div>
           </div>
         </Dialog>
@@ -126,7 +127,7 @@ function FlightRouteInMission({ startfly, progress }) {
             <div className="flightroute-rgb-title">RGB</div>
             <div className="flightroute-rgb-expandbtn">
               <button onClick={handleClickOpen}>
-                <img src={Icon} height={"100%"} width={"100%"} />
+                <img src={Icon} alt="Icon" height={"100%"} width={"100%"} />
               </button>
             </div>
 
@@ -134,16 +135,17 @@ function FlightRouteInMission({ startfly, progress }) {
               <img
                 key={currentFrame}
                 src={imageLink}
+                alt={currentFrame}
                 height={"225px"}
                 width={"409px"}
               />
             ) : (
-              <>NO RGB</>
+              <div className="flightroute-before-datareturned">no rgb</div>
             )}
           </div>
           <div className="flightroute-thermalview-container">
             <div className="flightroute-thermal-title">Thermal</div>
-            NO THERMAL
+            <div className="flightroute-before-datareturned">no thermal</div>
           </div>
           {zoomView()}
         </div>

@@ -9,6 +9,16 @@
   /* transition: 0.5s ease-out; */
 }
 
+.flightroute-before-datareturned {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  font-size: 30px;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
 /* body */
 .flightroute-close-rightpanel {
   position: absolute;

@@ -1,0 +1,99 @@
+/* common use */
+.onclick {
+  border: 2px solid red !important;
+}
+
+.choosed {
+  opacity: 0.4;
+}
+
+.checkmark {
+  position: absolute;
+  transform: rotate(45deg);
+  height: 50px;
+  width: 28px;
+  margin-top: 24%;
+  margin-left: 51%;
+  border-bottom: 7px solid #7fff00;
+  border-right: 7px solid #7fff00;
+}
+
+/* components */
+.homemodal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 100%;
+  width: 100%;
+  border: 2px solid #000;
+  box-shadow: 24;
+  padding-right: 0;
+}
+
+.homemodal-container {
+  height: 100%;
+}
+
+.homemodal-listdata {
+  height: 100%;
+  border: 1px solid black;
+  overflow-y: auto;
+}
+
+.homemodal-listdata-item {
+  min-height: 18%;
+  border: 1px solid black;
+  display: flex;
+  cursor: pointer;
+  font-size: 25px;
+  font-weight: bold;
+  background-image: url("../../../assets/images/play_video_icon.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100px 100px;
+}
+
+.homemodal-listdataitem-title {
+  position: relative;
+}
+
+.homemodal-videodata {
+  position: relative;
+  height: 50%;
+  border: 1px solid black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.homemodal-btn-close {
+  position: absolute !important;
+  top: 0;
+  right: 0;
+}
+
+.homemodal-imgdata {
+  height: 50%;
+  border: 1px solid black;
+}
+
+.homemodal-imgdata-container {
+  height: 100%;
+  overflow-y: auto;
+}
+
+.homemodal-imagelist {
+  width: 100%;
+  height: 100%;
+}
+
+.homemodal-imagelist-label:hover {
+  border: 2px solid red;
+}
+
+.homemodal-imagelist-submit {
+  width: 100%;
+  text-align: center;
+  margin-top: 10px;
+}

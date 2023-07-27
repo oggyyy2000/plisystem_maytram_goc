@@ -9,28 +9,14 @@ import Fade from "@mui/material/Fade";
 import Button from "@mui/material/Button";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
-import playVideo from "../../assets/images/play_video_icon.png";
 import CloseIcon from "@mui/icons-material/Close";
-import "./css/HomeModalTest.css";
+import "./css/HomeModal.css";
 
 import { useSelector } from "react-redux";
 import { VTInfo } from "../../redux/selectors";
 import { Grid } from "@mui/material";
 
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  height: "100%",
-  width: "100%",
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  pr: 0,
-};
-
-export default function HomeModalTest({ schedule_id }) {
+export default function HomeModal({ schedule_id }) {
   const [open, setOpen] = useState(false);
   const [selectedLabels, setSelectedLabels] = useState([]);
   const [checked, setChecked] = useState([]);
@@ -55,7 +41,7 @@ export default function HomeModalTest({ schedule_id }) {
           // console.log(Object.keys(res.data.data)[0]);
           setTimeFlyStart(Object.keys(res.data.data));
           // setChooseTime(Object.keys(res.data.data)[0])
-          if (chooseTime != "") {
+          if (chooseTime !== "") {
             getVideo(res.data.data[chooseTime]);
             getIMG(res.data.data[chooseTime]);
           }
@@ -64,7 +50,7 @@ export default function HomeModalTest({ schedule_id }) {
           console.log(err);
         });
     }
-  }, [open, VTdetail, videoLink, chooseTime]);
+  }, [open, VTdetail, videoLink, chooseTime, urlViewData]);
 
   const handleLabelClick = (label) => {
     if (selectedLabels.includes(label)) {
@@ -108,45 +94,33 @@ export default function HomeModalTest({ schedule_id }) {
     const imgList2 = [];
     setImgList2(imgList2);
     data.defect_datas.map((defect) => {
-      defect.defect_image.map((defectLink) => {
-        imgList2.push(defectLink);
+      return defect.defect_image.map((defectLink) => {
+        return imgList2.push(defectLink);
       });
     });
   }
 
   const getVideo = (data) => {
-    setVideoLink(process.env.REACT_APP_IMG_SLIDE + data.supervision_datas);
+    setVideoLink(process.env.REACT_APP_IMG + data.supervision_datas);
   };
 
   const renderListData = (timeFlyStart) => {
     return (
       <>
         {timeFlyStart.map((timeflystart) => {
+          console.log(timeflystart === chooseTime);
           return (
             <>
               <div
-                className={`${timeflystart} homemodaltest-viewflytime-container ${
+                className={`homemodal-listdata-item ${
                   timeflystart === chooseTime ? "onclick" : ""
                 }`}
-                style={{
-                  display: "flex",
-                  cursor: "pointer",
-                  fontSize: "25px",
-                  fontWeight: "bold",
-                }}
                 onClick={(e) => {
                   setChooseTime(e.target.innerText);
                 }}
               >
-                <div style={{ position: "relative" }}>{timeflystart}</div>
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  <img src={playVideo} height={"100px"} width={"100px"} />
+                <div className="homemodal-listdataitem-title">
+                  {timeflystart}
                 </div>
               </div>
             </>
@@ -182,84 +156,18 @@ export default function HomeModalTest({ schedule_id }) {
         }}
       >
         <Fade in={open}>
-          <Box sx={style}>
-            <Grid
-              container
-              spacing={0}
-              className="box1"
-              style={{ height: "100%" }}
-            >
-              <Grid
-                item
-                xs={2}
-                style={{
-                  height: "100%",
-                  border: "1px solid black",
-                  overflowY: "auto",
-                }}
-                className="box1.1"
-              >
+          <Box
+            className="homemodal"
+            sx={{
+              bgcolor: "background.paper",
+            }}
+          >
+            <Grid container className="homemodal-container" spacing={0}>
+              <Grid item className="homemodal-listdata" xs={2}>
                 {renderListData(timeFlyStart)}
-                {/* {timeFlyStart.map((timeflystart) => {
-                  console.log(chooseTime === chooseTimeDiv);
-                  return (
-                    <>
-                      <div
-                        className={`homemodaltest-viewflytime-container ${
-                          clicked === true
-                            ? "onclick"
-                            : ""
-                        }`}
-                        style={{
-                          // border: "1px solid black",
-                          // minHeight: "18%",
-                          display: "flex",
-                          cursor: "pointer",
-                          fontSize: "25px",
-                          fontWeight: "bold",
-                        }}
-                        onClick={(e) => {
-                          console.log(typeof e.target.innerText);
-                          setChooseTime(e.target.innerText);
-                          setChooseTimeDiv(e.target.innerText);
-                          setClicked(true)
-                        }}
-                      >
-                        <div style={{ position: "relative" }}>
-                          {timeflystart}
-                        </div>
-                        <div
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                          }}
-                        >
-                          <img
-                            src={playVideo}
-                            height={"100px"}
-                            width={"100px"}
-                          />
-                        </div>
-                      </div>
-                    </>
-                  );
-                })} */}
               </Grid>
-              <Grid container xs={10} className="box1.2">
-                <Grid
-                  item
-                  xs={12}
-                  style={{
-                    position: "relative",
-                    height: "50%",
-                    border: "1px solid black",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                  className="box1.2.1"
-                >
+              <Grid container xs={10}>
+                <Grid item className="homemodal-videodata" xs={12}>
                   <video
                     controls
                     autoPlay
@@ -276,25 +184,17 @@ export default function HomeModalTest({ schedule_id }) {
                   </video>
 
                   <Button
+                    className="homemodal-btn-close"
                     color="error"
                     variant="contained"
-                    style={{ position: "absolute", top: 0, right: 0 }}
                     onClick={handleClose}
                   >
                     <CloseIcon fontSize="small" />
                   </Button>
                 </Grid>
-                <Grid
-                  item
-                  xs={12}
-                  style={{
-                    height: "50%",
-                    border: "1px solid black",
-                  }}
-                  className="box1.2.2"
-                >
-                  <div style={{ height: "100%", overflowY: "auto" }}>
-                    <div style={{ width: "100%", height: "100%" }}>
+                <Grid item className="homemodal-imgdata" xs={12}>
+                  <div className="homemodal-imgdata-container">
+                    <div className="homemodal-imagelist">
                       <ImageList
                         sx={{
                           position: "relative",
@@ -308,7 +208,7 @@ export default function HomeModalTest({ schedule_id }) {
                               <ImageListItem key={img}>
                                 <label
                                   for={`choose-img-${img}`}
-                                  className={`homemodaltest-label ${
+                                  className={`homemodal-imagelist-label ${
                                     selectedLabels.includes(img)
                                       ? "choosed"
                                       : ""
@@ -316,13 +216,12 @@ export default function HomeModalTest({ schedule_id }) {
                                   onClick={() => handleLabelClick(img)}
                                 >
                                   <img
-                                    src={process.env.REACT_APP_IMG_SLIDE + img}
-                                    srcSet={
-                                      process.env.REACT_APP_IMG_SLIDE + img
-                                    }
-                                    alt="picture"
+                                    src={process.env.REACT_APP_IMG + img}
+                                    srcSet={process.env.REACT_APP_IMG + img}
+                                    alt={img}
                                     loading="lazy"
-                                    style={{ width: "100%", height: "100%" }}
+                                    width={"100%"}
+                                    height={"100%"}
                                   />
                                 </label>
 
@@ -345,13 +244,7 @@ export default function HomeModalTest({ schedule_id }) {
                         })}
                       </ImageList>
                     </div>
-                    <div
-                      style={{
-                        width: "100%",
-                        textAlign: "center",
-                        marginTop: "10px",
-                      }}
-                    >
+                    <div className="homemodal-imagelist-submit">
                       <Button variant="outlined" onClick={handleSubmit}>
                         SUBMIT
                       </Button>
