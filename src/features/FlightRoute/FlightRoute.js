@@ -34,7 +34,6 @@ import {
   GoogleMap,
   useJsApiLoader,
   MarkerF,
-  Marker,
   PolylineF,
 } from "@react-google-maps/api";
 
@@ -47,7 +46,7 @@ import DroneIcon from "../../assets/images/drone2.png";
 import FlightRoutreDefectList from "./FlightRouteDefectList";
 import FlightRouteInMission from "./FlightRouteInMission";
 
-function TabPanel(props) {
+function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
 
   return (
@@ -67,7 +66,7 @@ function TabPanel(props) {
   );
 }
 
-TabPanel.propTypes = {
+CustomTabPanel.propTypes = {
   children: PropTypes.node,
   index: PropTypes.number.isRequired,
   value: PropTypes.number.isRequired,
@@ -90,13 +89,11 @@ function FlightRouteMap() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [nameSelectedFile, setNameSelectedFile] = useState(null);
   var dt = new Date();
-  var date = `${dt
-    .getFullYear()
+  var date = `${dt.getFullYear().toString().padStart(4, "0")}-${(
+    dt.getMonth() + 1
+  )
     .toString()
-    .padStart(4, "0")}-${(dt.getMonth() + 1).toString().padStart(2, "0")}-${dt
-    .getDate()
-    .toString()
-    .padStart(2, "0")}`;
+    .padStart(2, "0")}-${dt.getDate().toString().padStart(2, "0")}`;
   const values = {
     someDate: date,
   };
@@ -113,6 +110,7 @@ function FlightRouteMap() {
   const currentFrame = useSelector(CurrentFrame);
 
   const [tab, setTab] = useState(0);
+  console.log(tab);
 
   const [center, setCenter] = useState({
     lat: 21.028511,
@@ -121,7 +119,6 @@ function FlightRouteMap() {
 
   const urlPostSchedules =
     process.env.REACT_APP_API_URL + "supervisionschedules/";
-  const wsUrl = process.env.REACT_APP_WS_URL;
   const { ws, connect, disconnect } = useContext(WSContext);
 
   useEffect(() => {
@@ -138,7 +135,7 @@ function FlightRouteMap() {
       if (!ws.current) return;
       ws.current.onmessage = (e) => {
         const data = JSON.parse(e.data);
-        if (data.data == "supervise_complete") {
+        if (data.data === "supervise_complete") {
           alert("Complete!");
           setStartFly(false);
         }
@@ -146,11 +143,11 @@ function FlightRouteMap() {
         const gis = data.data.gis;
         const defectWS = data.data.defects;
         const VT = data.data.location;
-        const currentFrame = process.env.REACT_APP_IMG_SLIDE + data.data.frame;
+        const currentFrame = process.env.REACT_APP_IMG + data.data.frame;
         const processPercent = data.data.progress;
         setProgress(processPercent);
 
-        if (gis != undefined) {
+        if (gis !== undefined) {
           console.log("WS", gis);
           dispatch({ type: actions.CurrentLocation, data: gis });
           // setCurrentLocation(gis);
@@ -178,18 +175,18 @@ function FlightRouteMap() {
     }
   }, [currentLocation, defectInfo, currentFrame]);
 
-  const handleChangeTabs = (newValue) => {
+  const handleChangeTabs = (event, newValue) => {
     setTab(newValue);
   };
 
   const handleChangeMapType = (event) => {
     setButtonText("Vệ tinh");
-    if (buttonText == "Vệ tinh") {
+    if (buttonText === "Vệ tinh") {
       setButtonText("Bản đồ");
     }
-    if (event.target.value == "Vệ tinh") {
+    if (event.target.value === "Vệ tinh") {
       setTypeMap("satellite");
-      if (typeMap == "satellite") {
+      if (typeMap === "satellite") {
         setTypeMap("roadmap");
       }
     }
@@ -375,106 +372,111 @@ function FlightRouteMap() {
               >
                 <Tab label="Mission" {...a11yProps(0)} />
                 <Tab label="Stream" {...a11yProps(1)} />
+
                 <div className="flightroute-dialog-icon">
                   <FlightTakeoffIcon color="primary" fontSize="large" />
                 </div>
               </Tabs>
             </Box>
-            <TabPanel value={tab} index={0}>
-              <DialogContent>
-                <DialogContentText>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    size="small"
-                    component="label"
-                    htmlFor="files"
-                    startIcon={<SaveIcon />}
-                  >
-                    VIDEO
-                    <input
-                      id="files"
-                      name="file"
-                      accept="video/*"
-                      style={{ display: "none" }}
-                      type="file"
-                      onChange={(e) => onChangeHandlerVID(e)}
-                    />
+            {tab === 0 && (
+              <CustomTabPanel value={tab} index={0}>
+                <DialogContent>
+                  <DialogContentText>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      size="small"
+                      component="label"
+                      htmlFor="files"
+                      startIcon={<SaveIcon />}
+                    >
+                      VIDEO
+                      <input
+                        id="files"
+                        name="file"
+                        accept="video/*"
+                        style={{ display: "none" }}
+                        type="file"
+                        onChange={(e) => onChangeHandlerVID(e)}
+                      />
+                    </Button>
+                    {nameSelectedFile}
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      size="small"
+                      component="label"
+                      htmlFor="srt"
+                      startIcon={<SaveIcon />}
+                      style={{ marginLeft: 10 }}
+                    >
+                      SRT
+                      <input
+                        id="srt"
+                        name="srt"
+                        accept=".srt"
+                        style={{ display: "none" }}
+                        type="file"
+                        onChange={(e) => onChangeHandlerSRT(e)}
+                      />
+                    </Button>
+                    {nameSRT}
+                  </DialogContentText>
+                  <DialogContentText style={{ marginTop: "5px" }}>
+                    Info:
+                    <Box className="flightroute-select-date">
+                      <TextField
+                        id="date"
+                        label="Ngày quay"
+                        type="date"
+                        value={DateDB}
+                        defaultValue={values.someDate}
+                        InputLabelProps={{
+                          shrink: true,
+                        }}
+                        onChange={onChangeDateDB}
+                      />
+                    </Box>
+                    <Box className="flightroute-select-tuyen">
+                      <FormControl fullWidth>
+                        <InputLabel>Tên Tuyến</InputLabel>
+                        <Select
+                          id="route"
+                          value={tuyen}
+                          label="IDTuyen"
+                          onChange={onChangeSelectTuyen}
+                          defaultValue={""}
+                        >
+                          <MenuItem value={"T87"}>Mai Động-Thanh Nhàn</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </Box>
+                  </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={handleClose} color="primary">
+                    Cancel
                   </Button>
-                  {nameSelectedFile}
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    size="small"
-                    component="label"
-                    htmlFor="srt"
-                    startIcon={<SaveIcon />}
-                    style={{ marginLeft: 10 }}
-                  >
-                    SRT
-                    <input
-                      id="srt"
-                      name="srt"
-                      accept=".srt"
-                      style={{ display: "none" }}
-                      type="file"
-                      onChange={(e) => onChangeHandlerSRT(e)}
-                    />
-                  </Button>
-                  {nameSRT}
-                </DialogContentText>
-                <DialogContentText style={{ marginTop: "5px" }}>
-                  Info:
-                  <Box className="flightroute-select-date">
-                    <TextField
-                      id="date"
-                      label="Ngày quay"
-                      type="date"
-                      value={DateDB}
-                      defaultValue={values.someDate}
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                      onChange={onChangeDateDB}
-                    />
-                  </Box>
-                  <Box className="flightroute-select-tuyen">
-                    <FormControl fullWidth>
-                      <InputLabel>Tên Tuyến</InputLabel>
-                      <Select
-                        id="route"
-                        value={tuyen}
-                        label="IDTuyen"
-                        onChange={onChangeSelectTuyen}
-                        defaultValue={""}
-                      >
-                        <MenuItem value={"T87"}>Mai Động-Thanh Nhàn</MenuItem>
-                      </Select>
-                    </FormControl>
-                  </Box>
-                </DialogContentText>
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={handleClose} color="primary">
-                  Cancel
-                </Button>
-                {selectedFile != null &&
-                SRT != null &&
-                tuyen != null &&
-                hadSubmited == false ? (
-                  <Button onClick={handleSubmit} color="primary">
-                    Submit
-                  </Button>
-                ) : (
-                  <Button disabled>
-                    {hadSubmited == false ? "Submit" : "Processing..."}
-                  </Button>
-                )}
-              </DialogActions>
-            </TabPanel>
-            <TabPanel value={tab} index={1}>
-              <div className="flightroute-dialogtab-stream">coming soon</div>
-            </TabPanel>
+                  {selectedFile != null &&
+                  SRT != null &&
+                  tuyen != null &&
+                  hadSubmited === false ? (
+                    <Button onClick={handleSubmit} color="primary">
+                      Submit
+                    </Button>
+                  ) : (
+                    <Button disabled>
+                      {hadSubmited === false ? "Submit" : "Processing..."}
+                    </Button>
+                  )}
+                </DialogActions>
+              </CustomTabPanel>
+            )}
+            {tab === 1 && (
+              <CustomTabPanel value={tab} index={1}>
+                <div className="flightroute-dialogtab-stream">coming soon</div>
+              </CustomTabPanel>
+            )}
           </Box>
         </Dialog>
       </>
@@ -504,7 +506,7 @@ function FlightRouteMap() {
             className="flightroute-btn-addmission"
             variant="contained"
             onClick={handleClickOpen}
-            disabled={startFly == false ? false : true}
+            disabled={startFly === false ? false : true}
           >
             flight
             <FlightTakeoffIcon />
