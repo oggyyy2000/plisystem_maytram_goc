@@ -85,7 +85,7 @@ function HomeListVT() {
                   }`}
                   onClick={handleListVTClick}
                 >
-                  {error == true ? (
+                  {error === true ? (
                     <CancelIcon
                       fontSize="small"
                       color="error"
@@ -100,6 +100,7 @@ function HomeListVT() {
                   )}
                   <img
                     src={itemIcon}
+                    alt="itemIcon"
                     style={{ width: "40px", height: "40px" }}
                   />
                   {item}

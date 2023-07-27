@@ -48,7 +48,7 @@ function HomeImageSlider() {
       if (typeof VTdetail.data[keys] !== "string") {
         VTdetail.data[keys].forEach((item) => {
           item.defect_image.map((list) => {
-            imgList2.push(process.env.REACT_APP_IMG_SLIDE + `${list}`);
+            return imgList2.push(process.env.REACT_APP_IMG + `${list}`);
           });
         });
       }

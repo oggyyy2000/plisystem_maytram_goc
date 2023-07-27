@@ -1,5 +1,5 @@
 import React from "react";
-import { Grid, Button } from "@mui/material";
+import { Grid } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
 
@@ -10,16 +10,8 @@ import "./css/HomeListTB.css";
 
 function HomeListTB() {
   const VTdetail = useSelector(VTInfo);
-  // console.log(VTdetail);
 
   function renderTB() {
-    // return VTdetail.map((item) => {
-    //   let error = false;
-    //   let TBtitle = [];
-    //   Object.keys(item).map((TB) => {
-    //     TBtitle.push(TB);
-    //   });
-
     return (
       <>
         {Object.keys(VTdetail.data).map((nameTB) => {
@@ -40,17 +32,15 @@ function HomeListTB() {
                 >
                   <div className="home-list-TB-title">{nameTB}</div>
                   <div className="home-list-TB-icon">
-                    {error == true ? (
+                    {error === true ? (
                       <CancelIcon
                         fontSize="large"
                         color="error"
-                        // style={{ float: "right" }}
                       />
                     ) : (
                       <CheckCircleIcon
                         fontSize="large"
                         color="success"
-                        // style={{ float: "right" }}
                       />
                     )}
                   </div>
@@ -63,7 +53,6 @@ function HomeListTB() {
         })}
       </>
     );
-    // });
   }
 
   return (
