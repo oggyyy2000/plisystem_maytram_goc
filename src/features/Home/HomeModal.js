@@ -84,6 +84,7 @@ export default function HomeModal({ schedule_id }) {
       .post(urlPostFlightData, checked)
       .then((response) => {
         console.log(response);
+        if (response.status === 200) alert(response.data);
       })
       .catch((error) => {
         console.error(error);
