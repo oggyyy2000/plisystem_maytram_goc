@@ -19,16 +19,53 @@ function FlightRouteInMission({ startfly, progress }) {
   const [close, setClose] = useState(false);
   const [imageLink, setImageLink] = useState("");
   console.log(imageLink);
+  //test
+  // const [debouncedImageUrl, setDebouncedImageUrl] = useState("");
+  // const [debounceTimeout, setDebounceTimeout] = useState(null);
+  const [imageLoaded, setImageLoaded] = useState(false);
+  console.log(imageLoaded);
+
   const currentLocation = useSelector(CurrentLocation);
   const VT = useSelector(CurrentVT);
   const currentFrame = useSelector(CurrentFrame);
+
+  // useEffect(() => {
+  //   // Update the debounced image URL when the image URL changes
+  //   setDebouncedImageUrl(imageLink);
+  // }, [imageLink]);
+
+  // useEffect(() => {
+  //   // Cancel the previous debounce timer if it exists
+  //   if (debounceTimeout) {
+  //     clearTimeout(debounceTimeout);
+  //   }
+
+  //   // Set a new debounce timer to update the image URL after a delay
+  //   const timeout = setTimeout(() => {
+  //     setDebounceTimeout(null);
+  //     setImageLink(debouncedImageUrl);
+  //   }, 5000); // Adjust the debounce time as needed
+
+  //   setDebounceTimeout(timeout);
+  // }, [imageLink, debouncedImageUrl, debounceTimeout]);
 
   useEffect(() => {
     if (startfly) {
       setClose(true);
     }
+    // if (imageLoaded) {
+    //   setImageLink(currentFrame);
+    // }
     setImageLink(currentFrame);
-  }, [startfly, currentFrame]);
+  }, [startfly, currentFrame, imageLoaded]);
+
+  // useEffect(() => {
+  //   const debounceImage = setInterval(() => {
+  //     setDebouncedImageUrl(imageLink);
+  //   }, 500);
+
+  //   return () => clearTimeout(debounceImage);
+  // }, [imageLink]);
 
   function handleClickOpen() {
     setOpen(true);
@@ -41,6 +78,23 @@ function FlightRouteInMission({ startfly, progress }) {
   function handleHidePanel() {
     setClose(!close);
   }
+
+  const handleImageLoad = () => {
+    setImageLoaded(true);
+  };
+
+  const renderImage = (imageLink) => {
+    return (
+      <img
+        key={currentFrame}
+        src={imageLink}
+        alt={currentFrame}
+        height={"225px"}
+        width={"409px"}
+        onLoad={handleImageLoad}
+      />
+    );
+  };
 
   function zoomView() {
     return (
@@ -132,13 +186,14 @@ function FlightRouteInMission({ startfly, progress }) {
             </div>
 
             {imageLink !== "" ? (
-              <img
-                key={currentFrame}
-                src={imageLink}
-                alt={currentFrame}
-                height={"225px"}
-                width={"409px"}
-              />
+              // <img
+              //   key={currentFrame}
+              //   src={debouncedImageUrl}
+              //   alt={currentFrame}
+              //   height={"225px"}
+              //   width={"409px"}
+              // />
+              renderImage(imageLink)
             ) : (
               <div className="flightroute-before-datareturned">no rgb</div>
             )}
