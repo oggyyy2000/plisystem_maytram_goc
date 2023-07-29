@@ -80,7 +80,7 @@ function a11yProps(index) {
 }
 
 function FlightRouteMap() {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
   const [hadSubmited, setHadSubmited] = useState(false);
   const [startFly, setStartFly] = useState(false);
   const [progress, setProgress] = useState("");
@@ -354,14 +354,15 @@ function FlightRouteMap() {
       <>
         <Dialog
           open={open}
-          sx={{
-            "& .MuiDialog-container": {
-              justifyContent: "flex-start",
-              alignItems: "flex-start",
-            },
-          }}
-          PaperProps={{ sx: { top: 102, left: -18 } }}
-          hideBackdrop={true}
+          // sx={{
+          //   "& .MuiDialog-container": {
+          //     justifyContent: "flex-start",
+          //     alignItems: "flex-start",
+          //   },
+          // }}
+          PaperProps={{ sx: { width: "515px", height: "380px" } }}
+          
+          // hideBackdrop={true}
         >
           <Box sx={{ width: "100%" }}>
             <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
@@ -381,46 +382,50 @@ function FlightRouteMap() {
             {tab === 0 && (
               <CustomTabPanel value={tab} index={0}>
                 <DialogContent>
-                  <DialogContentText>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      size="small"
-                      component="label"
-                      htmlFor="files"
-                      startIcon={<SaveIcon />}
-                    >
-                      VIDEO
-                      <input
-                        id="files"
-                        name="file"
-                        accept="video/*"
-                        style={{ display: "none" }}
-                        type="file"
-                        onChange={(e) => onChangeHandlerVID(e)}
-                      />
-                    </Button>
-                    {nameSelectedFile}
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      size="small"
-                      component="label"
-                      htmlFor="srt"
-                      startIcon={<SaveIcon />}
-                      style={{ marginLeft: 10 }}
-                    >
-                      SRT
-                      <input
-                        id="srt"
-                        name="srt"
-                        accept=".srt"
-                        style={{ display: "none" }}
-                        type="file"
-                        onChange={(e) => onChangeHandlerSRT(e)}
-                      />
-                    </Button>
-                    {nameSRT}
+                  <DialogContentText sx={{ display: "flex" }}>
+                    <div style={{ width: "50%", textAlign: "center" }}>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        size="small"
+                        component="label"
+                        htmlFor="files"
+                        startIcon={<SaveIcon />}
+                      >
+                        VIDEO
+                        <input
+                          id="files"
+                          name="file"
+                          accept="video/*"
+                          style={{ display: "none" }}
+                          type="file"
+                          onChange={(e) => onChangeHandlerVID(e)}
+                        />
+                      </Button>
+                      {nameSelectedFile}
+                    </div>
+                    <div style={{ width: "50%", textAlign: "center" }}>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        size="small"
+                        component="label"
+                        htmlFor="srt"
+                        startIcon={<SaveIcon />}
+                        style={{ marginLeft: 10 }}
+                      >
+                        SRT
+                        <input
+                          id="srt"
+                          name="srt"
+                          accept=".srt"
+                          style={{ display: "none" }}
+                          type="file"
+                          onChange={(e) => onChangeHandlerSRT(e)}
+                        />
+                      </Button>
+                      {nameSRT}
+                    </div>
                   </DialogContentText>
                   <DialogContentText style={{ marginTop: "5px" }}>
                     Info:
