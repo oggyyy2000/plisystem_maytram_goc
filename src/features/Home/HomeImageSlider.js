@@ -42,7 +42,7 @@ function HomeImageSlider() {
   function getIMG() {
     const imgList2 = [];
     setImgList2(imgList2);
-    // console.log(imgList2);
+    console.log(imgList2);
 
     for (var keys in VTdetail.data) {
       if (typeof VTdetail.data[keys] !== "string") {

@@ -39,6 +39,7 @@ function HomeListVT() {
 
   useEffect(() => {
     if (missionData) {
+      console.log(missionData.supervision_results);
       const supervisionRes = Object.keys(missionData.supervision_results);
       dispatch({
         type: actions.VTInfo,
