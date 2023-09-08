@@ -16,8 +16,8 @@ import { VTInfo, MissionId } from "../../redux/selectors";
 import "./css/HomeMap.css";
 
 function HomeMap() {
-  const types = ["roadmap", "satellite"];
   const [typeMap, setTypeMap] = useState("roadmap");
+  const [buttonText, setButtonText] = useState("Bản đồ");
   const [center, setCenter] = useState({
     lat: 21.007556875711494,
     lng: 105.84322259736739,
@@ -79,7 +79,16 @@ function HomeMap() {
   if (!isLoaded) return <div>...Loading</div>;
 
   const handleChangeMapType = (event) => {
-    setTypeMap(event.target.value);
+    setButtonText("Vệ tinh");
+    if (buttonText === "Vệ tinh") {
+      setButtonText("Bản đồ");
+    }
+    if (event.target.value === "Vệ tinh") {
+      setTypeMap("satellite");
+      if (typeMap === "satellite") {
+        setTypeMap("roadmap");
+      }
+    }
   };
 
   const handleActiveMarker = (marker, item) => {
@@ -95,19 +104,13 @@ function HomeMap() {
       <>
         <div>
           <div id="home-btn-container">
-            {types.map((type) => {
-              return (
-                <button
-                  className={`home-btn-change-maptype ${
-                    type === typeMap ? "home-btn-change-maptype-bold-text" : ""
-                  }`}
-                  value={type}
-                  onClick={handleChangeMapType}
-                >
-                  {type.charAt(0).toUpperCase() + type.slice(1)}
-                </button>
-              );
-            })}
+            <button
+              className={`home-btn-change-maptype`}
+              value={"Vệ tinh"}
+              onClick={handleChangeMapType}
+            >
+              {buttonText}
+            </button>
           </div>
           <div className="home-map-title">
             Tuyến {missionData.powerline_id} {missionData.powerline_name}

@@ -96,7 +96,7 @@ function HomeListMission() {
                 </div>
                 <div item className="homelist-icon-bottom-right">
                   {/* <TransitionsModal schedule_id={listmission.schedule_id} /> */}
-                  <HomeModal schedule_id={listmission.schedule_id}/>
+                  <HomeModal schedule_id={listmission.schedule_id} />
                 </div>
               </div>
             </div>

@@ -141,7 +141,7 @@ export default function HomeModal({ schedule_id }) {
         }}
         onClick={handleOpen}
       >
-        view datas
+        xem dữ liệu
       </Button>
       <Modal
         aria-labelledby="transition-modal-title"

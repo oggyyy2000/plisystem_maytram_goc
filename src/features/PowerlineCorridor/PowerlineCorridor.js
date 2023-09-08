@@ -5,7 +5,11 @@ export default function PowerlineCorridor() {
 
   return (
     <>
-      <iframe src={src3Dmap} title="powerline_corridor" style={{ width: "100%", minHeight: "673px" }} />
+      <iframe
+        src={src3Dmap}
+        title="powerline_corridor"
+        style={{ width: "100%", height: "94vh" }}
+      />
     </>
   );
 }

@@ -1,8 +1,9 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { useContext } from "react";
 import { WSContext } from "../../components/context/WSContext";
+import Webcam from "react-webcam";
 
 import { useDispatch } from "react-redux";
 import * as actions from "../../redux/types";
@@ -105,12 +106,29 @@ function FlightRouteMap() {
   const [zoom, setZoom] = useState(15);
   const [streetLine, setStreetLine] = useState([]);
   const dispatch = useDispatch();
+  // const [listCurrentFrame, setListCurrentFrame] = useState([]);
   const currentLocation = useSelector(CurrentLocation);
   const defectInfo = useSelector(DefectInfo);
   const currentFrame = useSelector(CurrentFrame);
 
+  // test lay cam tu uav
+  const [deviceId, setDeviceId] = useState({});
+  const [devices, setDevices] = useState([]);
+  console.log("deviceId", deviceId);
+  console.log("devices", devices);
+
+  const handleDevices = useCallback(
+    (mediaDevices) =>
+      setDevices(mediaDevices.filter(({ kind }) => kind === "USB Video")),
+    [setDevices]
+  );
+
+  useEffect(() => {
+    navigator.mediaDevices.enumerateDevices().then(handleDevices);
+  }, [handleDevices, devices]);
+
   const [tab, setTab] = useState(0);
-  console.log(tab);
+  // console.log(tab);
 
   const [center, setCenter] = useState({
     lat: 21.028511,
@@ -143,7 +161,12 @@ function FlightRouteMap() {
         const gis = data.data.gis;
         const defectWS = data.data.defects;
         const VT = data.data.location;
+        //test
         const currentFrame = process.env.REACT_APP_IMG + data.data.frame;
+        // const ListCurrentFrame = [...listCurrentFrame, currentFrame];
+        // setListCurrentFrame(ListCurrentFrame);
+        // console.log(ListCurrentFrame);
+
         const processPercent = data.data.progress;
         setProgress(processPercent);
 
@@ -349,6 +372,24 @@ function FlightRouteMap() {
     }
   }
 
+  const WebcamCapture = () => {
+    return (
+      <>
+        <Webcam audio={false} videoConstraints={{ deviceId }} />
+        <div>
+          {devices.map((device, key) => (
+            <button
+              key={device.deviceId}
+              onClick={() => setDeviceId(device.deviceId)}
+            >
+              {device.label || `Device ${key + 1}`}
+            </button>
+          ))}
+        </div>
+      </>
+    );
+  };
+
   function AddMissionDialog() {
     return (
       <>
@@ -360,8 +401,10 @@ function FlightRouteMap() {
           //     alignItems: "flex-start",
           //   },
           // }}
-          PaperProps={{ sx: { width: "515px", height: "380px" } }}
-          
+          PaperProps={{
+            sx: { maxWidth: "100%", width: "515px", height: "380px" },
+          }}
+
           // hideBackdrop={true}
         >
           <Box sx={{ width: "100%" }}>
@@ -479,7 +522,9 @@ function FlightRouteMap() {
             )}
             {tab === 1 && (
               <CustomTabPanel value={tab} index={1}>
-                <div className="flightroute-dialogtab-stream">coming soon</div>
+                <div className="flightroute-dialogtab-stream">
+                  {WebcamCapture()}
+                </div>
               </CustomTabPanel>
             )}
           </Box>
@@ -497,10 +542,10 @@ function FlightRouteMap() {
 
   return (
     <>
-      <div style={{ height: "90.7vh" }}>
+      <div style={{ height: "92.8vh" }}>
         <div id="flightroute-btn-container">
           <button
-            className={`flightroute-btn-change-maptype `}
+            className={`flightroute-btn-change-maptype`}
             value={"Vệ tinh"}
             onClick={handleChangeMapType}
           >

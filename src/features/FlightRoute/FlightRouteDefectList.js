@@ -13,6 +13,8 @@ function FlightRoutreDefectList({ startfly }) {
   const defectInfo = useSelector(DefectInfo);
   const VT = useSelector(CurrentVT);
 
+  console.log("defectInfo: ", defectInfo)
+
   useEffect(() => {
     if (startfly) {
       setClose(true);

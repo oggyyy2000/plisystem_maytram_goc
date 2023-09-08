@@ -40,8 +40,8 @@
 }
 
 .homelist-icon-bottom-right {
-  margin: 0 0 0 1rem !important; /*!important de de len CSS MUI goc*/
-  width: 30%;
+  margin: 0 0 0 0.4rem !important; /*!important de de len CSS MUI goc*/
+  width: 35%;
   /* height: 10%; */
   /* font-size: 58px; */
 }

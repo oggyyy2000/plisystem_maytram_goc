@@ -1,9 +1,9 @@
 .home-left-panel {
-  height: 90.8vh;
+  height: 93vh;
   border: 2px solid black;
   overflow-y: auto;
-  -ms-overflow-style: none;  /* hide scrollbar IE and Edge */
-  scrollbar-width: none;  /* hide scrollbar Firefox */
+  -ms-overflow-style: none; /* hide scrollbar IE and Edge */
+  scrollbar-width: none; /* hide scrollbar Firefox */
 }
 
 .home-left-panel::-webkit-scrollbar {
@@ -24,6 +24,6 @@
 }
 
 .home-right-panel {
-  height: 90.8vh;
+  height: 93vh;
   border: 2px solid black;
 }
