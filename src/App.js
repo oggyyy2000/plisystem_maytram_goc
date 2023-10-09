@@ -1,7 +1,6 @@
 import React from "react";
 import { useRoutes } from "react-router-dom";
-// import Navbar from "./components/Navbar/Navbar";
-import NavbarTest from "./components/Navbar/NavbarTest";
+import MainNavBar from "./components/Navbar/Navbar";
 import routes from "./Routes";
 import WSContextProvider from "./components/context/WSContext";
 
@@ -11,8 +10,7 @@ function App() {
   return (
     <>
       <WSContextProvider>
-        {/* <Navbar /> */}
-        <NavbarTest />
+        <MainNavBar />
         {tabs}
       </WSContextProvider>
     </>

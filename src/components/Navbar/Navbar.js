@@ -1,140 +1,140 @@
-import * as React from "react";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import Menu from "@mui/material/Menu";
-import MenuIcon from "@mui/icons-material/Menu";
-import Container from "@mui/material/Container";
-import Button from "@mui/material/Button";
-import MenuItem from "@mui/material/MenuItem";
+// import PropTypes from "prop-types";
+import { useState, useEffect } from "react";
 
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Box, Tabs, Tab, AppBar, Typography } from "@mui/material";
+import { useNavigate, useLocation } from "react-router-dom";
 
 import logo from "../../assets/images/logo.png";
 
-const pages = ["Home", "FlightRouteManage", "PowerlineCorridor"];
-
-function NavBar() {
-  const [anchorElNav, setAnchorElNav] = useState();
-
-  const handleOpenNavMenu = (event) => {
-    setAnchorElNav(event.currentTarget);
+function a11yProps(index) {
+  return {
+    id: `nav-tabmain-${index}`,
+    "aria-controls": `nav-tabmainpanel-${index}`,
   };
+}
 
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
-  };
-
+function LinkTab(props) {
   return (
-    <AppBar position="static">
-      <Container maxWidth="xl">
-        <Toolbar disableGutters>
-          <img
-            src={logo}
-            alt="logo"
-            style={{ width: "50px", height: "50px" }}
-          />
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            href="/Home"
-            sx={{
-              mr: 2,
-              display: { xs: "none", md: "flex" },
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
-              textDecoration: "none",
-            }}
-          >
-            EPSMARTTECH
-          </Typography>
-
-          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleOpenNavMenu}
-              color="inherit"
-            >
-              <MenuIcon />
-            </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "left",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "left",
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              sx={{
-                display: { xs: "block", md: "none" },
-              }}
-            >
-              {pages.map((page) => (
-                <MenuItem key={page}>
-                  <Typography textAlign="center">
-                    <Link
-                      style={{ textDecoration: "none", color: "black" }}
-                      to={`/${page}`}
-                    >
-                      {page}
-                    </Link>
-                  </Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
-
-          <Typography
-            variant="h5"
-            noWrap
-            component="a"
-            href="/Home"
-            sx={{
-              mr: 2,
-              display: { xs: "flex", md: "none" },
-              flexGrow: 1,
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
-              textDecoration: "none",
-            }}
-          >
-            EPSMARTTECH
-          </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {pages.map((page) => (
-              <Button
-                key={page}
-                sx={{ my: 2, color: "white", display: "block" }}
-              >
-                <Link
-                  style={{ textDecoration: "none", color: "white" }}
-                  to={`/${page}`}
-                >
-                  {page}
-                </Link>
-              </Button>
-            ))}
-          </Box>
-        </Toolbar>
-      </Container>
-    </AppBar>
+    <>
+      <Tab
+        sx={{
+          color: "white",
+          "&.Mui-selected": {
+            color: "#fff",
+          },
+        }}
+        icon={props.Icon}
+        component={"C"}
+        onClick={() => {
+          props.setValue(props.index);
+          if (props.href !== "visibility") props.navigate(props.href);
+        }}
+        {...props}
+      />
+    </>
   );
 }
-export default NavBar;
+
+const Navbar = [
+  {
+    index: 0,
+    ten_navbar: "Bay",
+    url: "/MainFlight",
+  },
+  {
+    index: 1,
+    ten_navbar: "Quản lý dữ liệu",
+    url: "/FlightManage",
+  },
+  {
+    index: 2,
+    ten_navbar: "Hành lang tuyến",
+    url: "/PowerlineCorridor",
+  },
+  {
+    index: 3,
+    ten_navbar: "Demo",
+    url: "/DemoFlight",
+  },
+];
+
+export default function MainNavbar() {
+  const [value, setValue] = useState(4);
+  const [prevCurrentPage, setPrevCurrentPage] = useState("");
+
+  let navigate = useNavigate();
+  let location = useLocation();
+
+  useEffect(() => {
+    var path = window.location.pathname;
+    var item = Navbar.find((x) => x.url === path);
+    if (item) {
+      setValue(item.index);
+      if (prevCurrentPage !== "") {
+        if (prevCurrentPage === "/app/m3d") {
+          window.location.reload();
+        }
+      }
+      setPrevCurrentPage(path);
+    }
+  }, [location, prevCurrentPage]);
+
+  return (
+    <Box>
+      <div>
+        <AppBar
+          position="static"
+          style={{
+            zIndex: 1,
+            display: "flex",
+            flexDirection: "row",
+          }}
+        >
+          <Tabs
+            style={{ width: "96%" }}
+            value={value}
+            variant="scrollable"
+            scrollButtons="auto"
+          >
+            <img
+              src={logo}
+              alt="logo"
+              style={{ width: "50px", height: "50px" }}
+            />
+            <Typography
+              variant="h6"
+              noWrap
+              component="a"
+              href="/MainFlight"
+              sx={{
+                mr: 2,
+                display: { xs: "none", md: "flex" },
+                fontFamily: "monospace",
+                fontWeight: 700,
+                letterSpacing: ".3rem",
+                color: "inherit",
+                textDecoration: "none",
+                lineHeight: "2.6",
+              }}
+            >
+              EPSMARTTECH
+            </Typography>
+
+            {Navbar.map((item, index) => (
+              <LinkTab
+                suburl={item.suburl}
+                label={item.ten_navbar}
+                setValue={setValue}
+                index={index}
+                navigate={navigate}
+                href={item.url}
+                icon={item.icon}
+                {...a11yProps(index)}
+              />
+            ))}
+          </Tabs>
+        </AppBar>
+      </div>
+    </Box>
+  );
+}
