@@ -7,12 +7,11 @@
   opacity: 0.4;
 }
 
-/* khi anh da submit thi them cai nay */
 .hadsubmitted {
   pointer-events: none;
 }
 
-.checkmark {
+.checkmark-hadsent {
   position: absolute;
   transform: rotate(45deg);
   height: 50px;
@@ -23,8 +22,28 @@
   border-right: 7px solid #7fff00;
 }
 
+.checkmark-hadchoosed {
+  position: absolute;
+  transform: rotate(45deg);
+  height: 50px;
+  width: 28px;
+  margin-top: 40%;
+  margin-left: 50%;
+  border-bottom: 7px solid #d2042d;
+  border-right: 7px solid #d2042d;
+}
+
+.flightmanage-line-seperate-items {
+  margin-left: 25%;
+  margin-top: 10px;
+  left: 25%;
+  width: 50%;
+  height: 5px;
+  background-color: #1976d2;
+}
+
 /* components */
-.homemodal {
+.flightmanage {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -36,17 +55,17 @@
   padding-right: 0;
 }
 
-.homemodal-container {
+.flightmanage-container {
   height: 100%;
 }
 
-.homemodal-listdata {
+.flightmanage-listdata {
   height: 100%;
   border: 1px solid black;
   overflow-y: auto;
 }
 
-.homemodal-listdata-item {
+.flightmanage-listdata-item {
   min-height: 18%;
   border: 1px solid black;
   display: flex;
@@ -59,66 +78,41 @@
   background-size: 100px 100px;
 }
 
-.homemodal-listdataitem-title {
+.flightmanage-listdataitem-title {
   position: relative;
 }
 
-/* .homemodal-videodata {
-  position: relative;
-  height: 50%;
-  border: 1px solid black;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-} */
-
-.homemodal-btn-close {
+.flightmanage-btn-close {
   position: absolute !important;
   top: 0;
   right: 0;
 }
 
-.homemodal-imgdata {
+.flightmanage-imgdata {
   /* margin-top: 2rem !important; */
   height: 100%;
   border: 1px solid black;
 }
 
-.homemodal-imgdata-container {
+.flightmanage-imgdata-container {
   height: 94vh;
   overflow-y: auto;
 }
 
-.homemodal-imagelist {
+.flightmanage-imagelist {
   width: 100%;
   min-height: 93%;
   max-height: 100%;
 }
 
-.homemodal-imagelist-label:hover {
+.flightmanage-imagelist-title {
+  text-align: center;
+  margin-top: 10px;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.flightmanage-imagelist-label:hover {
   border: 2px solid red;
 }
 
-.homemodal-imagelist-submit {
-  width: 100%;
-  text-align: center;
-  margin-top: 10px;
-}
-
-/* test */
-.label-container {
-  margin-left: 20px;
-}
-
-.homemodal-expandcam-container {
-  display: flex;
-  width: 100%;
-  height: 681px;
-  overflow-y: hidden;
-}
-
-.homemodal-rgbcam-expand-container {
-  width: 100%;
-  position: relative;
-  border: 1px solid black;
-}

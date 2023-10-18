@@ -8,6 +8,37 @@
   pointer-events: none;
 }
 
+.checkmark-hadsent {
+  position: absolute;
+  transform: rotate(45deg);
+  height: 50px;
+  width: 28px;
+  margin-top: 40%;
+  margin-left: 50%;
+  border-bottom: 7px solid #7fff00;
+  border-right: 7px solid #7fff00;
+}
+
+.checkmark-hadchoosed {
+  position: absolute;
+  transform: rotate(45deg);
+  height: 50px;
+  width: 28px;
+  margin-top: 40%;
+  margin-left: 50%;
+  border-bottom: 7px solid #d2042d;
+  border-right: 7px solid #d2042d;
+}
+
+.mainflight-line-seperate-items {
+  margin-left: 25%;
+  margin-top: 10px;
+  left: 25%;
+  width: 50%;
+  height: 5px;
+  background-color: #1976d2;
+}
+
 /* Body */
 .mainflight-btn-container {
   display: flex;
@@ -47,13 +78,18 @@
 }
 
 .mainflight-select-date {
-  min-width: 120;
+  min-width: 120px;
   margin-top: 8px;
 }
 
 .mainflight-select-tuyen {
   margin-top: 8px;
-  min-width: 120;
+  min-width: 120px;
+}
+
+.mainflight-select-superviseType {
+  margin-top: 8px;
+  min-width: 120px;
 }
 
 .mainflight-google-map {
@@ -123,6 +159,13 @@
   width: 100%;
   min-height: 90%;
   max-height: 100%;
+}
+
+.mainflight-imagelist-title {
+  text-align: center;
+  margin-top: 10px;
+  font-size: 20px;
+  font-weight: bold;
 }
 
 .mainflight-imagelist-label:hover {

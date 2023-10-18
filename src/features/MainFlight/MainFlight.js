@@ -97,7 +97,6 @@ const MainFlight = () => {
   // modal after fly variable
   const [openModalAfterFly, setOpenModalAfterFly] = useState(false);
   const [errorImageBoxChecked, setErrorImageBoxChecked] = useState(false);
-  // console.log("errorImageBoxChecked:", errorImageBoxChecked);
   const [openZoomingImg, setOpenZoomingImg] = useState("");
   const [openEditLabel, setOpenEditLabel] = useState("");
   const [imgList2, setImgList2] = useState({});
@@ -108,13 +107,11 @@ const MainFlight = () => {
 
   //check variable change
   const [change, setChange] = useState(false);
-  // console.log(change);
   const [checked, setChecked] = useState([]);
   const [hadSubmittedError, setHadSubmittedError] = useState(false);
 
   // common variable
   const [startFly, setStartFly] = useState(false);
-  const [progress, setProgress] = useState("");
   const [currentVT, setCurrentVT] = useState("");
   const [DefectInfo, setDefectInfo] = useState([]);
   const [currentLocation, setCurrentLocation] = useState({});
@@ -133,6 +130,7 @@ const MainFlight = () => {
   };
   const [DateDB, setDateDB] = useState(date);
   const [tuyen, setTuyen] = useState();
+  const [superviseType, setSuperviseType] = useState();
 
   //map variable
   const [typeMap, setTypeMap] = useState("roadmap");
@@ -156,7 +154,6 @@ const MainFlight = () => {
     "supervisiondetails/?spv_results_path=" +
     getImgData +
     `&img_state=${errorImageBoxChecked === true ? "defect" : "all"}`;
-  // console.log(urlGetData);
 
   useEffect(() => {
     // disconnect();
@@ -171,7 +168,6 @@ const MainFlight = () => {
       ws.current.onmessage = (e) => {
         const data = JSON.parse(e.data);
         if (data.data_state === "supervise_complete") {
-          // console.log("duong dan:", data.data);
           setGetImgData(data.data);
           setStartFly(false);
           setOpenModalAfterFly(true);
@@ -182,12 +178,8 @@ const MainFlight = () => {
         const VT = data.data.location;
         setCurrentVT(VT);
 
-        const processPercent = data.data.progress;
-        setProgress(processPercent);
-
         if (gis !== undefined) {
           console.log("WS", gis);
-          // dispatch({ type: actions.CurrentLocation, data: gis });
           setCurrentLocation(gis);
           setCenter({
             lat: parseFloat(gis.latitude),
@@ -203,16 +195,17 @@ const MainFlight = () => {
           if (defectWS.length > 0) {
             setDefectInfo(defectWS);
           }
-          // console.log("defectInfo", DefectInfo);
         }
       };
     } catch (e) {
       console.log(e);
     }
-  }, [startFly]);
+  }, [startFly, streetLine]);
 
   useEffect(() => {
     setChange(false);
+    setImageNewLabels([]);
+
     axios
       .get(urlGetData)
       .then((res) => {
@@ -224,24 +217,168 @@ const MainFlight = () => {
       });
   }, [getImgData, change, hadSubmittedError, errorImageBoxChecked]);
 
-  // ------------- Add Mission Dialog ------------
+  // ---------- Add Info for mission dialog ----------
 
-  function handleClickOpen() {
+  const handleClickOpen = () => {
     setOpen(true);
     setStartFly(false);
     setHadSubmited(false);
     setTuyen(null);
     setCurrentLocation({});
-    setStreetLine([]);
     setZoom(15);
     setDefectInfo([]);
-  }
+  };
 
-  function handleClose() {
+  const handleClose = () => {
     setOpen(false);
     setTuyen(null);
     disconnect();
-  }
+  };
+
+  const AddMissionDialog = () => {
+    return (
+      <>
+        <Dialog
+          open={open}
+          PaperProps={{
+            sx: { maxWidth: "100%", width: "515px", height: "410px" },
+          }}
+        >
+          <Box sx={{ width: "100%" }}>
+            <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+              <Tabs
+                value={tab}
+                onChange={handleChangeTabs}
+                aria-label="basic tabs example"
+              >
+                <Tab label="giám sát thiết bị" {...a11yProps(0)} />
+                <Tab label="giám sát hành lang" {...a11yProps(1)} />
+
+                <div className="mainflight-dialog-icon">
+                  <FlightTakeoffIcon color="primary" fontSize="large" />
+                </div>
+              </Tabs>
+            </Box>
+            {tab === 0 && (
+              <CustomTabPanel value={tab} index={0}>
+                <DialogContent>
+                  <DialogContentText>
+                    Thông tin:
+                    <Box className="mainflight-select-date">
+                      <TextField
+                        id="date"
+                        label="Ngày quay"
+                        type="date"
+                        value={DateDB}
+                        defaultValue={values.someDate}
+                        InputLabelProps={{
+                          shrink: true,
+                        }}
+                        onChange={onChangeDateDB}
+                      />
+                    </Box>
+                    <Box className="mainflight-select-tuyen">
+                      <FormControl fullWidth>
+                        <InputLabel>Tên Tuyến</InputLabel>
+                        <Select
+                          id="route"
+                          value={tuyen}
+                          label="Tên Tuyến"
+                          onChange={onChangeSelectTuyen}
+                          defaultValue={""}
+                        >
+                          <MenuItem value={"T87"}>Mai Động-Thanh Nhàn</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </Box>
+                    <Box className="mainflight-select-superviseType">
+                      <FormControl fullWidth>
+                        <InputLabel>Kiểu giám sát</InputLabel>
+                        <Select
+                          id="superviseType"
+                          value={superviseType}
+                          label="Kiểu giám sát"
+                          onChange={onChangeSelectSuperviseType}
+                          defaultValue={""}
+                        >
+                          <MenuItem value={"day"}>Dây</MenuItem>
+                          <MenuItem value={"thietbi"}>Thiết bị</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </Box>
+                  </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={handleClose} color="primary">
+                    Hủy
+                  </Button>
+                  {tuyen != null && hadSubmited === false ? (
+                    <Button onClick={handleSubmitInfoBeforeFly} color="primary">
+                      Xác nhận
+                    </Button>
+                  ) : (
+                    <Button disabled>
+                      {hadSubmited === false ? "Xác nhận" : "Đang xử lý..."}
+                    </Button>
+                  )}
+                </DialogActions>
+              </CustomTabPanel>
+            )}
+            {tab === 1 && (
+              <CustomTabPanel value={tab} index={1}>
+                <DialogContent>
+                  <DialogContentText>
+                    Thông tin:
+                    <Box className="mainflight-select-date">
+                      <TextField
+                        id="date"
+                        label="Ngày quay"
+                        type="date"
+                        value={DateDB}
+                        defaultValue={values.someDate}
+                        InputLabelProps={{
+                          shrink: true,
+                        }}
+                        onChange={onChangeDateDB}
+                      />
+                    </Box>
+                    <Box className="mainflight-select-tuyen">
+                      <FormControl fullWidth>
+                        <InputLabel>Tên Tuyến</InputLabel>
+                        <Select
+                          id="route"
+                          value={tuyen}
+                          label="IDTuyen"
+                          onChange={onChangeSelectTuyen}
+                          defaultValue={""}
+                        >
+                          <MenuItem value={"T87"}>Mai Động-Thanh Nhàn</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </Box>
+                  </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={handleClose} color="primary">
+                    Hủy
+                  </Button>
+                  {tuyen != null && hadSubmited === false ? (
+                    <Button onClick={handleSubmitInfoBeforeFly} color="primary">
+                      Xác nhận
+                    </Button>
+                  ) : (
+                    <Button disabled>
+                      {hadSubmited === false ? "Xác nhận" : "Đang xử lý..."}
+                    </Button>
+                  )}
+                </DialogActions>
+              </CustomTabPanel>
+            )}
+          </Box>
+        </Dialog>
+      </>
+    );
+  };
 
   const handleChangeTabs = (event, newValue) => {
     setTab(newValue);
@@ -254,6 +391,29 @@ const MainFlight = () => {
 
   const onChangeSelectTuyen = (e) => {
     setTuyen(e.target.value);
+  };
+
+  const onChangeSelectSuperviseType = (e) => {
+    setSuperviseType(e.target.value);
+  };
+
+  const handleSubmitInfoBeforeFly = (e) => {
+    e.preventDefault();
+    setHadSubmited(true);
+    setStreetLine([]);
+
+    const formData = new FormData();
+
+    formData.append(
+      "data",
+      JSON.stringify({
+        powerline_id: tuyen,
+        implementation_date: DateDB,
+        supervise_type: superviseType,
+      })
+    );
+
+    sendPostRequest(formData);
   };
 
   const sendInfo = (data) => {
@@ -279,22 +439,9 @@ const MainFlight = () => {
     }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setHadSubmited(true);
-    // setZoom(15);
-    // setStreetLine([]);
+  // ------------ Main Dialog ------------
 
-    const formData = new FormData();
-
-    formData.append(
-      "data",
-      JSON.stringify({ powerline_id: tuyen, implementation_date: DateDB })
-    );
-
-    sendPostRequest(formData);
-  };
-
+  // --------- Ham de xu ly click input va label ---------
   const handleLabelClick = (label) => {
     if (selectedLabels.includes(label)) {
       setSelectedLabels(selectedLabels.filter((l) => l !== label));
@@ -303,7 +450,7 @@ const MainFlight = () => {
     }
   };
 
-  const handleCheck = (event) => {
+  const handleInputClick = (event) => {
     var updatedList = [...checked];
     if (event.target.checked) {
       updatedList = [...checked, event.target.value];
@@ -314,7 +461,12 @@ const MainFlight = () => {
     setChecked(updatedList);
   };
 
-  // ------------ Dialog After Fly ------------
+  // --------- Ham de loc chi anh bat thuong  ---------
+  const handleErrorImageBoxChecked = (e) => {
+    setErrorImageBoxChecked(e.target.checked);
+  };
+
+  // --------- Ham de submit tat ca cac anh nguoi dung chon --------
   const handleSubmitErrorImage = () => {
     console.log(checked);
     setHadSubmittedError(false);
@@ -393,7 +545,7 @@ const MainFlight = () => {
       setImageNewLabels(imageNewLabels.filter((label) => label !== value));
     }
 
-    if (value === "binhthuong") {
+    if (value === "binhthuong" || imageNewLabels === "binhthuong") {
       if (editLabelSelectedValue.includes(value)) {
         setImageNewLabels([]);
         setEditLabelSelectedValue([]);
@@ -446,7 +598,10 @@ const MainFlight = () => {
             top: 0,
             right: 0,
           }}
-          onClick={() => setOpenEditLabel(info.img_path)}
+          onClick={() => {
+            setOpenEditLabel(info.img_path);
+            setImageNewLabels([...info.label.split("_")]);
+          }}
           disabled={info.sent_check === 1}
         >
           <EditIcon />
@@ -498,84 +653,105 @@ const MainFlight = () => {
   };
 
   const renderImageList = () => {
-    return Object.keys(imgList2).map((img) => {
-      return imgList2[img].map((info, index) => {
-        return (
-          <>
-            <ImageListItem key={index}>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                }}
-              >
-                <TextField
-                  id="outlined-multiline-flexible"
-                  label="Tình trạng"
-                  value={info.label.split("_").join("\n")}
-                  multiline
-                  maxRows={3}
-                  style={{ height: "70%", marginTop: "7px" }}
-                  disabled
-                />
+    return Object.keys(imgList2).map((vt) => {
+      return (
+        <>
+          <div>
+            <div className="mainflight-line-seperate-items"></div>
 
-                <div>
-                  {/* Zoom Dialog */}
-                  {zoomingDialog(info)}
+            <div className="mainflight-imagelist-title">{vt}</div>
 
-                  {/* Edit label Dialog */}
-                  {editLabelDialog(info)}
-                </div>
-              </div>
-
-              <label
-                for={`choose-img-${info.img_path}`}
-                className={`homemodal-imagelist-label ${
-                  info.sent_check === 1 ? "hadsubmitted" : ""
-                } ${
-                  selectedLabels.includes(info.img_path) ||
-                  info.sent_check === 1
-                    ? "choosed"
-                    : ""
-                }`}
-                onClick={() => handleLabelClick(info.img_path)}
-              >
-                <img
-                  src={process.env.REACT_APP_IMG + info.img_path}
-                  srcSet={process.env.REACT_APP_IMG + info.img_path}
-                  alt={info.img_path}
-                  loading="lazy"
-                  width={"100%"}
-                  height={"100%"}
-                />
-              </label>
-
-              {selectedLabels.includes(info.img_path) ||
-              info.sent_check === 1 ? (
-                <div className="checkmark"></div>
-              ) : (
-                <></>
-              )}
-            </ImageListItem>
-
-            <input
-              id={`choose-img-${info.img_path}`}
-              type="checkbox"
-              value={info.img_path}
-              style={{
-                display: "none",
+            <ImageList
+              sx={{
+                position: "relative",
+                overflowY: "hidden",
               }}
-              onChange={handleCheck}
-            />
-          </>
-        );
-      });
+              cols={3}
+            >
+              {imgList2[vt].map((info, index) => {
+                return (
+                  <>
+                    <ImageListItem key={index}>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <TextField
+                          id="outlined-multiline-flexible"
+                          label="Tình trạng"
+                          value={info.label.split("_").join("\n")}
+                          multiline
+                          maxRows={3}
+                          style={{ height: "70%", marginTop: "7px" }}
+                          disabled
+                        />
+
+                        <div>
+                          {/* Zoom Dialog */}
+                          {zoomingDialog(info)}
+
+                          {/* Edit label Dialog */}
+                          {editLabelDialog(info)}
+                        </div>
+                      </div>
+
+                      <label
+                        for={`choose-img-${info.img_path}`}
+                        className={`homemodal-imagelist-label ${
+                          info.sent_check === 1 ? "hadsubmitted" : ""
+                        } ${
+                          selectedLabels.includes(info.img_path) ||
+                          info.sent_check === 1
+                            ? "choosed"
+                            : ""
+                        }`}
+                        onClick={() => handleLabelClick(info.img_path)}
+                      >
+                        <img
+                          src={process.env.REACT_APP_IMG + info.img_path}
+                          srcSet={process.env.REACT_APP_IMG + info.img_path}
+                          alt={info.img_path}
+                          loading="lazy"
+                          width={"100%"}
+                          height={"100%"}
+                        />
+                      </label>
+
+                      {selectedLabels.includes(info.img_path) ? (
+                        <div className="checkmark-hadchoosed"></div>
+                      ) : (
+                        <></>
+                      )}
+
+                      {info.sent_check === 1 ? (
+                        <div className="checkmark-hadsent"></div>
+                      ) : (
+                        <></>
+                      )}
+                    </ImageListItem>
+
+                    <input
+                      id={`choose-img-${info.img_path}`}
+                      type="checkbox"
+                      value={info.img_path}
+                      style={{
+                        display: "none",
+                      }}
+                      onChange={handleInputClick}
+                    />
+                  </>
+                );
+              })}
+            </ImageList>
+          </div>
+        </>
+      );
     });
   };
 
-  const handleErrorImageBoxChecked = (e) => {
-    setErrorImageBoxChecked(e.target.checked);
-  };
+  // function handle map
 
   const handleChangeMapType = (event) => {
     setButtonText("Vệ tinh");
@@ -651,7 +827,7 @@ const MainFlight = () => {
             ></MarkerF>
           )}
           {renderMarkerError(DefectInfo)}
-          {streetLine && (
+          {/* {streetLine && (
             <PolylineF
               path={streetLine}
               options={{
@@ -660,138 +836,8 @@ const MainFlight = () => {
                 strokeWeight: 2,
               }}
             />
-          )}
+          )} */}
         </GoogleMap>
-      </>
-    );
-  };
-
-  const AddMissionDialog = () => {
-    return (
-      <>
-        <Dialog
-          open={open}
-          PaperProps={{
-            sx: { maxWidth: "100%", width: "515px", height: "350px" },
-          }}
-        >
-          <Box sx={{ width: "100%" }}>
-            <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-              <Tabs
-                value={tab}
-                onChange={handleChangeTabs}
-                aria-label="basic tabs example"
-              >
-                <Tab label="giám sát thiết bị" {...a11yProps(0)} />
-                <Tab label="giám sát hành lang" {...a11yProps(1)} />
-
-                <div className="mainflight-dialog-icon">
-                  <FlightTakeoffIcon color="primary" fontSize="large" />
-                </div>
-              </Tabs>
-            </Box>
-            {tab === 0 && (
-              <CustomTabPanel value={tab} index={0}>
-                <DialogContent>
-                  <DialogContentText>
-                    Thông tin:
-                    <Box className="mainflight-select-date">
-                      <TextField
-                        id="date"
-                        label="Ngày quay"
-                        type="date"
-                        value={DateDB}
-                        defaultValue={values.someDate}
-                        InputLabelProps={{
-                          shrink: true,
-                        }}
-                        onChange={onChangeDateDB}
-                      />
-                    </Box>
-                    <Box className="mainflight-select-tuyen">
-                      <FormControl fullWidth>
-                        <InputLabel>Tên Tuyến</InputLabel>
-                        <Select
-                          id="route"
-                          value={tuyen}
-                          label="IDTuyen"
-                          onChange={onChangeSelectTuyen}
-                          defaultValue={""}
-                        >
-                          <MenuItem value={"T87"}>Mai Động-Thanh Nhàn</MenuItem>
-                        </Select>
-                      </FormControl>
-                    </Box>
-                  </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                  <Button onClick={handleClose} color="primary">
-                    Hủy
-                  </Button>
-                  {tuyen != null && hadSubmited === false ? (
-                    <Button onClick={handleSubmit} color="primary">
-                      Xác nhận
-                    </Button>
-                  ) : (
-                    <Button disabled>
-                      {hadSubmited === false ? "Xác nhận" : "Đang xử lý..."}
-                    </Button>
-                  )}
-                </DialogActions>
-              </CustomTabPanel>
-            )}
-            {tab === 1 && (
-              <CustomTabPanel value={tab} index={1}>
-                <DialogContent>
-                  <DialogContentText>
-                    Thông tin:
-                    <Box className="mainflight-select-date">
-                      <TextField
-                        id="date"
-                        label="Ngày quay"
-                        type="date"
-                        value={DateDB}
-                        defaultValue={values.someDate}
-                        InputLabelProps={{
-                          shrink: true,
-                        }}
-                        onChange={onChangeDateDB}
-                      />
-                    </Box>
-                    <Box className="mainflight-select-tuyen">
-                      <FormControl fullWidth>
-                        <InputLabel>Tên Tuyến</InputLabel>
-                        <Select
-                          id="route"
-                          value={tuyen}
-                          label="IDTuyen"
-                          onChange={onChangeSelectTuyen}
-                          defaultValue={""}
-                        >
-                          <MenuItem value={"T87"}>Mai Động-Thanh Nhàn</MenuItem>
-                        </Select>
-                      </FormControl>
-                    </Box>
-                  </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                  <Button onClick={handleClose} color="primary">
-                    Hủy
-                  </Button>
-                  {tuyen != null && hadSubmited === false ? (
-                    <Button onClick={handleSubmit} color="primary">
-                      Xác nhận
-                    </Button>
-                  ) : (
-                    <Button disabled>
-                      {hadSubmited === false ? "Xác nhận" : "Đang xử lý..."}
-                    </Button>
-                  )}
-                </DialogActions>
-              </CustomTabPanel>
-            )}
-          </Box>
-        </Dialog>
       </>
     );
   };
@@ -825,7 +871,7 @@ const MainFlight = () => {
             <FlightTakeoffIcon />
           </Button>
 
-          <Button
+          {/* <Button
             style={{
               backgroundColor: "chartreuse",
               borderRadius: "10%",
@@ -836,7 +882,7 @@ const MainFlight = () => {
             }}
           >
             xem dữ liệu
-          </Button>
+          </Button> */}
 
           {/* Modal Addmission*/}
           {AddMissionDialog()}
@@ -849,7 +895,6 @@ const MainFlight = () => {
         />
         <MainFlightInMission
           startfly={startFly}
-          progress={progress}
           currentvt={currentVT}
           currentlocation={currentLocation}
         />
@@ -858,7 +903,6 @@ const MainFlight = () => {
           aria-labelledby="transition-modal-title"
           aria-describedby="transition-modal-description"
           open={openModalAfterFly}
-          // onClose={() => setOpenModalAfterFly(false)}
           closeAfterTransition
           slots={{ backdrop: Backdrop }}
           slotProps={{
@@ -920,15 +964,7 @@ const MainFlight = () => {
                   <Grid item className="mainflight-imgdata" xs={12}>
                     <div className="mainflight-imgdata-container">
                       <div className="mainflight-imagelist">
-                        <ImageList
-                          sx={{
-                            position: "relative",
-                            overflowY: "hidden",
-                          }}
-                          cols={3}
-                        >
-                          {getImgData !== "" && renderImageList()}
-                        </ImageList>
+                        {getImgData !== "" && renderImageList()}
                       </div>
                     </div>
                   </Grid>

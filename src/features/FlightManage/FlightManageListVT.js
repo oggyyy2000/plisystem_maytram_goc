@@ -30,7 +30,8 @@ export default function FlightManageListVT() {
           // console.log(missionId);
           setMissionData(
             res.data.data.find((id) => id.schedule_id === missionId)
-          );
+            );
+            console.log(res.data.data.find((id) => id.schedule_id === missionId))
         })
         .catch((err) => {
           console.log(err);

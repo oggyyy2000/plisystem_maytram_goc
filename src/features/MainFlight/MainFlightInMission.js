@@ -6,13 +6,11 @@ import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
 import Webcam from "react-webcam";
-import VideoJS from "./Stream";
 
 import "./css/MainFlightInMission.css";
 
 const MainFlightInMission = ({
   startfly,
-  progress,
   currentvt,
   currentlocation,
 }) => {
@@ -28,8 +26,8 @@ const MainFlightInMission = ({
   // lay cam tu uav
   const [deviceId, setDeviceId] = useState({});
   const [devices, setDevices] = useState([]);
-  console.log("deviceId", deviceId);
-  console.log("devices", devices);
+  // console.log("deviceId", deviceId);
+  // console.log("devices", devices);
 
   const handleDevices = useCallback(
     (mediaDevices) =>
@@ -51,22 +49,6 @@ const MainFlightInMission = ({
         />
       </>
     );
-  };
-
-  // test video.js
-  const playerRef = React.useRef(null);
-
-  const videoJsOptions = {
-    autoplay: true,
-    controls: true,
-    responsive: true,
-    fluid: true,
-    sources: [
-      {
-        src: "http://127.0.0.1:4090/stream",
-        type: "video/mp4",
-      },
-    ],
   };
 
   const handleClickOpen = () => {
@@ -146,16 +128,7 @@ const MainFlightInMission = ({
                   Longtitude: {parseFloat(currentlocation.longtitude)} <br />
                   Latitude: {parseFloat(currentlocation.latitude)} <br />
                   Altitude: {parseFloat(currentlocation.altitude)}
-                  {/* Longtitude: <br />
-                  Latitude: <br />
-                  Altitude:{" "} */}
                 </td>
-              </tr>
-              <tr>
-                <td>FPS:</td>
-              </tr>
-              <tr>
-                <td colSpan={2}>Process: {progress}</td>
               </tr>
             </table>
           </div>
@@ -167,7 +140,8 @@ const MainFlightInMission = ({
             </div>
 
             {devices.find(({ label }) =>
-                label.includes("USB Video (534d:2109)")) ? (
+              label.includes("USB Video (534d:2109)")
+            ) ? (
               WebcamCapture()
             ) : (
               <div className="mainflight-before-datareturned">

@@ -35,31 +35,32 @@ const errorLabel = [
 ];
 
 export default function HomeModal({ schedule_id }) {
+  // MAIN DIALOG VARIABLE
   const [open, setOpen] = useState(false);
-  const [openEditLabel, setOpenEditLabel] = useState("");
-  const [openZoomingImg, setOpenZoomingImg] = useState("");
+  // bien dung de lay data
+  const [imgList2, setImgList2] = useState({});
+  const [getImgData, setGetImgData] = useState("");
+  const [timeFlyStart, setTimeFlyStart] = useState([]);
+  const [chooseTime, setChooseTime] = useState("");
+  // input and label
   const [selectedLabels, setSelectedLabels] = useState([]);
+  console.log("selectedLabels:", selectedLabels);
+  // loc anh bat thuong
+  const [errorImageBoxChecked, setErrorImageBoxChecked] = useState(false);
 
-  //test
+  //zooming dialog variable
+  const [openZoomingImg, setOpenZoomingImg] = useState("");
+
+  //edit label dialog variable
+  const [openEditLabel, setOpenEditLabel] = useState("");
   const [imageNewLabels, setImageNewLabels] = useState([]);
   console.log(imageNewLabels);
   const [editLabelSelectedValue, setEditLabelSelectedValue] = useState([]);
-  const [getImgData, setGetImgData] = useState("");
-  // const [currentLabel, setCurrentLabel] = useState([])
-  // console.log("currentLabel", currentLabel)
 
   //check variable change
   const [change, setChange] = useState(false);
   const [checked, setChecked] = useState([]);
-  console.log(checked);
   const [hadSubmittedError, setHadSubmittedError] = useState(false);
-
-  // form control
-  const [errorImageBoxChecked, setErrorImageBoxChecked] = useState(false);
-
-  const [imgList2, setImgList2] = useState({});
-  const [timeFlyStart, setTimeFlyStart] = useState([]);
-  const [chooseTime, setChooseTime] = useState("");
 
   const urlViewData =
     process.env.REACT_APP_API_URL +
@@ -76,6 +77,8 @@ export default function HomeModal({ schedule_id }) {
     `&img_state=${errorImageBoxChecked === true ? "defect" : "all"}`;
 
   useEffect(() => {
+    setChecked([]);
+    setSelectedLabels([]);
     axios
       .get(urlViewData)
       .then((res) => {
@@ -91,7 +94,9 @@ export default function HomeModal({ schedule_id }) {
 
   useEffect(() => {
     setChange(false);
-    // setImageNewLabels([])
+    setImageNewLabels([]);
+    setHadSubmittedError(false);
+
     axios
       .get(urlGetData)
       .then((res) => {
@@ -106,41 +111,38 @@ export default function HomeModal({ schedule_id }) {
     hadSubmittedError,
     errorImageBoxChecked,
     selectedLabels,
+    open,
   ]);
 
-  const handleLabelClick = (label) => {
-    if (selectedLabels.includes(label)) {
-      setSelectedLabels(selectedLabels.filter((l) => l !== label));
-    } else {
-      setSelectedLabels([...selectedLabels, label]);
-    }
+  // TEST
+
+  // const handleChooseAllBoxChecked = (e) => {
+  //   if(e.target.checked) {
+  //     Object.keys(imgList2).map((vt) => {
+  //       return imgList2[vt].map((info, index) => {
+  //         console.log("not if sent_check:",index, info)
+  //         if(info.sent_check === 0) {
+  //           // return setChecked([info.img_path])
+  //         }
+  //       })
+  //     })
+  //   }
+  // }
+
+  // ------------ Main Manage Modal Dialog ------------
+
+  // --------- Ham de loc chi anh bat thuong  ---------
+  const handleErrorImageBoxChecked = (e) => {
+    setErrorImageBoxChecked(e.target.checked);
   };
 
-  const handleOpen = () => {
-    setOpen(true);
-    setChecked([]);
-  };
-
-  const handleClose = () => setOpen(false);
-
-  const handleCheck = (event) => {
-    var updatedList = [...checked];
-    if (event.target.checked) {
-      updatedList = [...checked, event.target.value];
-    } else {
-      updatedList.splice(checked.indexOf(event.target.value), 1);
-    }
-    console.log(updatedList);
-    setChecked(updatedList);
-  };
-
+  // --------- Ham de submit tat ca cac anh nguoi dung chon --------
   const handleSubmit = () => {
     console.log("checked:", checked);
-    setHadSubmittedError(false);
+
     axios
       .post(urlPostFlightData, checked)
       .then((response) => {
-        // console.log(response);
         if (response.status === 200) {
           alert(response.data);
           setHadSubmittedError(true);
@@ -151,14 +153,209 @@ export default function HomeModal({ schedule_id }) {
       });
   };
 
+  // --------- Ham de xu ly click input va label ---------
+  const handleLabelClick = (label) => {
+    if (selectedLabels.includes(label)) {
+      setSelectedLabels(selectedLabels.filter((l) => l !== label));
+    } else {
+      setSelectedLabels([...selectedLabels, label]);
+    }
+  };
+
+  const handleInputClick = (event) => {
+    var updatedList = [];
+    if (event.target.checked) {
+      updatedList = [...checked, event.target.value];
+    } else {
+      updatedList.splice(checked.indexOf(event.target.value), 1);
+    }
+    console.log(updatedList);
+    setChecked(updatedList);
+  };
+
+  const renderImageList = () => {
+    return Object.keys(imgList2).map((vt) => {
+      return (
+        <>
+          <div>
+            <div className="flightmanage-line-seperate-items"></div>
+
+            <div className="flightmanage-imagelist-title">{vt}</div>
+            <ImageList
+              sx={{
+                position: "relative",
+                overflowY: "hidden",
+              }}
+              cols={3}
+            >
+              {imgList2[vt].map((info, index) => {
+                return (
+                  <>
+                    <ImageListItem key={index}>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <TextField
+                          id="outlined-multiline-flexible"
+                          label="Tình trạng"
+                          value={info.label.split("_").join("\n")}
+                          multiline
+                          maxRows={3}
+                          style={{ height: "90%", marginTop: "7px" }}
+                          disabled
+                        />
+
+                        <div>
+                          {/* Zoom Dialog */}
+                          {zoomingDialog(info)}
+                          {/* Edit label Dialog */}
+                          {editLabelDialog(info)}
+                        </div>
+                      </div>
+
+                      <label
+                        for={`choose-img-${info.img_path}`}
+                        className={`flightmanage-imagelist-label ${
+                          info.sent_check === 1 ? "hadsubmitted" : ""
+                        } ${
+                          selectedLabels.includes(info.img_path) ||
+                          info.sent_check === 1
+                            ? "choosed"
+                            : ""
+                        }`}
+                        onClick={() => handleLabelClick(info.img_path)}
+                      >
+                        <img
+                          src={process.env.REACT_APP_IMG + info.img_path}
+                          srcSet={process.env.REACT_APP_IMG + info.img_path}
+                          alt={info.img_path}
+                          loading="lazy"
+                          width={"100%"}
+                          height={"100%"}
+                        />
+                      </label>
+
+                      {selectedLabels.includes(info.img_path) ? (
+                        <div className="checkmark-hadchoosed"></div>
+                      ) : (
+                        <></>
+                      )}
+
+                      {info.sent_check === 1 ? (
+                        <div className="checkmark-hadsent"></div>
+                      ) : (
+                        <></>
+                      )}
+                    </ImageListItem>
+
+                    <input
+                      id={`choose-img-${info.img_path}`}
+                      type="checkbox"
+                      value={info.img_path}
+                      style={{
+                        display: "none",
+                      }}
+                      onChange={handleInputClick}
+                    />
+                  </>
+                );
+              })}
+            </ImageList>
+          </div>
+        </>
+      );
+    });
+  };
+
+  const renderListData = (timeFlyStart) => {
+    return (
+      <>
+        {timeFlyStart.map((timeflystart) => {
+          console.log(timeflystart === chooseTime);
+          return (
+            <>
+              <div
+                className={`flightmanage-listdata-item ${
+                  timeflystart === chooseTime ? "onclick" : ""
+                }`}
+                onClick={(e) => {
+                  setChooseTime(e.target.innerText);
+                }}
+              >
+                <div className="flightmanage-listdataitem-title">
+                  {timeflystart}
+                </div>
+              </div>
+            </>
+          );
+        })}
+      </>
+    );
+  };
+
+  // ------------ Zooming Dialog ------------
+
+  const zoomingDialog = (info) => {
+    return (
+      <>
+        <Button
+          variant="contained"
+          style={{
+            marginRight: "10px",
+            minHeight: "35px",
+            minWidth: "10px",
+            top: 0,
+            right: 0,
+          }}
+          onClick={() => setOpenZoomingImg(info.img_path)}
+        >
+          <CropFreeIcon />
+        </Button>
+
+        <Dialog
+          open={openZoomingImg === info.img_path ? true : false}
+          onClose={() => setOpenZoomingImg(false)}
+          sx={{
+            "& .MuiDialog-container": {
+              justifyContent: "flex-start",
+              alignItems: "flex-start",
+            },
+          }}
+          PaperProps={{
+            sx: {
+              height: "681px",
+              width: "1535px",
+              maxWidth: "1535px",
+            },
+          }}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <img
+            src={process.env.REACT_APP_IMG + info.img_path}
+            srcSet={process.env.REACT_APP_IMG + info.img_path}
+            alt={info.img_path}
+            loading="lazy"
+            width={"100%"}
+            height={"100%"}
+          />
+        </Dialog>
+      </>
+    );
+  };
+
+  // ------------- Edit Label Dialog---------------
+
   const handleCheckboxChooseNewLabel = (e) => {
     const { value, checked } = e.target;
 
     if (checked) {
       setImageNewLabels([...imageNewLabels, value]);
     } else {
-      // setImageNewLabels(imageNewLabels.filter((label) => label !== value));
-      setImageNewLabels([!value]);
+      setImageNewLabels(imageNewLabels.filter((label) => label !== value));
     }
 
     if (value === "binhthuong" || imageNewLabels === "binhthuong") {
@@ -174,14 +371,6 @@ export default function HomeModal({ schedule_id }) {
     }
 
     console.log(imageNewLabels);
-  };
-
-  const isDisabled = (value) => {
-    return (
-      (editLabelSelectedValue.includes("binhthuong") ||
-        imageNewLabels.includes("binhthuong")) &&
-      value !== "binhthuong"
-    );
   };
 
   const handleSubmitEditLabel = (imageLink) => {
@@ -201,209 +390,75 @@ export default function HomeModal({ schedule_id }) {
       });
   };
 
-  const handleErrorImageBoxChecked = (e) => {
-    setErrorImageBoxChecked(e.target.checked);
+  const isDisabled = (value) => {
+    return (
+      (editLabelSelectedValue.includes("binhthuong") ||
+        imageNewLabels.includes("binhthuong")) &&
+      value !== "binhthuong"
+    );
   };
 
-  const renderImageList = () => {
-    return Object.keys(imgList2).map((img) => {
-      return imgList2[img].map((info, index) => {
-        console.log(info.label);
-        return (
-          <>
-            <ImageListItem key={index}>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                }}
-              >
-                <TextField
-                  id="outlined-multiline-flexible"
-                  label="Tình trạng"
-                  value={info.label.split("_").join("\n")}
-                  multiline
-                  maxRows={3}
-                  style={{ height: "90%", marginTop: "7px" }}
-                  disabled
-                />
-
-                <div>
-                  {/* Zoom Dialog */}
-                  <Button
-                    variant="contained"
-                    style={{
-                      marginRight: "10px",
-                      minHeight: "35px",
-                      minWidth: "10px",
-                      top: 0,
-                      right: 0,
-                    }}
-                    onClick={() => setOpenZoomingImg(info.img_path)}
-                  >
-                    <CropFreeIcon />
-                  </Button>
-
-                  <Dialog
-                    open={openZoomingImg === info.img_path ? true : false}
-                    onClose={() => setOpenZoomingImg(false)}
-                    sx={{
-                      "& .MuiDialog-container": {
-                        justifyContent: "flex-start",
-                        alignItems: "flex-start",
-                      },
-                    }}
-                    PaperProps={{
-                      sx: {
-                        height: "681px",
-                        width: "1535px",
-                        maxWidth: "1535px",
-                      },
-                    }}
-                    aria-labelledby="alert-dialog-title"
-                    aria-describedby="alert-dialog-description"
-                  >
-                    <img
-                      src={process.env.REACT_APP_IMG + info.img_path}
-                      srcSet={process.env.REACT_APP_IMG + info.img_path}
-                      alt={info.img_path}
-                      loading="lazy"
-                      width={"100%"}
-                      height={"100%"}
-                    />
-                  </Dialog>
-
-                  {/* Edit label Dialog */}
-                  <Button
-                    variant="contained"
-                    style={{
-                      minHeight: "35px",
-                      minWidth: "10px",
-                      top: 0,
-                      right: 0,
-                    }}
-                    onClick={() => {
-                      setOpenEditLabel(info.img_path);
-                      setImageNewLabels([...info.label.split("_")]);
-                    }}
-                    disabled={info.sent_check === 1}
-                  >
-                    <EditIcon />
-                  </Button>
-                  <Dialog
-                    sx={{
-                      "& .MuiDialog-paper": {
-                        width: "80%",
-                        maxHeight: 435,
-                      },
-                    }}
-                    maxWidth="xs"
-                    open={openEditLabel === info.img_path ? true : false}
-                    slots={{ backdrop: Backdrop }}
-                    slotProps={{
-                      backdrop: {
-                        sx: {
-                          backgroundColor: "rgba(0, 0, 0, 0.5)",
-                        },
-                      },
-                    }}
-                  >
-                    <DialogTitle>Cập nhật nhãn bất thường</DialogTitle>
-                    <DialogContent dividers>
-                      {errorLabel.map((label) => (
-                        <label key={label} style={{ fontSize: "20px" }}>
-                          <input
-                            type="checkbox"
-                            value={label}
-                            checked={imageNewLabels.includes(label)}
-                            onChange={(e) => handleCheckboxChooseNewLabel(e)}
-                            disabled={isDisabled(label)}
-                          />
-                          {label} <br />
-                        </label>
-                      ))}
-                    </DialogContent>
-                    <DialogActions>
-                      <Button autoFocus onClick={() => setOpenEditLabel(false)}>
-                        Hủy
-                      </Button>
-                      <Button
-                        onClick={() => handleSubmitEditLabel(info.img_path)}
-                      >
-                        Xác nhận
-                      </Button>
-                    </DialogActions>
-                  </Dialog>
-                </div>
-              </div>
-
-              <label
-                for={`choose-img-${info.img_path}`}
-                className={`homemodal-imagelist-label ${
-                  info.sent_check === 1 ? "hadsubmitted" : ""
-                } ${
-                  selectedLabels.includes(info.img_path) ||
-                  info.sent_check === 1
-                    ? "choosed"
-                    : ""
-                }`}
-                onClick={() => handleLabelClick(info.img_path)}
-              >
-                <img
-                  src={process.env.REACT_APP_IMG + info.img_path}
-                  srcSet={process.env.REACT_APP_IMG + info.img_path}
-                  alt={info.img_path}
-                  loading="lazy"
-                  width={"100%"}
-                  height={"100%"}
-                />
-              </label>
-
-              {selectedLabels.includes(info.img_path) ||
-              info.sent_check === 1 ? (
-                <div className="checkmark"></div>
-              ) : (
-                <></>
-              )}
-            </ImageListItem>
-
-            <input
-              id={`choose-img-${info.img_path}`}
-              type="checkbox"
-              value={info.img_path}
-              style={{
-                display: "none",
-              }}
-              onChange={handleCheck}
-            />
-          </>
-        );
-      });
-    });
-  };
-
-  const renderListData = (timeFlyStart) => {
+  const editLabelDialog = (info) => {
     return (
       <>
-        {timeFlyStart.map((timeflystart) => {
-          console.log(timeflystart === chooseTime);
-          return (
-            <>
-              <div
-                className={`homemodal-listdata-item ${
-                  timeflystart === chooseTime ? "onclick" : ""
-                }`}
-                onClick={(e) => {
-                  setChooseTime(e.target.innerText);
-                }}
-              >
-                <div className="homemodal-listdataitem-title">
-                  {timeflystart}
-                </div>
-              </div>
-            </>
-          );
-        })}
+        <Button
+          variant="contained"
+          style={{
+            minHeight: "35px",
+            minWidth: "10px",
+            top: 0,
+            right: 0,
+          }}
+          onClick={() => {
+            setOpenEditLabel(info.img_path);
+            setImageNewLabels([...info.label.split("_")]);
+          }}
+          disabled={info.sent_check === 1}
+        >
+          <EditIcon />
+        </Button>
+        <Dialog
+          sx={{
+            "& .MuiDialog-paper": {
+              width: "80%",
+              maxHeight: 435,
+            },
+          }}
+          maxWidth="xs"
+          open={openEditLabel === info.img_path ? true : false}
+          slots={{ backdrop: Backdrop }}
+          slotProps={{
+            backdrop: {
+              sx: {
+                backgroundColor: "rgba(0, 0, 0, 0.5)",
+              },
+            },
+          }}
+        >
+          <DialogTitle>Cập nhật nhãn bất thường</DialogTitle>
+          <DialogContent dividers>
+            {errorLabel.map((label) => (
+              <label key={label} style={{ fontSize: "20px" }}>
+                <input
+                  type="checkbox"
+                  value={label}
+                  checked={imageNewLabels.includes(label)}
+                  onChange={(e) => handleCheckboxChooseNewLabel(e)}
+                  disabled={isDisabled(label)}
+                />
+                {label} <br />
+              </label>
+            ))}
+          </DialogContent>
+          <DialogActions>
+            <Button autoFocus onClick={() => setOpenEditLabel(false)}>
+              Hủy
+            </Button>
+            <Button onClick={() => handleSubmitEditLabel(info.img_path)}>
+              Xác nhận
+            </Button>
+          </DialogActions>
+        </Dialog>
       </>
     );
   };
@@ -416,7 +471,7 @@ export default function HomeModal({ schedule_id }) {
           borderRadius: "10%",
           color: "white",
         }}
-        onClick={handleOpen}
+        onClick={() => setOpen(true)}
       >
         xem dữ liệu
       </Button>
@@ -424,7 +479,7 @@ export default function HomeModal({ schedule_id }) {
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
         open={open}
-        onClose={handleClose}
+        onClose={() => setOpen(false)}
         closeAfterTransition
         slots={{ backdrop: Backdrop }}
         slotProps={{
@@ -435,13 +490,13 @@ export default function HomeModal({ schedule_id }) {
       >
         <Fade in={open}>
           <Box
-            className="homemodal"
+            className="flightmanage"
             sx={{
               bgcolor: "background.paper",
             }}
           >
-            <Grid container className="homemodal-container" spacing={0}>
-              <Grid item className="homemodal-listdata" xs={2}>
+            <Grid container className="flightmanage-container" spacing={0}>
+              <Grid item className="flightmanage-listdata" xs={2}>
                 {renderListData(timeFlyStart)}
               </Grid>
               <Grid container xs={10}>
@@ -450,14 +505,20 @@ export default function HomeModal({ schedule_id }) {
                     control={<Checkbox />}
                     label="Ảnh bất thường"
                     style={{ margin: 0, height: "33px" }}
-                    onChange={handleErrorImageBoxChecked}
+                    onChange={(e) => handleErrorImageBoxChecked(e)}
                   />
+                  {/* <FormControlLabel
+                    control={<Checkbox />}
+                    label="Chọn tất cả"
+                    style={{ margin: 0, height: "33px" }}
+                    onChange={(e) => handleChooseAllBoxChecked(e)}
+                  /> */}
 
                   <Button
                     variant="outlined"
                     onClick={handleSubmit}
                     style={{
-                      marginLeft: "950px",
+                      marginLeft: "740px",
                       backgroundColor: "#1976d2",
                       color: "white",
                       height: "33px",
@@ -467,32 +528,19 @@ export default function HomeModal({ schedule_id }) {
                   </Button>
 
                   <Button
-                    className="homemodal-btn-close"
+                    className="flightmanage-btn-close"
                     color="error"
                     variant="contained"
-                    onClick={handleClose}
+                    onClick={() => setOpen(false)}
                   >
                     <CloseIcon fontSize="small" />
                   </Button>
                 </Grid>
-                <Grid item className="homemodal-imgdata" xs={12}>
-                  <div className="homemodal-imgdata-container">
-                    <div className="homemodal-imagelist">
-                      <ImageList
-                        sx={{
-                          position: "relative",
-                          overflowY: "hidden",
-                        }}
-                        cols={3}
-                      >
-                        {renderImageList()}
-                      </ImageList>
+                <Grid item className="flightmanage-imgdata" xs={12}>
+                  <div className="flightmanage-imgdata-container">
+                    <div className="flightmanage-imagelist">
+                      {renderImageList()}
                     </div>
-                    {/* <div className="homemodal-imagelist-submit">
-                      <Button variant="outlined" onClick={handleSubmit}>
-                        SUBMIT
-                      </Button>
-                    </div> */}
                   </div>
                 </Grid>
               </Grid>

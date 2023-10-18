@@ -11,6 +11,8 @@ import "./css/FlightManageListTB.css";
 export default function FlightManageListTB() {
   const VTdetail = useSelector(VTInfo);
 
+  console.log("VTdetail", VTdetail)
+
   function renderTB() {
     return (
       <>
