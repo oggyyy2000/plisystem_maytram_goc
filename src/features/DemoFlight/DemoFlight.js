@@ -104,6 +104,7 @@ export default function FlightRouteMap() {
   const [buttonText, setButtonText] = useState("Bản đồ");
   const [zoom, setZoom] = useState(15);
   const [streetLine, setStreetLine] = useState([]);
+  // console.log('streetline', streetLine);
   const dispatch = useDispatch();
   // const [listCurrentFrame, setListCurrentFrame] = useState([]);
   const currentLocation = useSelector(CurrentLocation);
