@@ -30,7 +30,7 @@ export default function FlightManage() {
             </Grid>
           </Grid>
           <Grid item xs={5} className="home-right-panel">
-            {/* <FlightManageImageSlider /> */}
+            <FlightManageImageSlider />
           </Grid>
         </Grid>
       </Box>

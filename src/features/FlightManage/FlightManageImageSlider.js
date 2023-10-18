@@ -1,16 +1,25 @@
 import React, { useEffect, useState } from "react";
 import Slider from "react-slick";
 // import img4 from "../../assets/images/anh4.png";
-import thermalImg1 from "../../assets/images/ThermalIMG/DJI_20230316142734_0008_T.JPG";
-import thermalImg2 from "../../assets/images/ThermalIMG/DJI_20230316142754_0009_T.JPG";
-import thermalImg3 from "../../assets/images/ThermalIMG/DJI_20230316143031_0011_T.JPG";
-import thermalImg4 from "../../assets/images/ThermalIMG/DJI_20230316143223_0013_T.JPG";
-import thermalImg5 from "../../assets/images/ThermalIMG/DJI_20230316143228_0014_T.JPG";
-import thermalImg6 from "../../assets/images/ThermalIMG/DJI_20230316143231_0015_T.JPG";
-import thermalImg7 from "../../assets/images/ThermalIMG/DJI_20230316143233_0016_T.JPG";
-import thermalImg8 from "../../assets/images/ThermalIMG/DJI_20230316143236_0017_T.JPG";
-import thermalImg9 from "../../assets/images/ThermalIMG/DJI_20230316143240_0018_T.JPG";
-import thermalImg10 from "../../assets/images/ThermalIMG/DJI_20230316143324_0019_T.JPG";
+import thermalImg1 from "../../assets/images/ThermalIMG/DJI_0926_T.JPG";
+import thermalImg2 from "../../assets/images/ThermalIMG/DJI_0928_T.JPG";
+import thermalImg3 from "../../assets/images/ThermalIMG/DJI_0930_T.JPG";
+import thermalImg4 from "../../assets/images/ThermalIMG/DJI_0932_T.JPG";
+import thermalImg5 from "../../assets/images/ThermalIMG/DJI_0935_T.JPG";
+import thermalImg6 from "../../assets/images/ThermalIMG/DJI_0938_T.JPG";
+import thermalImg7 from "../../assets/images/ThermalIMG/DJI_0943_T.JPG";
+import thermalImg8 from "../../assets/images/ThermalIMG/DJI_0945_T.JPG";
+import thermalImg9 from "../../assets/images/ThermalIMG/DJI_0948_T.JPG";
+
+import rgbImg1 from "../../assets/images/RGBIMG/DJI_0925_W.JPG";
+import rgbImg2 from "../../assets/images/RGBIMG/DJI_0927_W.JPG";
+import rgbImg3 from "../../assets/images/RGBIMG/DJI_0929_W.JPG";
+import rgbImg4 from "../../assets/images/RGBIMG/DJI_0931_W.JPG";
+import rgbImg5 from "../../assets/images/RGBIMG/DJI_0933_W.JPG";
+import rgbImg6 from "../../assets/images/RGBIMG/DJI_0934_W.JPG";
+import rgbImg7 from "../../assets/images/RGBIMG/DJI_0936_W.JPG";
+import rgbImg8 from "../../assets/images/RGBIMG/DJI_0937_W.JPG";
+import rgbImg9 from "../../assets/images/RGBIMG/DJI_0942_W.JPG";
 
 import noProblem from "../../assets/images/noproblem.jpg";
 
@@ -29,7 +38,18 @@ const imgList = [
   thermalImg7,
   thermalImg8,
   thermalImg9,
-  thermalImg10,
+];
+
+const imgList3 = [
+  rgbImg1,
+  rgbImg2,
+  rgbImg3,
+  rgbImg4,
+  rgbImg5,
+  rgbImg6,
+  rgbImg7,
+  rgbImg8,
+  rgbImg9,
 ];
 
 export default function FlightManageImageSlider() {
@@ -95,6 +115,8 @@ export default function FlightManageImageSlider() {
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 5000,
   };
 
   return (
@@ -106,7 +128,7 @@ export default function FlightManageImageSlider() {
           asNavFor={nav2}
           ref={(slider1) => setNav1(slider1)}
         >
-          {JSON.stringify(VTdetail.data) !== "{}" && imgList2.length > 0 ? (
+          {/* {JSON.stringify(VTdetail.data) !== "{}" && imgList2.length > 0 ? (
             imgList2.map((img) => {
               return (
                 <>
@@ -130,7 +152,28 @@ export default function FlightManageImageSlider() {
                 />
               </div>
             </>
-          )}
+          )} */}
+          {imgList3.map((img) => {
+            return (
+              <>
+                <div
+                  // style={{
+                  //   padding: "1px",
+                  //   textAlign: "center",
+                  //   display: "flex",
+                  //   justifyContent: "center",
+                  // }}
+                  className="home-slide"
+                >
+                  <img
+                    src={`${img}`}
+                    alt="img"
+                    style={{ maxWidth: "561px", maxHeight: "272px" }}
+                  />
+                </div>
+              </>
+            );
+          })}
         </Slider>
       </div>
 
@@ -166,4 +209,3 @@ export default function FlightManageImageSlider() {
     </>
   );
 }
-
