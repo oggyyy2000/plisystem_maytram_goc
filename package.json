@@ -16,24 +16,19 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.4.0",
-    "eslint-plugin-react": "^7.32.2",
-    "flv.js": "^1.6.2",
+
     "package.json": "^0.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-flv-player": "^1.0.9",
-    "react-player": "^2.13.0",
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.10.0",
-    "react-scripts": "^5.0.1",
+    "react-scripts": "^3.0.1",
     "react-slick": "^0.29.0",
     "react-webcam": "^7.0.1",
     "redux": "^4.2.1",
     "redux-devtools-extension": "^2.13.9",
     "slick-carousel": "^1.8.1",
     "socket.io-client": "^4.6.1",
-    "video.js": "^8.5.2",
-    "videojs-flash": "^2.2.1",
     "web-vitals": "^2.1.4",
     "websocket": "^1.0.34"
   },
@@ -62,7 +57,7 @@
     ]
   },
   "devDependencies": {
-    "@svgr/webpack": "^8.0.1",
-    "eslint-config-react-app": "^7.0.1"
+    "@svgr/webpack": "^8.0.1"
+
   }
 }
